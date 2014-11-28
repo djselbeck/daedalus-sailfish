@@ -27,7 +27,13 @@ OTHER_FILES += qml/harbour-odyssey.qml \
     harbour-odyssey.desktop \
     qml/pages/MainPage.qml \
     qml/pages/AlbumsList.qml \
-    qml/components/AlbumListDelegate.qml
+    qml/components/AlbumListDelegate.qml \
+    qml/components/SectionScroller.js \
+    qml/components/SpeedScroller.js \
+    qml/components/AlbumDelegate.qml \
+    qml/components/AlbumShowDelegate.qml \
+    qml/components/SectionScroller.qml \
+    qml/components/SpeedScroller.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -36,5 +42,6 @@ TRANSLATIONS += translations/harbour-odyssey-de.ts
 
 HEADERS += \
     src/maincontroller.h \
-    src/model/albumsmodel.h
+    src/model/albumsmodel.h \
+    src/global.h
 

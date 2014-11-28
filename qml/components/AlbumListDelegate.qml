@@ -29,7 +29,7 @@ Component {
                     sourceSize.height: height
                     cache: true
                     asynchronous: true
-                    //source: ( listImageSize === 0 ) ? "" : coverURL
+                    source: ( listImageSize === 0 ) ? "" : coverURL
                 }
             }
 
@@ -37,7 +37,7 @@ Component {
             Label {
                 id: albumLabel
                 anchors.verticalCenter: parent.verticalCenter
-                text: (album === "" ? qsTr("no album tag") : album)
+                text: (title === "" ? qsTr("no album tag") : title)
             }
         }
         OpacityRampEffect {
@@ -48,17 +48,17 @@ Component {
 
         onClicked: {
             listView.currentIndex = index;
-            albumClicked(artistname, album);
-            pageStack.push(Qt.resolvedUrl("../pages/database/AlbumTracksPage.qml"),{artistname:artistname,albumname:album});
+            albumClicked(artistname, title);
+            pageStack.push(Qt.resolvedUrl("../pages/database/AlbumTracksPage.qml"),{artistname:artistname,albumname:title});
         }
         function playAlbumRemorse() {
             remorseAction(qsTr("playing album"), function () {
-                playAlbum([artistname, album])
+                playAlbum([artistname, title])
             }, 3000)
         }
         function addAlbumRemorse() {
             remorseAction(qsTr("adding album"), function () {
-                addAlbum([artistname, album])
+                addAlbum([artistname, title])
             }, 3000)
         }
         Component {
@@ -67,7 +67,7 @@ Component {
                 MenuItem {
                     text: qsTr("play album")
                     onClicked: {
-                        if (album !== "") {
+                        if (title !== "") {
                             playAlbumRemorse()
                         }
                     }
@@ -76,7 +76,7 @@ Component {
                 MenuItem {
                     text: qsTr("add album to list")
                     onClicked: {
-                        if (album !== "") {
+                        if (title !== "") {
                             addAlbumRemorse()
                         }
                     }

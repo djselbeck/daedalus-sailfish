@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>AlbumDelegate</name>
+    <message>
+        <source>No Album Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AlbumListDelegate</name>
     <message>
         <source>no album tag</source>
@@ -21,6 +28,29 @@
     </message>
     <message>
         <source>add album to list</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AlbumShowDelegate</name>
+    <message>
+        <source>No Album Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>playing track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adding track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>play track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>add track to list</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -27,6 +27,7 @@ Page {
             }
             onClicked: {
                 if ( ident=== "albums" ) {
+                    requestAlbums();
                     pageStack.push(Qt.resolvedUrl("AlbumsList.qml"));
                 }
             }

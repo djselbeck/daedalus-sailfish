@@ -34,8 +34,20 @@ import "pages"
 
 ApplicationWindow
 {
+    // Controller request signals
+    signal requestAlbums();
 
+    // Controller model clear signals (memory cleanup)
+    signal clearAlbumList();
+    signal clearArtistList();
+    signal clearTrackList();
+    signal clearPlaylistTracks();
+    signal clearPlaylists();
+    signal clearSearchTracks();
+
+    property int populateDuration: 200;
     property int listPadding: Theme.paddingMedium;
+    property int bothOrientation: Orientation.Landscape + Orientation.Portrait + Orientation.PortraitInverted + Orientation.LandscapeInverted
     property bool jollaQuickscroll: false;
 
     initialPage: Component { MainPage { } }
