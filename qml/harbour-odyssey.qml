@@ -36,6 +36,7 @@ ApplicationWindow
 {
     // Controller request signals
     signal requestAlbums();
+    signal requestArtists();
 
     // Controller model clear signals (memory cleanup)
     signal clearAlbumList();

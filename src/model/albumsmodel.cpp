@@ -20,15 +20,19 @@ void AlbumsModel::requestAlbums()
 {
     // Initialize the query
     mSparqlModel->clear();
+    beginResetModel();
     qDebug() << "getting albums";
     // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
     mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
+    endResetModel();
 }
 
 void AlbumsModel::sparqlModelfinished()
 {
+    beginResetModel();
+    emit dataChanged(QModelIndex(),QModelIndex());
     qDebug() << "underlaying model finished result fetching";
-    emit albumsReady();
+    endResetModel();
 }
 
 

@@ -70,6 +70,46 @@
     </message>
 </context>
 <context>
+    <name>ArtistDelegate</name>
+    <message>
+        <source>No Artist Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ArtistListDelegate</name>
+    <message>
+        <source>playing artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adding artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>play artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>add artist to list</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ArtistShowDelegate</name>
+    <message>
+        <source>No Artist Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ArtistsList</name>
+    <message>
+        <source>artists</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>My Cover</source>

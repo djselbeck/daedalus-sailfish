@@ -7,7 +7,7 @@
 class AlbumsModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(int count READ rowCount)
+    Q_PROPERTY(int count READ rowCount )
 
 
 

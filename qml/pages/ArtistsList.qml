@@ -1,66 +1,53 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-//import harbour.smpc.components 1.0
 import "../components"
 
 Page {
-    id: albumslistPage
-    allowedOrientations: bothOrientation
-    property string artistname
+    id: artistlistPage
     property int lastIndex
     property int lastOrientation
     property int oldCount
+    allowedOrientations: bothOrientation
+
+
     Loader {
         id: gridViewLoader
-        active: false
-        anchors.fill: albumslistPage
-
+        anchors.fill: parent
         //        anchors.bottomMargin: quickControlPanel.visibleSize
+        active: false
+
         sourceComponent: Component {
             SilicaGridView {
-                id: albumGridView
+                id: artistGridView
+                quickScrollEnabled: jollaQuickscroll
+                model: artistsModel
                 clip: true
-                model: albumsModel
                 cellWidth: width / 2
                 cellHeight: cellWidth
-                SectionScroller {
-                    id: sectionScroller
-                    gridView: albumGridView
-                    landscape: false
-                    sectionPropertyName: "sectionprop"
-                }
                 populate: Transition {
                     NumberAnimation {
                         properties: "x"
-                        from: albumGridView.width * 2
+                        from: artistGridView.width * 2
                         duration: populateDuration
                     }
+                }
+
+                SectionScroller {
+                    id: sectionScroller
+                    gridView: artistGridView
+                    landscape: false
+                    sectionPropertyName: "sectionprop"
                 }
                 ScrollDecorator {
                 }
 
-                quickScrollEnabled: jollaQuickscroll
                 header: PageHeader {
-                    title: artistname !== "" ? artistname : qsTr("albums")
+                    title: qsTr("artists")
                     width: parent.width
                     height: Theme.itemSizeMedium
                 }
-                PullDownMenu {
-                    enabled: artistname !== ""
-                    MenuItem {
-                        text: qsTr("add albums")
-                        onClicked: {
-                            addArtist(artistname)
-                        }
-                    }
-                    MenuItem {
-                        text: qsTr("play albums")
-                        onClicked: {
-                            playArtist(artistname)
-                        }
-                    }
-                }
-                delegate: AlbumDelegate {
+
+                delegate: ArtistDelegate {
                 }
                 onCountChanged: {
                     if (oldCount != count ) {
@@ -74,55 +61,43 @@ Page {
     }
 
     Loader {
-        id: listviewLoader
-        active: false
-        anchors.fill: albumslistPage
-
+        id: listViewLoader
+        anchors.fill: parent
         //        anchors.bottomMargin: quickControlPanel.visibleSize
+        active: false
+
         sourceComponent: Component {
             SilicaListView {
-                id: listView
-                clip: true
-                model: albumsModel
+                id: artistListView
                 quickScrollEnabled: jollaQuickscroll
-                SectionScroller {
-                    id: sectionScroller
-                    listview: listView
-                    landscape: false
-                    sectionPropertyName: "sectionprop"
-                }
+                model: artistsModel
+                clip: true
                 populate: Transition {
                     NumberAnimation {
                         properties: "x"
-                        from: listView.width * 2
+                        from: artistListView.width * 2
                         duration: populateDuration
                     }
+                }
+
+                SectionScroller {
+                    id: sectionScroller
+                    listview: artistListView
+                    landscape: false
+                    sectionPropertyName: "sectionprop"
                 }
                 ScrollDecorator {
                 }
 
                 header: PageHeader {
-                    title: artistname !== "" ? artistname : qsTr("albums")
+                    title: qsTr("artists")
                     width: parent.width
                     height: Theme.itemSizeMedium
                 }
-                PullDownMenu {
-                    enabled: artistname !== ""
-                    MenuItem {
-                        text: qsTr("add albums")
-                        onClicked: {
-                            addArtist(artistname)
-                        }
-                    }
-                    MenuItem {
-                        text: qsTr("play albums")
-                        onClicked: {
-                            playArtist(artistname)
-                        }
-                    }
+
+                delegate: ArtistListDelegate {
                 }
-                delegate: AlbumListDelegate {
-                }
+
                 section {
                     property: 'sectionprop'
                     delegate: SectionHeader {
@@ -150,23 +125,22 @@ Page {
                 id: showView
                 property int itemHeight: height / (1.3)
                 property int itemWidth: itemHeight
-                model: albumsModel
+                model: artistsModel
 
                 SectionScroller {
                     id: sectionScroller
                     pathview: showView
-                    landscape: true
                     sectionPropertyName: "sectionprop"
+                    landscape: true
                     z: 120
                     interactive: showView.interactive
                 }
 
                 cacheItemCount: pathItemCount + 2
                 pathItemCount: 12 // width/itemWidth
-                delegate: AlbumShowDelegate {
+                delegate: ArtistShowDelegate {
                 }
                 snapMode: PathView.NoSnap
-
                 preferredHighlightBegin: 0.5
                 preferredHighlightEnd: 0.5
                 clip: true
@@ -268,14 +242,13 @@ Page {
             if (!orientationTransitionRunning
                     && orientation != lastOrientation) {
                 gridViewLoader.active = false
-                listviewLoader.active = false
                 showViewLoader.active = false
                 if ((orientation === Orientation.Portrait) || (orientation === Orientation.PortraitInverted)) {
                     console.debug("activating page with portrait grid view")
-                    if (albumView === 0) {
+                    if (artistView === 0) {
                         gridViewLoader.active = true
-                    } else if (albumView === 1) {
-                        listviewLoader.active = true
+                    } else if (artistView === 1) {
+                        listViewLoader.active = true
                     }
                 } else if ((orientation === Orientation.Landscape) || (orientation === Orientation.LandscapeInverted)) {
                     console.debug("activating page landscape showview")
@@ -284,51 +257,42 @@ Page {
             }
         }
         if (status === PageStatus.Deactivating) {
-            lastOrientation = orientation
-        }
-
-        if (status === PageStatus.Deactivating
-                && typeof (gridViewLoader.item) != undefined
-                && gridViewLoader.item) {
-            lastIndex = gridViewLoader.item.currentIndex
-        } else if (status === PageStatus.Activating) {
             if (typeof (gridViewLoader.item) != undefined
                     && gridViewLoader.item) {
-                gridViewLoader.item.positionViewAtIndex(lastIndex,
-                                                        GridView.Center)
+                lastIndex = gridViewLoader.item.currentIndex
             }
-            requestArtistInfo(artistname)
-        } else if (status === PageStatus.Active) {
-            if (artistname != "")
-                pageStack.pushAttached(Qt.resolvedUrl("ArtistInfoPage.qml"), {
-                                           artistname: artistname
-                                       })
+            lastOrientation = orientation
+        } else if (status === PageStatus.Activating
+                   && typeof (gridViewLoader.item) != undefined
+                   && gridViewLoader.item) {
+            gridViewLoader.item.positionViewAtIndex(lastIndex, GridView.Center)
         }
     }
 
     onOrientationTransitionRunningChanged: {
         if (!orientationTransitionRunning) {
-            if ( (orientation === Orientation.Portrait) || (orientation === Orientation.PortraitInverted) ){
+            if ((orientation === Orientation.Portrait) || (orientation === Orientation.PortraitInverted)) {
                 console.debug("activating portrait grid view")
-                if (albumView === 0) {
+                if (artistView === 0) {
                     gridViewLoader.active = true
-                } else if (albumView === 1) {
-                    listviewLoader.active = true
+                } else if (artistView === 1) {
+                    listViewLoader.active = true
                 }
-            } else if ((orientation === Orientation.Landscape) || (orientation === Orientation.LandscapeInverted) ) {
+            } else if ((orientation === Orientation.Landscape) || (orientation === Orientation.LandscapeInverted)) {
                 console.debug("activating landscape showview")
                 showViewLoader.active = true
             }
         } else {
             console.debug("deactivating loaders")
             gridViewLoader.active = false
-            listviewLoader.active = false
             showViewLoader.active = false
+            listViewLoader.active = false
             // Deactivating components
         }
     }
 
     Component.onDestruction: {
-        clearAlbumList()
+        //artistListView.model = null
+        clearArtistList()
     }
 }

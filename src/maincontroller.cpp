@@ -13,9 +13,11 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
 {
     mSparQLConnection = new QSparqlConnection("QTRACKER_DIRECT");
     mAlbumsModel = new AlbumsModel(this,mSparQLConnection);
+    mArtistsModel = new ArtistsModel(this,mSparQLConnection);
     mQuickView = viewer;
 
-    mQuickView->rootContext()->setContextProperty("albumsModel",0);
+    mQuickView->rootContext()->setContextProperty("albumsModel",mAlbumsModel);
+    mQuickView->rootContext()->setContextProperty("artistsModel",mArtistsModel);
     mQuickView->rootContext()->setContextProperty("listImageSize", 1);
 
     connectQMLSignals();
@@ -32,7 +34,8 @@ void MainController::requestAlbums()
 
 void MainController::requestArtists()
 {
-
+    qDebug() << "Artists requested";
+    mArtistsModel->requestArtists();
 }
 
 void MainController::requestPlaylists()
@@ -45,16 +48,6 @@ void MainController::requestFolder(QString path)
 
 }
 
-void MainController::albumsReady()
-{
-    qDebug() << "Albums ready";
-    mQuickView->rootContext()->setContextProperty("albumsModel",mAlbumsModel);
-}
-
-void MainController::artistsReady()
-{
-
-}
 
 void MainController::playlistsReady()
 {
@@ -71,11 +64,13 @@ void MainController::connectQMLSignals()
 {
     QObject *item = (QObject *)mQuickView->rootObject();
     connect(item,SIGNAL(requestAlbums()),this,SLOT(requestAlbums()));
+    connect(item,SIGNAL(requestArtists()),this,SLOT(requestArtists()));
 }
 
 void MainController::connectModelSignals()
 {
-    connect(mAlbumsModel,SIGNAL(albumsReady()),this,SLOT(albumsReady()));
+//    connect(mAlbumsModel,SIGNAL(albumsReady()),this,SLOT(albumsReady()));
+//    connect(mArtistsModel,SIGNAL(artistsReady()),this,SLOT(artistsReady()));
 }
 
 void MainController::readSettings()

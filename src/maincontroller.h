@@ -9,6 +9,7 @@
 
 // local includes
 #include "model/albumsmodel.h"
+#include "model/artistsmodel.h"
 
 class MainController : public QObject
 {
@@ -39,8 +40,6 @@ public slots:
     void requestPlaylists();
     void requestFolder(QString path);
 
-    void albumsReady();
-    void artistsReady();
     void playlistsReady();
     void folderReady();
 
@@ -51,6 +50,7 @@ private:
     QSparqlConnection *mSparQLConnection;
 
     AlbumsModel *mAlbumsModel;
+    ArtistsModel *mArtistsModel;
 
 
     // Qml stuff

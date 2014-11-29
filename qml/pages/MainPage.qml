@@ -29,6 +29,9 @@ Page {
                 if ( ident=== "albums" ) {
                     requestAlbums();
                     pageStack.push(Qt.resolvedUrl("AlbumsList.qml"));
+                } else if ( ident=== "artists" ) {
+                    requestArtists();
+                    pageStack.push(Qt.resolvedUrl("ArtistsList.qml"));
                 }
             }
         }

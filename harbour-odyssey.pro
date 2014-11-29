@@ -16,7 +16,8 @@ CONFIG += sailfishapp qtsparql
 
 SOURCES += src/harbour-odyssey.cpp \
     src/maincontroller.cpp \
-    src/model/albumsmodel.cpp
+    src/model/albumsmodel.cpp \
+    src/model/artistsmodel.cpp
 
 OTHER_FILES += qml/harbour-odyssey.qml \
     qml/cover/CoverPage.qml \
@@ -33,7 +34,11 @@ OTHER_FILES += qml/harbour-odyssey.qml \
     qml/components/AlbumDelegate.qml \
     qml/components/AlbumShowDelegate.qml \
     qml/components/SectionScroller.qml \
-    qml/components/SpeedScroller.qml
+    qml/components/SpeedScroller.qml \
+    qml/pages/ArtistsList.qml \
+    qml/components/ArtistDelegate.qml \
+    qml/components/ArtistListDelegate.qml \
+    qml/components/ArtistShowDelegate.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -43,5 +48,6 @@ TRANSLATIONS += translations/harbour-odyssey-de.ts
 HEADERS += \
     src/maincontroller.h \
     src/model/albumsmodel.h \
-    src/global.h
+    src/global.h \
+    src/model/artistsmodel.h
 
