@@ -48,17 +48,18 @@ int AlbumsModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant AlbumsModel::data(const QModelIndex &index, int role) const {
+    QString albumTitle;
     switch ( role ) {
     case AlbumRole:
         return mSparqlModel->data(index,role);
         break;
     case SectionRole:
-        QString albumTitle = mSparqlModel->data(index,0);
+        albumTitle = mSparqlModel->data(index,AlbumRole).toString();
+        return QString(albumTitle.at(0)).toUpper();
         break;
     case ArtistRole:
 
-        break;
-    case AlbumCleandRole:
+        break; case AlbumCleandRole:
 
         break;
     case AlbumImageRole:
@@ -70,4 +71,17 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const {
     }
 
     return "";
+}
+
+QVariantMap AlbumsModel::get(int row){
+    QHash<int,QByteArray> roles = roleNames();
+    QHashIterator<int, QByteArray> i(roles);
+    QVariantMap res;
+    while (i.hasNext()) {
+        i.next();
+        QModelIndex idx = index(row, 0);
+        QVariant data = idx.data(i.key());
+        res[i.value()] = data;
+    }
+    return res;
 }

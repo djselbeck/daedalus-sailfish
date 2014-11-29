@@ -79,7 +79,7 @@ Page {
                 SectionScroller {
                     listview: listView
                     landscape: false
-                    sectionPropertyName: "title"
+                    sectionPropertyName: "sectionprop"
                 }
                 populate: Transition {
                     NumberAnimation {
@@ -114,7 +114,7 @@ Page {
                 delegate: AlbumListDelegate {
                 }
                 section {
-                    property: 'title'
+                    property: 'sectionprop'
                     delegate: SectionHeader {
                         text: section
                     }

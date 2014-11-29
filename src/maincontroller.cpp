@@ -85,7 +85,7 @@ void MainController::readSettings()
     settings.beginGroup("general_properties");
     int dlSize = settings.value("download_size",LASTFM_EXTRALARGE).toInt();
     mArtistViewSetting = settings.value("artist_view",0).toInt();
-    mAlbumViewSetting = settings.value("album_view",0).toInt();
+    mAlbumViewSetting = settings.value("album_view",1).toInt();
     mListImageSize = settings.value("list_image_size",0).toInt();
     mSectionsInSearch = settings.value("sections_in_search",1).toInt();
     mSectionsInPlaylist = settings.value("sections_in_playlist",1).toInt();

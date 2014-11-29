@@ -45,10 +45,16 @@ ApplicationWindow
     signal clearPlaylists();
     signal clearSearchTracks();
 
+
+    // Wiki/Biography information requests for sqlDB
+    signal requestArtistInfo(string artist);
+    signal requestAlbumInfo(variant album);
+
     property int populateDuration: 200;
     property int listPadding: Theme.paddingMedium;
     property int bothOrientation: Orientation.Landscape + Orientation.Portrait + Orientation.PortraitInverted + Orientation.LandscapeInverted
     property bool jollaQuickscroll: false;
+    property bool mDebugEnabled: true;
 
     initialPage: Component { MainPage { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")

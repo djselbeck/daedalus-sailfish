@@ -7,11 +7,16 @@
 class AlbumsModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(int count READ rowCount)
+
+
 
     enum EntryRoles {
         AlbumRole = Qt::UserRole + 1,
-        SectionRole,
+        TrackCountRole,
+        DurationRole,
         ArtistRole,
+        SectionRole,
         AlbumCleandRole,
         AlbumImageRole
     };
@@ -21,6 +26,7 @@ public:
 
     Q_INVOKABLE QHash<int, QByteArray> roleNames() const;
     Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    Q_INVOKABLE QVariantMap get(int row);
     QVariant data(const QModelIndex &index, int role) const;
 
 signals:
