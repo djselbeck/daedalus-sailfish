@@ -10,6 +10,7 @@
 // local includes
 #include "model/albumsmodel.h"
 #include "model/artistsmodel.h"
+#include "model/albumtracksmodel.h"
 
 class MainController : public QObject
 {
@@ -51,6 +52,7 @@ private:
 
     AlbumsModel *mAlbumsModel;
     ArtistsModel *mArtistsModel;
+    AlbumTracksModel *mAlbumTracksModel;
 
 
     // Qml stuff

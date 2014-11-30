@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "../commonfunctions/clickHandler.js" as ClickHandler
 
 Component {
     id: albumDelegate
@@ -48,8 +49,7 @@ Component {
 
         onClicked: {
             listView.currentIndex = index;
-            albumClicked(artistname, title);
-            pageStack.push(Qt.resolvedUrl("../pages/database/AlbumTracksPage.qml"),{artistname:artistname,albumname:title});
+            ClickHandler.albumClicked(artist, title, albumurn);
         }
         function playAlbumRemorse() {
             remorseAction(qsTr("playing album"), function () {

@@ -34,9 +34,12 @@ import "pages"
 
 ApplicationWindow
 {
+    id: mainWindow
     // Controller request signals
     signal requestAlbums();
+    signal requestArtistAlbums(string artist);
     signal requestArtists();
+    signal requestAlbum(string albumurn);
 
     // Controller model clear signals (memory cleanup)
     signal clearAlbumList();
@@ -57,8 +60,13 @@ ApplicationWindow
     property bool jollaQuickscroll: false;
     property bool mDebugEnabled: true;
 
+    property string artistname
+    property string albumname
+
     initialPage: Component { MainPage { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
+
+
 }
 
 

@@ -39,7 +39,9 @@ OTHER_FILES += qml/harbour-odyssey.qml \
     qml/pages/ArtistsList.qml \
     qml/components/ArtistDelegate.qml \
     qml/components/ArtistListDelegate.qml \
-    qml/components/ArtistShowDelegate.qml
+    qml/components/ArtistShowDelegate.qml \
+    qml/commonfunctions/clickHandler.js \
+    qml/pages/AlbumTracks.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

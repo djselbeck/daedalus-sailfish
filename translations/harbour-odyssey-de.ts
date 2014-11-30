@@ -55,6 +55,45 @@
     </message>
 </context>
 <context>
+    <name>AlbumTracks</name>
+    <message>
+        <source>show all tracks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>add album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>play album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>playing track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adding track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>play track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>add track to list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>play after current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>add to saved list</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AlbumsList</name>
     <message>
         <source>add albums</source>

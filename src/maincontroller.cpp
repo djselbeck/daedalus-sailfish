@@ -14,10 +14,12 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mSparQLConnection = new QSparqlConnection("QTRACKER_DIRECT");
     mAlbumsModel = new AlbumsModel(this,mSparQLConnection);
     mArtistsModel = new ArtistsModel(this,mSparQLConnection);
+    mAlbumTracksModel = new AlbumTracksModel(this,mSparQLConnection);
     mQuickView = viewer;
 
     mQuickView->rootContext()->setContextProperty("albumsModel",mAlbumsModel);
     mQuickView->rootContext()->setContextProperty("artistsModel",mArtistsModel);
+    mQuickView->rootContext()->setContextProperty("albumTracksModel",mAlbumTracksModel);
     mQuickView->rootContext()->setContextProperty("listImageSize", 1);
 
     connectQMLSignals();
@@ -65,6 +67,8 @@ void MainController::connectQMLSignals()
     QObject *item = (QObject *)mQuickView->rootObject();
     connect(item,SIGNAL(requestAlbums()),this,SLOT(requestAlbums()));
     connect(item,SIGNAL(requestArtists()),this,SLOT(requestArtists()));
+    connect(item,SIGNAL(requestArtistAlbums(QString)),mAlbumsModel,SLOT(requestAlbums(QString)));
+    connect(item,SIGNAL(requestAlbum(QString)),mAlbumTracksModel,SLOT(requestAlbumTracks(QString)));
 }
 
 void MainController::connectModelSignals()

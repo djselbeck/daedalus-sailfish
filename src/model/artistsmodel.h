@@ -16,6 +16,7 @@ public:
     enum EntryRoles {
         NameRole = Qt::UserRole + 1,
         AlbumCountRole,
+        ArtistURNRole,
         SectionRole,
         ImageURLRole
     };

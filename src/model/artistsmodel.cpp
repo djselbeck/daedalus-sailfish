@@ -1,11 +1,13 @@
 #include "artistsmodel.h"
 
+#include <QUrl>
+
 ArtistsModel::ArtistsModel(QObject *parent, QSparqlConnection *connection) :
     QAbstractListModel(parent)
 {
     if ( connection != NULL ) {
         mConnection = connection;
-        mArtistsQueryString = "SELECT  ?artist  COUNT(?album) as ?albumcount WHERE { ?album nmm:albumArtist ?artistobj . ?artistobj nmm:artistName ?artist } GROUP BY ?artist ORDER BY ?artist";
+        mArtistsQueryString = "SELECT ?artist  COUNT(?album) as ?albumcount ?artistobj WHERE { ?album nmm:albumArtist ?artistobj . ?artistobj nmm:artistName ?artist } GROUP BY ?artist ORDER BY ?artist";
     }
     mSparqlModel = new QSparqlQueryModel(this);
     connect(mSparqlModel,SIGNAL(finished()),this,SLOT(sparqlModelfinished()));
@@ -35,6 +37,7 @@ QHash<int, QByteArray> ArtistsModel::roleNames() const {
     QHash<int,QByteArray> roles;
     roles[NameRole] = "artist";
     roles[AlbumCountRole] = "albumcount";
+    roles[ArtistURNRole] = "artisturn";
     roles[SectionRole] = "sectionprop";
     roles[ImageURLRole] = "imageURL";
     return roles;
@@ -46,10 +49,14 @@ int ArtistsModel::rowCount(const QModelIndex &parent) const {
 
 QVariant ArtistsModel::data(const QModelIndex &index, int role) const {
     QString artistName;
+    QUrl urn;
     switch ( role ) {
     case NameRole:
         return mSparqlModel->data(index,role);
         break;
+    case ArtistURNRole:
+        urn = mSparqlModel->data(index,role).toUrl();
+        return urn.toEncoded();
     case SectionRole:
         artistName = mSparqlModel->data(index,NameRole).toString();
         return QString(artistName.at(0)).toUpper();

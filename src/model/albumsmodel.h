@@ -9,13 +9,12 @@ class AlbumsModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(int count READ rowCount )
 
-
-
     enum EntryRoles {
         AlbumRole = Qt::UserRole + 1,
         TrackCountRole,
         DurationRole,
         ArtistRole,
+        AlbumURNRole,
         SectionRole,
         AlbumCleandRole,
         AlbumImageRole
@@ -34,6 +33,7 @@ signals:
 
 public slots:
     void requestAlbums();
+    void requestAlbums(QString artist);
     void sparqlModelfinished();
 
 

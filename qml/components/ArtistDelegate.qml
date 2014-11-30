@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "../commonfunctions/clickHandler.js" as ClickHandler
 
 Component {
     ListItem {
@@ -70,8 +71,8 @@ Component {
         //        }
         onClicked: {
             artistGridView.currentIndex = index
-            artistClicked(artist)
-            pageStack.push(Qt.resolvedUrl("../pages/database/AlbumListPage.qml"),{artistname:artistname});
+            ClickHandler.artistClicked(artist,artisturn);
+
         }
         //        function playArtistRemorse() {
         //            remorseAction(qsTr("playing artist"), function () {

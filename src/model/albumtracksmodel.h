@@ -30,12 +30,14 @@ public:
 signals:
 
 public slots:
-    void requestAlbumTracks();
+    void requestAlbumTracks(QString);
 
 private:
     QString mAlbumTracksQueryString;
     QSparqlConnection *mConnection;
     QSparqlQueryModel *mSparqlModel;
+
+    inline QString getLengthFormatted(int length) const;
 
 private slots:
     void sparqlModelfinished();
