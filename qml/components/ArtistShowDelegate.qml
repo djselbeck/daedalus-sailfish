@@ -1,5 +1,6 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
+import "../commonfunctions/clickHandler.js" as ClickHandler
 
 BackgroundItem {
     id: artistShowDelegate
@@ -202,7 +203,7 @@ BackgroundItem {
                             id: moreButton
                             icon.source: "image://theme/icon-m-other"
                             onClicked: {
-                                artistClicked(artist)
+                                ClickHandler.artistClicked(artist,artisturn);
                                 pageStack.push(Qt.resolvedUrl("../pages/database/AlbumListPage.qml"),{artistname:artistname});
                                 if ( flipped ) {
                                     rotateOut.running = true

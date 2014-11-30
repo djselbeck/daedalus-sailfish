@@ -1,5 +1,6 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
+import "../commonfunctions/clickHandler.js" as ClickHandler
 
 BackgroundItem {
     id: albumShowDelegate
@@ -202,8 +203,7 @@ BackgroundItem {
                             id: moreButton
                             icon.source: "image://theme/icon-m-other"
                             onClicked: {
-                                albumClicked(artistname, title)
-                                pageStack.push(Qt.resolvedUrl("../pages/database/AlbumTracksPage.qml"),{artistname:artistname,albumname:title});
+                                ClickHandler.albumClicked(artist, title, albumurn);
                                 if ( flipped ) {
                                     rotateOut.running = true
                                     flipped = false
@@ -260,7 +260,7 @@ BackgroundItem {
                                         font.pixelSize: Theme.fontSizeSmall
                                     }
                                     Label {
-                                        text: (length === 0 ? "" : " (" + lengthformated + ")")
+                                        text: (length === 0 ? "" : " (" + lengthformatted + ")")
                                         anchors {
                                             verticalCenter: parent.verticalCenter
                                         }
@@ -338,7 +338,7 @@ BackgroundItem {
         console.debug("index: " + index + " currentindex: " + showView.currentIndex)
         // Only flip front cover
         if ( coverRotation == 0 ) {
-            albumClicked(artistname, title)
+            requestAlbum(albumurn);
             if (!flipped) {
                 backsideLoader.active = true
                 flipped = true

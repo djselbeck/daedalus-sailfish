@@ -32,6 +32,10 @@ Page {
                 } else if ( ident=== "artists" ) {
                     requestArtists();
                     pageStack.push(Qt.resolvedUrl("ArtistsList.qml"));
+                } else if ( ident=== "settings" ) {
+                    pageStack.push(Qt.resolvedUrl("settings/SettingsPage.qml"));
+                } else if ( ident === "playlist" ) {
+                    pageStack.push(Qt.resolvedUrl("CurrentPlaylistPage.qml"));
                 }
             }
         }
@@ -61,10 +65,6 @@ Page {
         mainMenuModel.append({
                                  name: qsTr("search"),
                                  ident: "search"
-                             })
-        mainMenuModel.append({
-                                 name: qsTr("connect"),
-                                 ident: "connectto"
                              })
         mainMenuModel.append({
                                  name: qsTr("settings"),

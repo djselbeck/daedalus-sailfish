@@ -14,8 +14,9 @@ AlbumTracksModel::AlbumTracksModel(QObject *parent, QSparqlConnection *connectio
 
 void AlbumTracksModel::requestAlbumTracks(QString albumurn)
 {
+    albumurn = albumurn.replace('\'',"\\\'");
     qDebug() << "Album tracks requested: " + albumurn;
-    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr WHERE { ?piece nmm:musicAlbum '" + albumurn + "' ;  nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?discnr ?tracknr";
+    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl WHERE { ?piece nmm:musicAlbum '" + albumurn + "' ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 
@@ -27,6 +28,7 @@ QHash<int, QByteArray> AlbumTracksModel::roleNames() const {
     roles[DurationRole] = "length";
     roles[TrackNumberRole] = "tracknr";
     roles[DiscNumberRole] = "discnr";
+    roles[FileURLRole] = "fileurl";
     roles[DurationFormattedRole] = "lengthformatted";
     return roles;
 }
@@ -63,6 +65,9 @@ QVariant AlbumTracksModel::data(const QModelIndex &index, int role) const
         return mSparqlModel->data(index,role);
         break;
     case DiscNumberRole:
+        return mSparqlModel->data(index,role);
+        break;
+    case FileURLRole:
         return mSparqlModel->data(index,role);
         break;
     default:

@@ -2,6 +2,7 @@ import QtQuick 2.1
 
 import Sailfish.Silica 1.0
 import "../components"
+import "../commonfunctions/clickHandler.js" as ClickHandler
 
 Page {
     id: albumTracksPage
@@ -105,7 +106,7 @@ Page {
                     MenuItem {
                         text: qsTr("add album")
                         onClicked: {
-                            addAlbum([artistname, albumname])
+                            addActiveAlbum();
                         }
                     }
                     MenuItem {
@@ -206,7 +207,7 @@ Page {
                         MenuItem {
                             text: qsTr("add album")
                             onClicked: {
-                                addAlbum([artistname, albumname])
+                                addActiveAlbum();
                             }
                         }
                         MenuItem {
@@ -346,8 +347,8 @@ Page {
             }
             onClicked: {
                 //albumTracksListView.currentIndex = index
-                albumTrackClicked(title, album, artist, lengthformatted, path,
-                                  year, tracknr)
+                ClickHandler.albumTrackClicked(title, album, artist, lengthformatted, fileurl,
+                                  "year", tracknr, discnr, index)
             }
             function playTrackRemorse() {
                 remorseAction(qsTr("playing track"), function () {
@@ -356,7 +357,7 @@ Page {
             }
             function addTrackRemorse() {
                 remorseAction(qsTr("adding track"), function () {
-                    addSong(path)
+                    addAlbumTrack(index);
                 }, 3000)
             }
             function addTrackAfterCurrentRemorse() {

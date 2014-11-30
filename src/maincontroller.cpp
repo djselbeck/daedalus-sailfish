@@ -15,12 +15,18 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mAlbumsModel = new AlbumsModel(this,mSparQLConnection);
     mArtistsModel = new ArtistsModel(this,mSparQLConnection);
     mAlbumTracksModel = new AlbumTracksModel(this,mSparQLConnection);
+
+    mPlaylist = new Playlist(this);
+
     mQuickView = viewer;
 
     mQuickView->rootContext()->setContextProperty("albumsModel",mAlbumsModel);
     mQuickView->rootContext()->setContextProperty("artistsModel",mArtistsModel);
     mQuickView->rootContext()->setContextProperty("albumTracksModel",mAlbumTracksModel);
-    mQuickView->rootContext()->setContextProperty("listImageSize", 1);
+    mQuickView->rootContext()->setContextProperty("playlistModel",mPlaylist);
+
+    mQuickView->rootContext()->setContextProperty("artistInfoText","");
+    mQuickView->rootContext()->setContextProperty("albumInfoText","");
 
     connectQMLSignals();
     connectModelSignals();
@@ -69,6 +75,15 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(requestArtists()),this,SLOT(requestArtists()));
     connect(item,SIGNAL(requestArtistAlbums(QString)),mAlbumsModel,SLOT(requestAlbums(QString)));
     connect(item,SIGNAL(requestAlbum(QString)),mAlbumTracksModel,SLOT(requestAlbumTracks(QString)));
+
+    // Settings
+    connect(item,SIGNAL(newDownloadSize(int)),this,SLOT(receiveDownloadSize(int)));
+    connect(item,SIGNAL(newSettingKey(QVariant)),this,SLOT(receiveSettingKey(QVariant)));
+
+    // playlist management
+    connect(item,SIGNAL(addAlbumTrack(int)),this,SLOT(addAlbumTrack(int)));
+    connect(item,SIGNAL(addActiveAlbum()),this,SLOT(addActiveAlbum()));
+    connect(item,SIGNAL(playPlaylistIndex(int)),mPlaylist,SLOT(playPosition(int)));
 }
 
 void MainController::connectModelSignals()
@@ -107,6 +122,22 @@ void MainController::readSettings()
     settings.endGroup();
 }
 
+void MainController::writeSettings()
+{
+    QSettings settings;
+    settings.clear();
+    settings.beginGroup("general_properties");
+    settings.setValue("download_size",mDownloadSize);
+    settings.setValue("artist_view",mArtistViewSetting);
+    settings.setValue("album_view",mAlbumViewSetting);
+    settings.setValue("list_image_size",mListImageSize);
+    settings.setValue("sections_in_search",mSectionsInSearch);
+    settings.setValue("sections_in_playlist",mSectionsInPlaylist);
+    settings.setValue("lastfm_download",mDownloadEnabled);
+    settings.setValue("show_covernowplaying",mCoverInNowPlaying);
+    settings.endGroup();
+}
+
 QString MainController::getLastFMArtSize(int index)
 {
     switch (index)  {
@@ -134,3 +165,64 @@ QString MainController::getLastFMArtSize(int index)
     return LASTFMDEFAULTSIZE;
 }
 
+void MainController::receiveDownloadSize(int size)
+{
+    mDownloadSize = size;
+    mQuickView->rootContext()->setContextProperty("downloadSize",size);
+    emit newDownloadSize(getLastFMArtSize(size));
+    writeSettings();
+}
+
+void MainController::receiveSettingKey(QVariant setting)
+{
+    QStringList settings = setting.toStringList();
+    if ( settings.length() == 2 ) {
+        if ( settings.at(0) == "albumView" ) {
+            mAlbumViewSetting = settings.at(1).toInt();
+            mQuickView->rootContext()->setContextProperty("albumView", mAlbumViewSetting);
+        } else if ( settings.at(0) == "artistView" ) {
+            mArtistViewSetting = settings.at(1).toInt();
+            mQuickView->rootContext()->setContextProperty("artistView", mArtistViewSetting);
+        } else if ( settings.at(0) == "listImageSize" ) {
+            mListImageSize = settings.at(1).toInt();
+            mQuickView->rootContext()->setContextProperty("listImageSize", mListImageSize);
+        } else if ( settings.at(0) == "sectionsInSearch" ) {
+            mSectionsInSearch = settings.at(1).toInt();
+            mQuickView->rootContext()->setContextProperty("sectionsInSearch", mSectionsInSearch);
+        } else if ( settings.at(0) == "sectionsInPlaylist" ) {
+            mSectionsInPlaylist = settings.at(1).toInt();
+            mQuickView->rootContext()->setContextProperty("sectionsInPlaylist", mSectionsInPlaylist);
+        } else if ( settings.at(0) == "lastfmEnabled" ) {
+            mDownloadEnabled = settings.at(1).toInt();
+            mQuickView->rootContext()->setContextProperty("lastfmEnabled", mDownloadEnabled);
+            emit newDownloadEnabled(mDownloadEnabled);
+        } else if ( settings.at(0) == "showCoverNowPlaying" ) {
+            mCoverInNowPlaying = settings.at(1).toInt();
+            mQuickView->rootContext()->setContextProperty("showCoverNowPlaying", mCoverInNowPlaying);
+        }
+
+    }
+    writeSettings();
+}
+
+void MainController::addAlbumTrack(int index)
+{
+    // get track information from model and create trackobject
+    QVariantMap modelTrack = mAlbumTracksModel->get(index);
+    QVariant title = modelTrack["title"];
+    QVariant album = modelTrack["album"];
+    QVariant artist = modelTrack["artist"];
+    QVariant length = modelTrack["length"];
+    QVariant tracknr = modelTrack["tracknr"];
+    QVariant discnr = modelTrack["discnr"];
+    QVariant url = modelTrack["fileurl"];
+    TrackObject *track = new TrackObject(title.toString(),artist.toString(),album.toString(),url.toString(),length.toInt(),tracknr.toInt(),discnr.toInt(),this);
+    mPlaylist->addFile(track);
+}
+
+void MainController::addActiveAlbum()
+{
+    for ( int i = 0; i < mAlbumTracksModel->rowCount() ; i++) {
+        addAlbumTrack(i);
+    }
+}

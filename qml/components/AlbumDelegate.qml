@@ -1,5 +1,6 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
+import "../commonfunctions/clickHandler.js" as ClickHandler
 
 ListItem {
         //menu: contextMenu
@@ -64,8 +65,7 @@ ListItem {
 
         onClicked: {
             albumGridView.currentIndex = index
-            albumClicked(artistname, title)
-            pageStack.push(Qt.resolvedUrl("../pages/database/AlbumTracksPage.qml"),{artistname:artistname,albumname:title});
+            ClickHandler.albumClicked(artist, title, albumurn);
         }
 //        Component.onCompleted: {
 //            console.debug("Album created: " + title)

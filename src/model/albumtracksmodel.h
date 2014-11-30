@@ -17,6 +17,7 @@ class AlbumTracksModel : public QAbstractListModel
         DurationRole,
         TrackNumberRole,
         DiscNumberRole,
+        FileURLRole,
         DurationFormattedRole
     };
 public:

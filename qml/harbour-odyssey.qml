@@ -49,6 +49,18 @@ ApplicationWindow
     signal clearPlaylists();
     signal clearSearchTracks();
 
+    // playlist management
+    signal addAlbumTrack(int index);
+    signal addActiveAlbum();
+    signal playPlaylistIndex(int index);
+
+
+    // Signals change in download-size preference
+    signal newDownloadSize(int size)
+
+    // Signals changed settings key
+    // [settingkey,value]
+    signal newSettingKey(variant setting);
 
     // Wiki/Biography information requests for sqlDB
     signal requestArtistInfo(string artist);
@@ -58,7 +70,7 @@ ApplicationWindow
     property int listPadding: Theme.paddingMedium;
     property int bothOrientation: Orientation.Landscape + Orientation.Portrait + Orientation.PortraitInverted + Orientation.LandscapeInverted
     property bool jollaQuickscroll: false;
-    property bool mDebugEnabled: true;
+    property bool mDebugEnabled: false;
 
     property string artistname
     property string albumname

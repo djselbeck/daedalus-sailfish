@@ -14,11 +14,17 @@ TARGET = harbour-odyssey
 
 CONFIG += sailfishapp qtsparql
 
+QT += multimedia
+
 SOURCES += src/harbour-odyssey.cpp \
     src/maincontroller.cpp \
     src/model/albumsmodel.cpp \
     src/model/artistsmodel.cpp \
-    src/model/albumtracksmodel.cpp
+    src/model/albumtracksmodel.cpp \
+    src/mediaplayer/odysseymediaplayer.cpp \
+    src/mediaplayer/playlist.cpp \
+    src/model/trackobject.cpp \
+    src/model/playbackstatusobject.cpp
 
 OTHER_FILES += qml/harbour-odyssey.qml \
     qml/cover/CoverPage.qml \
@@ -41,7 +47,18 @@ OTHER_FILES += qml/harbour-odyssey.qml \
     qml/components/ArtistListDelegate.qml \
     qml/components/ArtistShowDelegate.qml \
     qml/commonfunctions/clickHandler.js \
-    qml/pages/AlbumTracks.qml
+    qml/pages/AlbumTracks.qml \
+    qml/pages/AlbumInfoPage.qml \
+    qml/pages/ArtistInfoPage.qml \
+    qml/pages/settings/AboutPage.qml \
+    qml/pages/settings/DatabaseSettings.qml \
+    qml/pages/settings/GUISettings.qml \
+    qml/pages/settings/SettingsPage.qml \
+    qml/pages/SongDialog.qml \
+    qml/components/ScrollLabel.qml \
+    qml/components/ToggleImage.qml \
+    qml/pages/CurrentPlaylistPage.qml \
+    qml/components/PlaylistSectionDelegate.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -53,5 +70,9 @@ HEADERS += \
     src/model/albumsmodel.h \
     src/global.h \
     src/model/artistsmodel.h \
-    src/model/albumtracksmodel.h
+    src/model/albumtracksmodel.h \
+    src/mediaplayer/odysseymediaplayer.h \
+    src/mediaplayer/playlist.h \
+    src/model/trackobject.h \
+    src/model/playbackstatusobject.h
 

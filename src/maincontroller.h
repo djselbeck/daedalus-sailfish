@@ -11,6 +11,7 @@
 #include "model/albumsmodel.h"
 #include "model/artistsmodel.h"
 #include "model/albumtracksmodel.h"
+#include "mediaplayer/playlist.h"
 
 class MainController : public QObject
 {
@@ -59,6 +60,7 @@ private:
     QQuickView *mQuickView;
 
     void readSettings();
+    void writeSettings();
     void connectModelSignals();
     void connectQMLSignals();
 
@@ -71,6 +73,18 @@ private:
     int mSectionsInSearch;
     int mSectionsInPlaylist;
     int mCoverInNowPlaying;
+
+    // Playback objects
+    Playlist *mPlaylist;
+
+private slots:
+    void receiveDownloadSize(int);
+    void receiveSettingKey(QVariant setting);
+
+    void addAlbumTrack(int index);
+    void addActiveAlbum();
+
+
 
 };
 
