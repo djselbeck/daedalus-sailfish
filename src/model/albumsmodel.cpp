@@ -77,6 +77,12 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const {
     return "";
 }
 
+/**
+ * This returns an pseudo item in an variant map for SectionScroller
+ * @brief AlbumsModel::get
+ * @param row
+ * @return
+ */
 QVariantMap AlbumsModel::get(int row){
     QHash<int,QByteArray> roles = roleNames();
     QHashIterator<int, QByteArray> i(roles);

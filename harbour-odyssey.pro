@@ -17,7 +17,8 @@ CONFIG += sailfishapp qtsparql
 SOURCES += src/harbour-odyssey.cpp \
     src/maincontroller.cpp \
     src/model/albumsmodel.cpp \
-    src/model/artistsmodel.cpp
+    src/model/artistsmodel.cpp \
+    src/model/albumtracksmodel.cpp
 
 OTHER_FILES += qml/harbour-odyssey.qml \
     qml/cover/CoverPage.qml \
@@ -49,5 +50,6 @@ HEADERS += \
     src/maincontroller.h \
     src/model/albumsmodel.h \
     src/global.h \
-    src/model/artistsmodel.h
+    src/model/artistsmodel.h \
+    src/model/albumtracksmodel.h
 

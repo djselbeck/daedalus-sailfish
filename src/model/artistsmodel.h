@@ -28,14 +28,15 @@ public:
 
 signals:
     void artistsReady();
-    void modelChanged();
 
 public slots:
     void requestArtists();
+
+private slots:
     void sparqlModelfinished();
 
+
 private:
-    int mRolesCount;
     QString mArtistsQueryString;
     QSparqlConnection *mConnection;
     QSparqlQueryModel *mSparqlModel;

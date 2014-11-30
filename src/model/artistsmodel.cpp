@@ -16,18 +16,15 @@ void ArtistsModel::requestArtists()
 {
     // Initialize the query
     //mSparqlModel->clear();
-  //  beginResetModel();
     qDebug() << "getting artists";
     // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
     mSparqlModel->setQuery(QSparqlQuery(mArtistsQueryString),*mConnection);
-    //endResetModel();
 }
 
 void ArtistsModel::sparqlModelfinished()
 {
  //   emit dataChanged(QModelIndex().child(0,0),QModelIndex().child(mSparqlModel->rowCount(),mSparqlModel->columnCount()));
     beginResetModel();
-    emit modelChanged();
     qDebug() << "underlaying model finished result fetching";
     emit artistsReady();
     endResetModel();
@@ -70,6 +67,12 @@ QVariant ArtistsModel::data(const QModelIndex &index, int role) const {
     return "";
 }
 
+/**
+ * This returns an pseudo item in an variant map for SectionScroller
+ * @brief ArtistsModel::get
+ * @param row
+ * @return
+ */
 QVariantMap ArtistsModel::get(int row){
     QHash<int,QByteArray> roles = roleNames();
     QHashIterator<int, QByteArray> i(roles);
