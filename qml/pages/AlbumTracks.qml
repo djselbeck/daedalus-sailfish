@@ -112,7 +112,7 @@ Page {
                     MenuItem {
                         text: qsTr("play album")
                         onClicked: {
-                            playAlbum([artistname, albumname])
+                            playActiveAlbum();
                         }
                     }
                 }
@@ -213,7 +213,7 @@ Page {
                         MenuItem {
                             text: qsTr("play album")
                             onClicked: {
-                                playAlbum([artistname, albumname])
+                                playActiveAlbum();
                             }
                         }
 

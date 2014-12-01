@@ -27,7 +27,6 @@ SOURCES += src/harbour-odyssey.cpp \
     src/model/playbackstatusobject.cpp
 
 OTHER_FILES += qml/harbour-odyssey.qml \
-    qml/cover/CoverPage.qml \
     rpm/harbour-odyssey.changes.in \
     rpm/harbour-odyssey.spec \
     rpm/harbour-odyssey.yaml \
@@ -58,7 +57,10 @@ OTHER_FILES += qml/harbour-odyssey.qml \
     qml/components/ScrollLabel.qml \
     qml/components/ToggleImage.qml \
     qml/pages/CurrentPlaylistPage.qml \
-    qml/components/PlaylistSectionDelegate.qml
+    qml/components/PlaylistSectionDelegate.qml \
+    qml/pages/CurrentSong.qml \
+    qml/components/CoverPage.qml \
+    qml/components/ControlPanel.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -75,4 +77,7 @@ HEADERS += \
     src/mediaplayer/playlist.h \
     src/model/trackobject.h \
     src/model/playbackstatusobject.h
+
+RESOURCES += \
+    images.qrc
 

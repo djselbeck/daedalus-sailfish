@@ -3,6 +3,7 @@
 
 #include <QAbstractListModel>
 #include <QSparqlQueryModel>
+#include <QThread>
 #include <QSparqlConnection>
 
 class AlbumTracksModel : public QAbstractListModel
@@ -21,7 +22,7 @@ class AlbumTracksModel : public QAbstractListModel
         DurationFormattedRole
     };
 public:
-    explicit AlbumTracksModel(QObject *parent = 0, QSparqlConnection *connection = 0);
+    explicit AlbumTracksModel(QObject *parent = 0, QSparqlConnection *connection = 0, QThread *fetchthread = 0);
 
     Q_INVOKABLE QHash<int, QByteArray> roleNames() const;
     Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -37,6 +38,7 @@ private:
     QString mAlbumTracksQueryString;
     QSparqlConnection *mConnection;
     QSparqlQueryModel *mSparqlModel;
+    QThread *mThread;
 
     inline QString getLengthFormatted(int length) const;
 

@@ -179,7 +179,7 @@ BackgroundItem {
                             id: playButton
                             icon.source: "image://theme/icon-m-play"
                             onClicked: {
-                                playAlbum(["", title])
+                                playActiveAlbum();
                                 if ( flipped ) {
                                     rotateOut.running = true
                                     flipped = false
@@ -191,7 +191,7 @@ BackgroundItem {
                             id: addButton
                             icon.source: "image://theme/icon-m-add"
                             onClicked: {
-                                addAlbum([artistname, title])
+                                addActiveAlbum();
                                 if ( flipped ) {
                                     rotateOut.running = true
                                     flipped = false

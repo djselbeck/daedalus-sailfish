@@ -3,6 +3,7 @@ import Sailfish.Silica 1.0
 
 Page {
     id: mainPage
+    allowedOrientations: bothOrientation
 
     SilicaListView {
         id: mainList
@@ -35,7 +36,8 @@ Page {
                 } else if ( ident=== "settings" ) {
                     pageStack.push(Qt.resolvedUrl("settings/SettingsPage.qml"));
                 } else if ( ident === "playlist" ) {
-                    pageStack.push(Qt.resolvedUrl("CurrentPlaylistPage.qml"));
+//                    pageStack.push(Qt.resolvedUrl("CurrentPlaylistPage.qml"));
+                    pageStack.navigateForward();
                 }
             }
         }
@@ -58,10 +60,10 @@ Page {
                                  name: qsTr("albums"),
                                  ident: "albums"
                              })
-        mainMenuModel.append({
+        /*mainMenuModel.append({
                                  name: qsTr("files"),
                                  ident: "files"
-                             })
+                             })*/
         mainMenuModel.append({
                                  name: qsTr("search"),
                                  ident: "search"
@@ -71,4 +73,32 @@ Page {
                                  ident: "settings"
                              })
     }
+
+    Timer {
+            id: showCurrentSongTimer
+            interval: 15000
+            repeat: false
+            onTriggered: {
+                    pageStack.navigateForward();
+            }
+        }
+
+    onStatusChanged: {
+            if (status === PageStatus.Active) {
+                if ( mPlaylistPage == undefined) {
+                    var playlistComponent = Qt.createComponent(Qt.resolvedUrl("CurrentPlaylistPage.qml"));
+                    var playlistPage = playlistComponent.createObject(mainWindow);
+                    mPlaylistPage = playlistPage;
+                }
+
+                pageStack.pushAttached(mPlaylistPage);
+                showCurrentSongTimer.start()
+            } else if (status === PageStatus.Deactivating) {
+                if (showCurrentSongTimer.running) {
+                    showCurrentSongTimer.stop()
+                }
+            }
+            else if ( status === PageStatus.Activating ) {
+            }
+        }
 }

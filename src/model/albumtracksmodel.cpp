@@ -2,13 +2,17 @@
 
 #include <QTime>
 
-AlbumTracksModel::AlbumTracksModel(QObject *parent, QSparqlConnection *connection) :
+AlbumTracksModel::AlbumTracksModel(QObject *parent, QSparqlConnection *connection,QThread *fetchthread) :
     QAbstractListModel(parent)
 {
     if ( connection != NULL ) {
         mConnection = connection;
     }
-    mSparqlModel = new QSparqlQueryModel(this);
+    mSparqlModel = new QSparqlQueryModel(0);
+    if ( fetchthread != 0  ) {
+        mThread = fetchthread;
+        mSparqlModel->moveToThread(mThread);
+    }
     connect(mSparqlModel,SIGNAL(finished()),this,SLOT(sparqlModelfinished()));
 }
 

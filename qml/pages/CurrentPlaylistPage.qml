@@ -4,9 +4,8 @@ import "../components"
 
 Page {
     id: currentPlaylistPage
-    //property alias listmodel: playlistView.model
     allowedOrientations: bothOrientation
-    property int lastIndex: lastsongid
+    property int lastIndex: playbackstatus.playlistposition
     property bool mDeleteRemorseRunning: false
 
     Component.onDestruction: {
@@ -17,7 +16,7 @@ Page {
         id: playlistView
         clip: true
         delegate: trackDelegate
-        currentIndex: lastsongid
+        currentIndex: playbackstatus.playlistposition
 
         anchors {
             fill: parent
@@ -64,7 +63,7 @@ Page {
                 text: qsTr("jump to playing song")
                 onClicked: {
                     playlistView.currentIndex = -1
-                    playlistView.currentIndex = lastsongid
+                    playlistView.currentIndex = playbackstatus.playlistposition
                 }
             }
         }
@@ -317,7 +316,7 @@ Page {
 
     onStatusChanged: {
         if (status === PageStatus.Activating) {
-            playlistView.positionViewAtIndex(lastsongid, ListView.Center)
+            playlistView.positionViewAtIndex(playbackstatus.playlistposition, ListView.Center)
         } else if (status === PageStatus.Active) {
 //            pageStack.pushAttached(Qt.resolvedUrl("CurrentSong.qml"));
             if ( mCurrentSongPage == undefined) {
@@ -334,7 +333,7 @@ Page {
     onOrientationTransitionRunningChanged: {
         if ( !orientationTransitionRunning ) {
             playlistView.currentIndex = -1
-            playlistView.currentIndex = lastsongid
+            playlistView.currentIndex = playbackstatus.playlistposition
         }
     }
     onLastIndexChanged: {

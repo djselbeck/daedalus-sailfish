@@ -8,6 +8,11 @@ Playlist::Playlist(QObject *parent) :
     mPlayer = new QMediaPlayer(this);
     mPlayer->setPlaylist(mQPlaylist);
     connect(mQPlaylist,SIGNAL(currentIndexChanged(int)),this,SLOT(indexChanged(int)));
+    mStatusTimer = 0;
+    mStatusInterval = 1000;
+
+    connect(mPlayer,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(updateStatus()));
+    connect(mPlayer,SIGNAL(positionChanged(qint64)),this,SLOT(updateStatus()));
 }
 
 
@@ -18,8 +23,35 @@ void Playlist::addFile(TrackObject *track)
         qDebug() << "Couldn't add " << track->getURL();
         return;
     }
+    int position = mTrackList->size();
+    beginInsertRows(QModelIndex(),position,position);
     mTrackList->append(track);
-    qDebug() << "File: " << track->getURL() << " added";
+    endInsertRows();
+    qDebug() << "File: " << track->getURL() << " added at " << mTrackList->size()-1;
+}
+
+void Playlist::insertAt(TrackObject *track, int pos)
+{
+    int insPos;
+    if ( pos >= mTrackList->size() ) {
+        insPos = mTrackList->size();
+    }
+    bool retVal = mQPlaylist->insertMedia(insPos,track->getURL());
+    if ( !retVal ) {
+        qDebug() << "Couldn't add " << track->getURL();
+        return;
+    }
+    beginInsertRows(QModelIndex(),insPos,insPos);
+    mTrackList->insert(insPos,track);
+    endInsertRows();
+    qDebug() << "File: " << track->getURL() << " added at " <<insPos;
+}
+
+void Playlist::playSong(TrackObject *track)
+{
+    int pos = rowCount();
+    insertAt(track,pos);
+    playPosition(pos);
 }
 
 void Playlist::removePosition(int position)
@@ -33,8 +65,8 @@ void Playlist::playPosition(int position)
     qDebug() << "jumping to position: " << position;
     mQPlaylist->setCurrentIndex(position);
     mPlayer->play();
-    emit dataChanged(index(oldpos),index(oldpos));
-    emit dataChanged(index(position),index(position));
+    indexChanged(mQPlaylist->currentIndex());
+    updateStatus();
 }
 
 void Playlist::setPlaybackMode(QMediaPlaylist::PlaybackMode mode)
@@ -83,7 +115,11 @@ QVariant Playlist::data(const QModelIndex &index, int role) const
     case DurationFormattedRole:
         return mTrackList->at(index.row())->getLengthFormatted();
     case PlayingRole:
-        return mQPlaylist->currentIndex() == index.row() ? true : false;
+        if ( (mPlayer->state() == QMediaPlayer::PlayingState || mPlayer->state() == QMediaPlayer::PlayingState) &&
+             mQPlaylist->currentIndex() == index.row() ) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -109,4 +145,145 @@ void Playlist::indexChanged(int position)
     emit dataChanged(index(mOldIndex),index(mOldIndex));
     emit dataChanged(index(position),index(position));
     mOldIndex = position;
+}
+
+void Playlist::registerStatusObject(PlaybackStatusObject *obj)
+{
+    if ( obj == 0 ) {
+        return;
+    }
+    mStatusObject = obj;
+    if ( mStatusTimer != 0 ) {
+        mStatusTimer->stop();
+        mStatusTimer->deleteLater();
+        mStatusTimer = 0;
+    }
+//    mStatusTimer = new QTimer();
+//    mStatusTimer->setSingleShot(false);
+//    mStatusTimer->setInterval(mStatusInterval);
+//    connect(mStatusTimer,SIGNAL(timeout()),this,SLOT(updateStatus()));
+//    mStatusTimer->start();
+}
+
+void Playlist::updateStatus()
+{
+    int index = mQPlaylist->currentIndex();
+    int playing = mPlayer->state() == QMediaPlayer::PlayingState ? 1 : 0;
+    QString title;
+    QString artist;
+    QString album;
+    QUrl url;
+    int length;
+    int elapsed = mPlayer->position()/1000;;
+    int tracknr;
+    int discnr;
+    int playlistposition = mQPlaylist->currentIndex();
+    int playlistlength = mTrackList->size();
+    int random = mQPlaylist->playbackMode() == QMediaPlaylist::Random ? 1 : 0;
+    int repeat = mQPlaylist->playbackMode() == QMediaPlaylist::Loop ? 1 : 0;
+
+    if (mTrackList->size() > 0 && index >= 0) {
+        title = mTrackList->at(index)->getTitle();
+        artist = mTrackList->at(index)->getArtist();
+        album = mTrackList->at(index)->getAlbum();
+        url = mTrackList->at(index)->getURL();
+        length = mTrackList->at(index)->getLength();
+        tracknr = mTrackList->at(index)->getTrackNr();
+        discnr = mTrackList->at(index)->getDiscNr();
+    }
+    if ( mStatusObject != 0 ) {
+        mStatusObject->setInformation(title,artist,album,url.toEncoded(),length,tracknr,discnr,elapsed,playlistposition,playlistlength,playing,random,repeat);
+    }
+}
+
+void Playlist::next()
+{
+    if ( mQPlaylist->currentIndex() + 1 < mTrackList->size() ) {
+        mQPlaylist->next();
+    } else {
+        stop();
+    }
+}
+
+void Playlist::previous()
+{
+    mQPlaylist->previous();
+}
+
+void Playlist::pause()
+{
+    mPlayer->pause();
+    indexChanged(mQPlaylist->currentIndex());
+    updateStatus();
+}
+
+void Playlist::play()
+{
+    mPlayer->play();
+    indexChanged(mQPlaylist->currentIndex());
+    updateStatus();
+}
+
+void Playlist::clear()
+{
+    stop();
+    beginResetModel();
+    bool retVal = mQPlaylist->clear();
+    if ( !retVal ) {
+        qDebug() << "Couldn't delete playlist";
+        return;
+    }
+    TrackObject *track;
+    foreach (track, *mTrackList) {
+        delete(track);
+    }
+    mTrackList->clear();
+    endResetModel();
+}
+
+void Playlist::togglePlayPause()
+{
+    if( mPlayer->state() == QMediaPlayer::PlayingState ) {
+        pause();
+    } else if ( mPlayer->state() == QMediaPlayer::PausedState || mPlayer->state() == QMediaPlayer::StoppedState ) {
+        play();
+    }
+}
+
+void Playlist::stop()
+{
+    mPlayer->stop();
+    indexChanged(mQPlaylist->currentIndex());
+    mQPlaylist->setCurrentIndex(0);
+    updateStatus();
+}
+
+void Playlist::seek(int pos)
+{
+    qDebug() << "seeking";
+    if ( mPlayer->isSeekable() ) {
+        mPlayer->setPosition(pos * 1000);
+    }
+}
+
+void Playlist::setRandom(bool random)
+{
+    if ( random ) {
+        qDebug() << "enable random";
+        mQPlaylist->setPlaybackMode(QMediaPlaylist::Random);
+    } else {
+        qDebug() << "disable random";
+        mQPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
+    }
+    updateStatus();
+}
+
+void Playlist::setRepeat(bool repeat)
+{
+    if ( repeat ) {
+        mQPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
+    } else {
+        mQPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
+    }
+    updateStatus();
 }

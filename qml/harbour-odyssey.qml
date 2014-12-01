@@ -30,6 +30,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "components"
 import "pages"
 
 ApplicationWindow
@@ -51,9 +52,22 @@ ApplicationWindow
 
     // playlist management
     signal addAlbumTrack(int index);
+    signal playAlbumTrack(int index);
     signal addActiveAlbum();
     signal playPlaylistIndex(int index);
+    signal playActiveAlbum();
+    signal deletePlaylist();
 
+    // basic controls
+    signal next();
+    signal prev();
+    signal play();
+    signal stop();
+    signal pause();
+    signal togglePlayPause();
+    signal seek(int pos);
+    signal setShuffle(bool random)
+    signal setRepeat(bool repeat)
 
     // Signals change in download-size preference
     signal newDownloadSize(int size)
@@ -71,13 +85,57 @@ ApplicationWindow
     property int bothOrientation: Orientation.Landscape + Orientation.Portrait + Orientation.PortraitInverted + Orientation.LandscapeInverted
     property bool jollaQuickscroll: false;
     property bool mDebugEnabled: false;
+    property bool mPositionSliderActive: false
+
+    // Global image sources for play/pause
+    property string playbuttoniconsource : playbackstatus.playing ?  "image://theme/icon-m-pause" :  "image://theme/icon-m-play";
+    property string playbuttoniconsourcecover :  playbackstatus.playing ? "image://theme/icon-cover-pause" : "image://theme/icon-cover-play";
 
     property string artistname
     property string albumname
+    property string coverimageurl
+    property string artistimageurl
 
-    initialPage: Component { MainPage { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    property Page mPlaylistPage
+    property Page mCurrentSongPage
 
+    // Nicely formats length values to string
+    function formatLength(length)
+    {
+        if ( length === 0 ) {
+            return "0:00"
+        }
+
+        var temphours = Math.floor(length/3600);
+        var min = 0;
+        var sec = 0;
+        var temp="";
+        if(temphours>1)
+        {
+            min=(length-(3600*temphours))/60;
+        }
+        else{
+            min=Math.floor(length/60);
+        }
+        sec = length-temphours*3600-min*60;
+        if(temphours===0)
+        {
+            temp=((min<10?"0":"")+min)+":"+(sec<10?"0":"")+(sec);
+        }
+        else
+        {
+            temp=((temphours<10?"0":"")+temphours)+":"+((min<10?"0":"")+min)+":"+(sec<10?"0":"")+(sec);
+        }
+        return temp;
+    }
+
+    ControlPanel {
+            id: quickControlPanel
+    }
+    bottomMargin: quickControlPanel.visibleSize
+
+    initialPage: Qt.resolvedUrl("pages/MainPage.qml")
+    cover: Qt.resolvedUrl("components/CoverPage.qml")
 
 }
 

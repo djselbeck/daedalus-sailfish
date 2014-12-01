@@ -5,13 +5,18 @@
 // REmove me
 #include <QSparqlResult>
 
-AlbumsModel::AlbumsModel(QObject *parent, QSparqlConnection *connection) :
+AlbumsModel::AlbumsModel(QObject *parent, QSparqlConnection *connection, QThread *fetchthread) :
     QAbstractListModel(parent)
 {
+
     if ( connection != NULL ) {
         mConnection = connection;
     }
-    mSparqlModel = new QSparqlQueryModel(this);
+    mSparqlModel = new QSparqlQueryModel(0);
+    if ( fetchthread != 0  ) {
+        mThread = fetchthread;
+        mSparqlModel->moveToThread(mThread);
+    }
     connect(mSparqlModel,SIGNAL(finished()),this,SLOT(sparqlModelfinished()));
 }
 
@@ -43,7 +48,6 @@ void AlbumsModel::requestAlbums(QString artist)
 void AlbumsModel::sparqlModelfinished()
 {
     beginResetModel();
-    emit dataChanged(QModelIndex(),QModelIndex());
     qDebug() << "underlaying model finished result fetching";
     endResetModel();
 }

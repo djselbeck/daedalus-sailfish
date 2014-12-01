@@ -184,7 +184,7 @@ Dialog {
             MenuItem {
                 text: qsTr("play song")
                 onClicked: {
-                    playSong(filename)
+                    playAlbumTrack(index);
                     pageStack.navigateBack(PageStackAction.Animated)
                 }
             }
@@ -202,7 +202,7 @@ Dialog {
             id: playButton
             icon.source: "image://theme/icon-m-play"
             onClicked: {
-                playSong(filename)
+                playAlbumTrack(index);
                 pageStack.pop()
             }
         }

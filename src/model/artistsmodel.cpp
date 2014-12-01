@@ -2,14 +2,18 @@
 
 #include <QUrl>
 
-ArtistsModel::ArtistsModel(QObject *parent, QSparqlConnection *connection) :
+ArtistsModel::ArtistsModel(QObject *parent, QSparqlConnection *connection, QThread *fetchthread) :
     QAbstractListModel(parent)
 {
     if ( connection != NULL ) {
         mConnection = connection;
         mArtistsQueryString = "SELECT ?artist  COUNT(?album) as ?albumcount ?artistobj WHERE { ?album nmm:albumArtist ?artistobj . ?artistobj nmm:artistName ?artist } GROUP BY ?artist ORDER BY ?artist";
     }
-    mSparqlModel = new QSparqlQueryModel(this);
+    mSparqlModel = new QSparqlQueryModel(0);
+    if ( fetchthread != 0  ) {
+        mThread = fetchthread;
+        mSparqlModel->moveToThread(mThread);
+    }
     connect(mSparqlModel,SIGNAL(finished()),this,SLOT(sparqlModelfinished()));
 }
 

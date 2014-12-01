@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <Qt5Sparql/QSparqlQueryModel>
+#include <QThread>
 
 class AlbumsModel : public QAbstractListModel
 {
@@ -21,7 +22,7 @@ class AlbumsModel : public QAbstractListModel
     };
 
 public:
-    explicit AlbumsModel(QObject *parent = 0, QSparqlConnection *connection = 0);
+    explicit AlbumsModel(QObject *parent = 0, QSparqlConnection *connection = 0, QThread *fetchthread = 0);
 
     Q_INVOKABLE QHash<int, QByteArray> roleNames() const;
     Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -42,6 +43,7 @@ private:
     QString mAlbumsQueryString;
     QSparqlConnection *mConnection;
     QSparqlQueryModel *mSparqlModel;
+    QThread *mThread;
 
 };
 

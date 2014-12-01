@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QQuickView>
 #include <QQmlContext>
+#include <QtQml>
+#include <QQmlEngine>
+#include <QThread>
 #include <Qt5Sparql/QSparqlConnection>
 
 
@@ -11,6 +14,7 @@
 #include "model/albumsmodel.h"
 #include "model/artistsmodel.h"
 #include "model/albumtracksmodel.h"
+#include "model/playbackstatusobject.h"
 #include "mediaplayer/playlist.h"
 
 class MainController : public QObject
@@ -54,6 +58,7 @@ private:
     AlbumsModel *mAlbumsModel;
     ArtistsModel *mArtistsModel;
     AlbumTracksModel *mAlbumTracksModel;
+    QThread *mModelThread;
 
 
     // Qml stuff
@@ -76,13 +81,18 @@ private:
 
     // Playback objects
     Playlist *mPlaylist;
+    PlaybackStatusObject *mPlaybackStatus;
+
 
 private slots:
     void receiveDownloadSize(int);
     void receiveSettingKey(QVariant setting);
 
     void addAlbumTrack(int index);
+    void playAlbumTrack(int index);
     void addActiveAlbum();
+    void playActiveAlbum();
+
 
 
 

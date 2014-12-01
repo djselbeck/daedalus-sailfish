@@ -168,9 +168,9 @@
     </message>
 </context>
 <context>
-    <name>CoverPage</name>
+    <name>ControlPanel</name>
     <message>
-        <source>My Cover</source>
+        <source>not playing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -246,6 +246,45 @@
     </message>
     <message>
         <source>input url (http://, file://, etc)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CurrentSong</name>
+    <message>
+        <source>show all tracks from album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show albums from artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>current song</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>track no.:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>playlist no.:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bitrate:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>properties:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uri:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>position</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -435,10 +474,6 @@
     </message>
     <message>
         <source>albums</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

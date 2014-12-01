@@ -10,13 +10,13 @@ function fillSections(listview,sectionProperty) {
 
     var currentSection = "";
     var currentItem;
-    console.debug("Filling sections of: " + count + " elements");
+//    console.debug("Filling sections of: " + count + " elements");
     for(var i = 0; i < count; i++) {
         currentItem = listview.model.get(i);
         if(currentItem[sectionProperty] !== currentSection ) {
             currentSection = currentItem[sectionProperty];
             sections.push({index: i, value: currentSection});
-            console.debug("New section: " + currentSection);
+//            console.debug("New section: " + currentSection);
         }
     }
 }
