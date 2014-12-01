@@ -25,7 +25,8 @@ public:
         DiscNumberRole,
         FileURLRole,
         DurationFormattedRole,
-        PlayingRole
+        PlayingRole,
+        SectionRole
     };
 
     Q_INVOKABLE QHash<int, QByteArray> roleNames() const;

@@ -56,6 +56,19 @@ void Playlist::playSong(TrackObject *track)
 
 void Playlist::removePosition(int position)
 {
+    if (mQPlaylist->currentIndex() == position) {
+        // currently playing try to advance
+        next();
+    }
+    bool retVal = mQPlaylist->removeMedia(position);
+    if ( !retVal ) {
+        qDebug() << "error removing song:" << position;
+        return;
+    }
+    beginRemoveRows(QModelIndex(),position,position);
+    delete(mTrackList->at(position));
+    mTrackList->removeAt(position);
+    endRemoveRows();
 
 }
 
@@ -86,6 +99,7 @@ QHash<int, QByteArray> Playlist::roleNames() const {
     roles[FileURLRole] = "fileurl";
     roles[DurationFormattedRole] = "lengthformatted";
     roles[PlayingRole] = "playing";
+    roles[SectionRole] = "section";
     return roles;
 }
 
@@ -120,6 +134,8 @@ QVariant Playlist::data(const QModelIndex &index, int role) const
             return true;
         }
         return false;
+    case SectionRole:
+        return mTrackList->at(index.row())->getArtist() + '|' + mTrackList->at(index.row())->getAlbum();
     }
 
 
@@ -173,10 +189,10 @@ void Playlist::updateStatus()
     QString artist;
     QString album;
     QUrl url;
-    int length;
+    int length = 0;
     int elapsed = mPlayer->position()/1000;;
-    int tracknr;
-    int discnr;
+    int tracknr = 0;
+    int discnr = 0;
     int playlistposition = mQPlaylist->currentIndex();
     int playlistlength = mTrackList->size();
     int random = mQPlaylist->playbackMode() == QMediaPlaylist::Random ? 1 : 0;
@@ -254,13 +270,12 @@ void Playlist::stop()
 {
     mPlayer->stop();
     indexChanged(mQPlaylist->currentIndex());
-    mQPlaylist->setCurrentIndex(0);
+    mQPlaylist->setCurrentIndex(-1);
     updateStatus();
 }
 
 void Playlist::seek(int pos)
 {
-    qDebug() << "seeking";
     if ( mPlayer->isSeekable() ) {
         mPlayer->setPosition(pos * 1000);
     }
@@ -269,10 +284,8 @@ void Playlist::seek(int pos)
 void Playlist::setRandom(bool random)
 {
     if ( random ) {
-        qDebug() << "enable random";
         mQPlaylist->setPlaybackMode(QMediaPlaylist::Random);
     } else {
-        qDebug() << "disable random";
         mQPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
     }
     updateStatus();

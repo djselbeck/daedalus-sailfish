@@ -106,6 +106,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(setRepeat(bool)),mPlaylist,SLOT(setRepeat(bool)));
     connect(item,SIGNAL(setShuffle(bool)),mPlaylist,SLOT(setRandom(bool)));
     connect(item,SIGNAL(deletePlaylist()),mPlaylist,SLOT(clear()));
+    connect(item,SIGNAL(deletePlaylistTrack(int)),mPlaylist,SLOT(removePosition(int)));
 }
 
 void MainController::connectModelSignals()

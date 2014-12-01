@@ -57,6 +57,7 @@ ApplicationWindow
     signal playPlaylistIndex(int index);
     signal playActiveAlbum();
     signal deletePlaylist();
+    signal deletePlaylistTrack(int index);
 
     // basic controls
     signal next();
