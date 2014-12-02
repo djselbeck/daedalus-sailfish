@@ -32,7 +32,7 @@ void Playlist::addFile(TrackObject *track)
 
 void Playlist::insertAt(TrackObject *track, int pos)
 {
-    int insPos;
+    int insPos = pos;
     if ( pos >= mTrackList->size() ) {
         insPos = mTrackList->size();
     }
@@ -97,6 +97,7 @@ QHash<int, QByteArray> Playlist::roleNames() const {
     roles[TrackNumberRole] = "tracknr";
     roles[DiscNumberRole] = "discnr";
     roles[FileURLRole] = "fileurl";
+    roles[TrackURNRole] = "trackurn";
     roles[DurationFormattedRole] = "lengthformatted";
     roles[PlayingRole] = "playing";
     roles[SectionRole] = "section";
@@ -126,6 +127,8 @@ QVariant Playlist::data(const QModelIndex &index, int role) const
         return mTrackList->at(index.row())->getDiscNr();
     case FileURLRole:
         return mTrackList->at(index.row())->getURL();
+    case TrackURNRole:
+        return mTrackList->at(index.row())->getURN();
     case DurationFormattedRole:
         return mTrackList->at(index.row())->getLengthFormatted();
     case PlayingRole:
@@ -189,6 +192,7 @@ void Playlist::updateStatus()
     QString artist;
     QString album;
     QUrl url;
+    QUrl urn;
     int length = 0;
     int elapsed = mPlayer->position()/1000;;
     int tracknr = 0;
@@ -203,12 +207,13 @@ void Playlist::updateStatus()
         artist = mTrackList->at(index)->getArtist();
         album = mTrackList->at(index)->getAlbum();
         url = mTrackList->at(index)->getURL();
+        urn = mTrackList->at(index)->getURN();
         length = mTrackList->at(index)->getLength();
         tracknr = mTrackList->at(index)->getTrackNr();
         discnr = mTrackList->at(index)->getDiscNr();
     }
     if ( mStatusObject != 0 ) {
-        mStatusObject->setInformation(title,artist,album,url.toEncoded(),length,tracknr,discnr,elapsed,playlistposition,playlistlength,playing,random,repeat);
+        mStatusObject->setInformation(title,artist,album,url.toEncoded(),urn,length,tracknr,discnr,elapsed,playlistposition,playlistlength,playing,random,repeat);
     }
 }
 
@@ -299,4 +304,39 @@ void Playlist::setRepeat(bool repeat)
         mQPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
     }
     updateStatus();
+}
+
+void Playlist::moveTrack(int from, int to)
+{
+    beginRemoveRows(QModelIndex(),from,from);
+    if ( mQPlaylist->currentIndex() == from || from >= rowCount()) {
+        // Abort here
+        return;
+    }
+    bool retVal = mQPlaylist->removeMedia(from);
+    if ( !retVal ) {
+        qDebug() << "error moving track";
+        return;
+    }
+    TrackObject *tempTrack = mTrackList->at(from);
+    mTrackList->removeAt(from);
+    endRemoveRows();
+    beginInsertRows(QModelIndex(),to,to);
+    retVal = mQPlaylist->insertMedia(to,tempTrack->getURL());
+    if ( !retVal ) {
+        qDebug() << "error reinserting track";
+        return;
+    }
+    mTrackList->insert(to,tempTrack);
+    endInsertRows();
+}
+
+void Playlist::playNext(int position)
+{
+    moveTrack(position,currentIndex()+1);
+}
+
+int Playlist::currentIndex()
+{
+    return mQPlaylist->currentIndex();
 }

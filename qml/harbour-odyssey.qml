@@ -41,6 +41,8 @@ ApplicationWindow
     signal requestArtistAlbums(string artist);
     signal requestArtists();
     signal requestAlbum(string albumurn);
+    signal requestTrackAlbumTracks(string trackurn);
+    signal requestTrackArtistAlbums(string trackurn);
 
     // Controller model clear signals (memory cleanup)
     signal clearAlbumList();
@@ -52,9 +54,11 @@ ApplicationWindow
 
     // playlist management
     signal addAlbumTrack(int index);
+    signal addAlbumTrackAfterCurrent(int index);
     signal playAlbumTrack(int index);
     signal addActiveAlbum();
     signal playPlaylistIndex(int index);
+    signal playPlaylistSongNext(int index);
     signal playActiveAlbum();
     signal deletePlaylist();
     signal deletePlaylistTrack(int index);
@@ -81,7 +85,7 @@ ApplicationWindow
     signal requestArtistInfo(string artist);
     signal requestAlbumInfo(variant album);
 
-    property int populateDuration: 200;
+    property int populateDuration: 700;
     property int listPadding: Theme.paddingMedium;
     property int bothOrientation: Orientation.Landscape + Orientation.Portrait + Orientation.PortraitInverted + Orientation.LandscapeInverted
     property bool jollaQuickscroll: false;

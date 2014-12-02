@@ -24,6 +24,7 @@ public:
         TrackNumberRole,
         DiscNumberRole,
         FileURLRole,
+        TrackURNRole,
         DurationFormattedRole,
         PlayingRole,
         SectionRole
@@ -34,6 +35,8 @@ public:
     Q_INVOKABLE QVariantMap get(int row);
     QVariant data(const QModelIndex &index, int role) const;
 
+    int currentIndex();
+
     void registerStatusObject(PlaybackStatusObject *obj);
 
 signals:
@@ -43,6 +46,8 @@ public slots:
     void playSong(TrackObject *track);
     void insertAt(TrackObject *track, int pos);
     void removePosition(int position);
+    void moveTrack(int from, int to);
+    void playNext(int position);
     void playPosition(int position);
     void setPlaybackMode(QMediaPlaylist::PlaybackMode mode);
     void setRandom(bool random);

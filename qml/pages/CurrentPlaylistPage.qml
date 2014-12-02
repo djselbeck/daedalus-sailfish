@@ -30,9 +30,24 @@ Page {
         header: PageHeader {
             title: qsTr("playlist")
         }
-//        populate: Transition {
-//            NumberAnimation { properties: "x"; from:playlistView.width*2 ;duration: populateDuration }
-//        }
+        add: Transition {
+            NumberAnimation { properties: "x"; from:playlistView.width*2 ;duration: populateDuration }
+        }
+        populate: Transition {
+            NumberAnimation { properties: "x"; from:playlistView.width*2 ;duration: populateDuration }
+        }
+        remove: Transition {
+                        NumberAnimation { properties: "x"; to:playlistView.width*2 ;duration: populateDuration }
+        }
+        addDisplaced: Transition {
+                NumberAnimation { properties: "x,y"; duration: populateDuration }
+            }
+        removeDisplaced: Transition {
+                NumberAnimation { properties: "x,y"; duration: populateDuration }
+            }
+        moveDisplaced: Transition {
+                NumberAnimation { properties: "x,y"; duration: populateDuration }
+            }
         PullDownMenu {
             MenuItem {
                 text: qsTr("add url")
@@ -99,8 +114,10 @@ Page {
                         MenuItem {
                             text: qsTr("show artist")
                             onClicked: {
-                                artistClicked(artist)
-                                pageStack.push(Qt.resolvedUrl("AlbumListPage.qml"),{artistname:artist});
+                                requestTrackArtistAlbums(trackurn);
+                                pageStack.push(Qt.resolvedUrl("AlbumsList.qml"), {
+                                                   artistname: artist,
+                                               });
                             }
                         }
 
@@ -108,9 +125,11 @@ Page {
                             text: qsTr("show album")
                             onClicked: {
                                 onClicked: {
-                                    albumClicked("", album)
-                                    pageStack.push(Qt.resolvedUrl("AlbumTracksPage.qml"),{artistname:"",albumname:album});
-
+                                    requestTrackAlbumTracks(trackurn);
+                                    pageStack.push(Qt.resolvedUrl("AlbumTracks.qml"), {
+                                                       artistname: artist,
+                                                       albumname: album
+                                                   });
                                 }
                             }
                         }

@@ -46,22 +46,21 @@ Page {
                     text: qsTr("show all tracks from album")
                     visible: playbackstatus.album === "" ? false : true
                     onClicked: {
-                        // FIXME
-                        albumClicked("", playbackstatus.album)
-                        pageStack.push(Qt.resolvedUrl("AlbumTracksPage.qml"), {
-                                           artistname: "",
+                        requestTrackAlbumTracks(playbackstatus.trackurn);
+                        pageStack.push(Qt.resolvedUrl("AlbumTracks.qml"), {
+                                           artistname: playbackstatus.artist,
                                            albumname: playbackstatus.album
-                                       })
+                                       });
                     }
                 }
                 MenuItem {
                     text: qsTr("show albums from artist")
                     visible: playbackstatus.artist === "" ? false : true
                     onClicked: {
-                        artistClicked(playbackstatus.playbackstatus.artist)
-                        pageStack.push(Qt.resolvedUrl("AlbumListPage.qml"), {
-                                           artistname: playbackstatus.artist
-                                       })
+                        requestTrackArtistAlbums(playbackstatus.trackurn);
+                        pageStack.push(Qt.resolvedUrl("AlbumsList.qml"), {
+                                           artistname: playbackstatus.artist,
+                                       });
                     }
                 }
             }
@@ -280,7 +279,7 @@ Page {
                     }
                     Label {
                         id: playlistnrText
-                        text: playbackstatus.playlistposition + " / "
+                        text: (playbackstatus.playlistposition + 1) + " / "
                               + playbackstatus.playlistlength
                         color: Theme.primaryColor
                         font.pixelSize: fontsize

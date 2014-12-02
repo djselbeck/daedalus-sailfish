@@ -10,6 +10,7 @@ class PlaybackStatusObject : public QObject
     Q_PROPERTY(QString title READ getTitle NOTIFY valuesChanged)
     Q_PROPERTY(QString artist READ getArtist NOTIFY valuesChanged)
     Q_PROPERTY(QString album READ getAlbum NOTIFY valuesChanged)
+    Q_PROPERTY(QUrl trackurn READ getURN NOTIFY valuesChanged)
     Q_PROPERTY(QUrl url READ getURL NOTIFY valuesChanged)
     Q_PROPERTY(int length READ getLength NOTIFY valuesChanged)
     Q_PROPERTY(int elapsed READ getElapsed NOTIFY valuesChanged)
@@ -24,12 +25,13 @@ class PlaybackStatusObject : public QObject
 
 
 public:
-    explicit PlaybackStatusObject(QString title = "", QString artist = "", QString album = "", QString url = "", int length = 0, int tracknr = 0, int discnr = 0, int elapsed = 0, int playlistposition = 0, int playlistlength = 0, QObject *parent = 0);
+    explicit PlaybackStatusObject(QString title = "", QString artist = "", QString album = "", QString url = "", QUrl urn = QUrl(), int length = 0, int tracknr = 0, int discnr = 0, int elapsed = 0, int playlistposition = 0, int playlistlength = 0, QObject *parent = 0);
 
     QString getTitle();
     QString getArtist();
     QString getAlbum();
     QUrl getURL();
+    QUrl getURN();
     int getLength();
     int getTrackNr();
     int getElapsed();
@@ -41,7 +43,7 @@ public:
     int getRandom();
     QString getLengthFormatted();
 
-    void setInformation(QString title, QString artist, QString album, QString url, int length, int tracknr, int discnr, int elapsed, int playlistposition, int playlistlength, int playing, int random, int repeat);
+    void setInformation(QString title, QString artist, QString album, QString url, QUrl urn, int length, int tracknr, int discnr, int elapsed, int playlistposition, int playlistlength, int playing, int random, int repeat);
 signals:
     void valuesChanged();
 
@@ -52,6 +54,8 @@ private:
     QString mArtist;
     QString mAlbum;
     QString mURL;
+    QUrl mURN;
+
     int mLength;
     int mElapsed;
     int mTrackNr;

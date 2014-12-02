@@ -2,13 +2,14 @@
 
 #include <QDebug>
 
-PlaybackStatusObject::PlaybackStatusObject(QString title, QString artist, QString album, QString url, int length, int tracknr, int discnr, int elapsed, int playlistposition, int playlistlength, QObject *parent) :
+PlaybackStatusObject::PlaybackStatusObject(QString title, QString artist, QString album, QString url, QUrl urn, int length, int tracknr, int discnr, int elapsed, int playlistposition, int playlistlength, QObject *parent) :
     QObject(parent)
 {
     mTitle = title;
     mArtist = artist;
     mAlbum = album;
     mURL = url;
+    mURN = urn;
     mLength = length;
     mTrackNr = tracknr;
     mDiscNr = discnr;
@@ -38,6 +39,11 @@ QString PlaybackStatusObject::getAlbum()
 QUrl PlaybackStatusObject::getURL()
 {
     return QUrl(mURL);
+}
+
+QUrl PlaybackStatusObject::getURN()
+{
+    return mURN;
 }
 
 int PlaybackStatusObject::getLength()
@@ -109,12 +115,13 @@ QString PlaybackStatusObject::getLengthFormatted()
     return temp;
 }
 
-void PlaybackStatusObject::setInformation(QString title, QString artist, QString album, QString url, int length, int tracknr, int discnr, int elapsed, int playlistposition, int playlistlength, int playing, int random, int repeat)
+void PlaybackStatusObject::setInformation(QString title, QString artist, QString album, QString url, QUrl urn, int length, int tracknr, int discnr, int elapsed, int playlistposition, int playlistlength, int playing, int random, int repeat)
 {
     mTitle = title;
     mArtist = artist;
     mAlbum = album;
     mURL = url;
+    mURN = urn;
     mLength = length;
     mTrackNr = tracknr;
     mDiscNr = discnr;

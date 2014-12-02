@@ -19,6 +19,7 @@ class AlbumTracksModel : public QAbstractListModel
         TrackNumberRole,
         DiscNumberRole,
         FileURLRole,
+        TrackURNRole,
         DurationFormattedRole
     };
 public:
@@ -33,6 +34,7 @@ signals:
 
 public slots:
     void requestAlbumTracks(QString);
+    void requestAlbumTracksReverseFromTrack(QString urn);
 
 private:
     QString mAlbumTracksQueryString;

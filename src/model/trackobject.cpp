@@ -1,6 +1,6 @@
 #include "trackobject.h"
 
-TrackObject::TrackObject(QString title, QString artist, QString album, QString url, int length, int tracknr, int discnr, QObject *parent) :
+TrackObject::TrackObject(QString title, QString artist, QString album, QString url, QUrl urn, int length, int tracknr, int discnr, QObject *parent) :
     QObject(parent)
 {
     mTitle = title;
@@ -10,6 +10,7 @@ TrackObject::TrackObject(QString title, QString artist, QString album, QString u
     mLength = length;
     mTrackNr = tracknr;
     mDiscNr = discnr;
+    mURN = urn;
 }
 
 QString TrackObject::getTitle(){
@@ -29,6 +30,11 @@ QString TrackObject::getAlbum()
 QUrl TrackObject::getURL()
 {
     return QUrl(mURL);
+}
+
+QUrl TrackObject::getURN()
+{
+    return mURN;
 }
 
 int TrackObject::getLength()

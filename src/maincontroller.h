@@ -90,6 +90,7 @@ private slots:
 
     void addAlbumTrack(int index);
     void playAlbumTrack(int index);
+    void addAlbumTrackAfterCurrent(int index);
     void addActiveAlbum();
     void playActiveAlbum();
 

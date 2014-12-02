@@ -276,17 +276,18 @@ BackgroundItem {
                             }
 
                             onClicked: {
-                                playAlbum([albumslistPage.artistname, album]);
-                                playPlaylistTrack(index);
+                                deletePlaylist();
+                                addActiveAlbum();
+                                playPlaylistIndex(index);
                             }
                             function playTrackRemorse() {
                                 remorseAction(qsTr("playing track"), function () {
-                                    playSong(path)
+                                    playAlbumTrack(index);
                                 }, 3000)
                             }
                             function addTrackRemorse() {
                                 remorseAction(qsTr("adding track"), function () {
-                                    addSong(path)
+                                    addAlbumTrack(index);
                                 }, 3000)
                             }
                             Component {

@@ -35,6 +35,7 @@ signals:
 public slots:
     void requestAlbums();
     void requestAlbums(QString artist);
+    void requestArtistAlbumsReverseFromTrack(QString urn);
     void sparqlModelfinished();
 
 

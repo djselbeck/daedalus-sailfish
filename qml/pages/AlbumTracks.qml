@@ -94,7 +94,7 @@ Page {
                     }
                 }
                 PullDownMenu {
-                    MenuItem {
+                    /*MenuItem {
                         enabled: (artistname!=="")
                         visible: enabled
                         text: qsTr("show all tracks")
@@ -102,7 +102,7 @@ Page {
                             albumClicked("", albumname);
                             artistname = "";
                         }
-                    }
+                    }*/
                     MenuItem {
                         text: qsTr("add album")
                         onClicked: {
@@ -352,7 +352,7 @@ Page {
             }
             function playTrackRemorse() {
                 remorseAction(qsTr("playing track"), function () {
-                    playSong(path)
+                    playAlbumTrack(index)
                 }, 3000)
             }
             function addTrackRemorse() {
@@ -362,7 +362,7 @@ Page {
             }
             function addTrackAfterCurrentRemorse() {
                 remorseAction(qsTr("adding track"), function () {
-                    addSongAfterCurrent(path)
+                    addAlbumTrackAfterCurrent(index)
                 }, 3000)
             }
             Component {

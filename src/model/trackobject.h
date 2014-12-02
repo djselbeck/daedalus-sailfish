@@ -8,12 +8,13 @@ class TrackObject : public QObject
 {
     Q_OBJECT
 public:
-    explicit TrackObject(QString title, QString artist, QString album, QString url, int length, int tracknr, int discnr, QObject *parent = 0);
+    explicit TrackObject(QString title, QString artist, QString album, QString url, QUrl urn, int length, int tracknr, int discnr, QObject *parent = 0);
 
     QString getTitle();
     QString getArtist();
     QString getAlbum();
     QUrl getURL();
+    QUrl getURN();
     int getLength();
     int getTrackNr();
     int getDiscNr();
@@ -28,6 +29,7 @@ private:
     QString mArtist;
     QString mAlbum;
     QString mURL;
+    QUrl mURN;
     int mLength;
     int mTrackNr;
     int mDiscNr;

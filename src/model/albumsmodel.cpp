@@ -40,10 +40,25 @@ void AlbumsModel::requestAlbums(QString artist)
     mSparqlModel->clear();
     beginResetModel();
     qDebug() << "getting albums";
-    mAlbumsQueryString = "SELECT ?albumname COUNT(?piece) as ?trackcount SUM(?tracklength) as ?totalduration ?artistname ?album WHERE { ?piece nmm:performer '" + artist + "'  . ?piece nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?piece nfo:duration ?tracklength . ?piece nmm:performer ?performer . ?performer nmm:artistName ?artistname  } GROUP BY ?album";
+    mAlbumsQueryString = "SELECT ?albumname COUNT(?piece) as ?trackcount SUM(?tracklength) as ?totalduration ?artistname ?album WHERE { ?piece nmm:performer '" + artist + "'  . ?piece nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?piece nfo:duration ?tracklength . ?piece nmm:performer ?performer . ?performer nmm:artistName ?artistname  } GROUP BY ?album ORDER BY ?album";
     // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
     mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
- }
+}
+
+void AlbumsModel::requestArtistAlbumsReverseFromTrack(QString urn)
+{
+    urn = urn.replace('<','\<');
+    urn = urn.replace('>','\>');
+    qDebug() << "getting albums of: " << urn;
+    // Initialize the query
+    mSparqlModel->clear();
+    beginResetModel();
+    qDebug() << "getting albums";
+    mAlbumsQueryString = "SELECT ?albumname COUNT(?piece) as ?trackcount SUM(?tracklength) as ?totalduration ?artistname ?album WHERE { <" + urn + "> nmm:performer ?artist . ?piece nmm:performer ?artist . ?piece nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?piece nfo:duration ?tracklength . ?piece nmm:performer ?performer . ?performer nmm:artistName ?artistname  } GROUP BY ?album ORDER BY ?album";
+    // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
+    mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
+
+}
 
 void AlbumsModel::sparqlModelfinished()
 {

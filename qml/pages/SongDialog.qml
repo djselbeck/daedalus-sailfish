@@ -177,7 +177,7 @@ Dialog {
             MenuItem {
                 text: qsTr("play after current")
                 onClicked: {
-                    addSongAfterCurrent(filename)
+                    addAlbumTrackAfterCurrent(index);
                     pageStack.navigateBack(PageStackAction.Animated)
                 }
             }

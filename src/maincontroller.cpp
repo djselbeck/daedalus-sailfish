@@ -91,6 +91,7 @@ void MainController::connectQMLSignals()
     // playlist management
     connect(item,SIGNAL(addAlbumTrack(int)),this,SLOT(addAlbumTrack(int)));
     connect(item,SIGNAL(playAlbumTrack(int)),this,SLOT(playAlbumTrack(int)));
+    connect(item,SIGNAL(addAlbumTrackAfterCurrent(int)),this,SLOT(addAlbumTrackAfterCurrent(int)));
     connect(item,SIGNAL(addActiveAlbum()),this,SLOT(addActiveAlbum()));
     connect(item,SIGNAL(playPlaylistIndex(int)),mPlaylist,SLOT(playPosition(int)));
     connect(item,SIGNAL(playActiveAlbum()),this,SLOT(playActiveAlbum()));
@@ -107,6 +108,9 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(setShuffle(bool)),mPlaylist,SLOT(setRandom(bool)));
     connect(item,SIGNAL(deletePlaylist()),mPlaylist,SLOT(clear()));
     connect(item,SIGNAL(deletePlaylistTrack(int)),mPlaylist,SLOT(removePosition(int)));
+    connect(item,SIGNAL(playPlaylistSongNext(int)),mPlaylist,SLOT(playNext(int)));
+    connect(item,SIGNAL(requestTrackAlbumTracks(QString)),mAlbumTracksModel,SLOT(requestAlbumTracksReverseFromTrack(QString)));
+    connect(item,SIGNAL(requestTrackArtistAlbums(QString)),mAlbumsModel,SLOT(requestArtistAlbumsReverseFromTrack(QString)));
 }
 
 void MainController::connectModelSignals()
@@ -228,6 +232,7 @@ void MainController::receiveSettingKey(QVariant setting)
     writeSettings();
 }
 
+// FIXME clearup
 void MainController::addAlbumTrack(int index)
 {
     // get track information from model and create trackobject
@@ -239,7 +244,8 @@ void MainController::addAlbumTrack(int index)
     QVariant tracknr = modelTrack["tracknr"];
     QVariant discnr = modelTrack["discnr"];
     QVariant url = modelTrack["fileurl"];
-    TrackObject *track = new TrackObject(title.toString(),artist.toString(),album.toString(),url.toString(),length.toInt(),tracknr.toInt(),discnr.toInt(),this);
+    QVariant urn = modelTrack["trackurn"];
+    TrackObject *track = new TrackObject(title.toString(),artist.toString(),album.toString(),url.toString(),urn.toUrl(),length.toInt(),tracknr.toInt(),discnr.toInt(),this);
     mPlaylist->addFile(track);
 }
 
@@ -254,8 +260,25 @@ void MainController::playAlbumTrack(int index)
     QVariant tracknr = modelTrack["tracknr"];
     QVariant discnr = modelTrack["discnr"];
     QVariant url = modelTrack["fileurl"];
-    TrackObject *track = new TrackObject(title.toString(),artist.toString(),album.toString(),url.toString(),length.toInt(),tracknr.toInt(),discnr.toInt(),this);
+    QVariant urn = modelTrack["trackurn"];
+    TrackObject *track = new TrackObject(title.toString(),artist.toString(),album.toString(),url.toString(),urn.toUrl(),length.toInt(),tracknr.toInt(),discnr.toInt(),this);
     mPlaylist->playSong(track);
+}
+
+void MainController::addAlbumTrackAfterCurrent(int index)
+{
+    // get track information from model and create trackobject
+    QVariantMap modelTrack = mAlbumTracksModel->get(index);
+    QVariant title = modelTrack["title"];
+    QVariant album = modelTrack["album"];
+    QVariant artist = modelTrack["artist"];
+    QVariant length = modelTrack["length"];
+    QVariant tracknr = modelTrack["tracknr"];
+    QVariant discnr = modelTrack["discnr"];
+    QVariant url = modelTrack["fileurl"];
+    QVariant urn = modelTrack["trackurn"];
+    TrackObject *track = new TrackObject(title.toString(),artist.toString(),album.toString(),url.toString(),urn.toUrl(),length.toInt(),tracknr.toInt(),discnr.toInt(),this);
+    mPlaylist->insertAt(track,mPlaylist->currentIndex() + 1);
 }
 
 void MainController::addActiveAlbum()
