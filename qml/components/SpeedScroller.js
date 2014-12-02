@@ -6,7 +6,8 @@ function fillSections(listview) {
         console.debug("NO LISTMODEL");
         return;
     }
-    var count = (typeof listview.model.count === 'undefined' ? listview.model.length : listview.model.count);
+    console.debug("Playlist count changed");
+    var count = (typeof listview.model.rowCount === 'undefined' ? listview.model.length : listview.model.rowCount());
     itmCount = count;
 }
 

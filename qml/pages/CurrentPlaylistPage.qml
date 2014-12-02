@@ -84,8 +84,13 @@ Page {
         }
 
         SpeedScroller {
+            id: speedScroller
             listview: playlistView
         }
+        onCountChanged: {
+            speedScroller.reReadSections()
+        }
+
         ScrollDecorator {
         }
         Component {

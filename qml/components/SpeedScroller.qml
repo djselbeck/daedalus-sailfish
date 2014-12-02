@@ -67,12 +67,15 @@ Item {
         preventStealing: true
         onMouseYChanged: {
             if(pressed) {
+                console.debug("Speedsacroll pressed")
                 listviewCache = listview.cacheBuffer
                 listview.cacheBuffer = -1
                 var relPos = (mouseY/height)*100;
                 var item = Sections.getItemPositionFromRelative(relPos);
                 if(listview && listview.model) {
-                    var count = (typeof listview.model.count === 'undefined' ? listview.model.length : listview.model.count);
+                    console.debug("model and lv existing")
+                    var count = (typeof listview.model.rowCount === 'undefined' ? listview.model.length : listview.model.rowCount());
+                    console.debug("item count: " + count + " item pos: " + item)
                     if ( item < count )
                         listview.positionViewAtIndex(item,ListView.Beginning);
                 }
@@ -80,6 +83,21 @@ Item {
                 // Restore cacheBuffer
                 listview.cacheBuffer = cacheBuffer
             }
+        }
+    }
+    function reReadSections()
+    {
+        if(listview && listview.model) {
+            listviewCache = listview.cacheBuffer
+            Sections.fillSections(listview);
+            listview.modelChanged.connect( function() {
+                Sections.fillSections(listview);
+            });
+        } else if(listview) {
+            listviewCache = listview.cacheBuffer
+            listview.modelChanged.connect( function() {
+                Sections.fillSections(listview);
+            });
         }
     }
 }
