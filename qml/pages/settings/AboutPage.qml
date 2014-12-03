@@ -51,7 +51,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "source code"
                 onClicked: {
-                    Qt.openUrlExternally('https://github.com/djselbeck/odyssey-daedalus')
+                    Qt.openUrlExternally('https://github.com/djselbeck/daedalus-sailfish')
                 }
             }
             Separator {

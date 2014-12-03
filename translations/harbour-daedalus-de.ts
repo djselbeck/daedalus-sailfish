@@ -91,50 +91,45 @@
 <context>
     <name>AlbumTracks</name>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="107"/>
-        <location filename="../qml/pages/AlbumTracks.qml" line="208"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="98"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="190"/>
         <source>add album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="113"/>
-        <location filename="../qml/pages/AlbumTracks.qml" line="214"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="104"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="196"/>
         <source>play album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="201"/>
-        <source>show all tracks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="354"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="336"/>
         <source>playing track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="359"/>
-        <location filename="../qml/pages/AlbumTracks.qml" line="364"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="341"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="346"/>
         <source>adding track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="376"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="358"/>
         <source>play track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="383"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="365"/>
         <source>add track to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="389"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="371"/>
         <source>play after current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="395"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="377"/>
         <source>add to saved list</source>
         <translation type="unfinished"></translation>
     </message>
