@@ -31,10 +31,12 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
 
 signals:
+    void modelReady();
 
 public slots:
     void requestAlbumTracks(QString);
     void requestAlbumTracksReverseFromTrack(QString urn);
+    void requestArtistTracks(QString artisturn);
 
 private:
     QString mAlbumTracksQueryString;

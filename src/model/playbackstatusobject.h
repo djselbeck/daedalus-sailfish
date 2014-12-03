@@ -7,9 +7,9 @@
 class PlaybackStatusObject : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString title READ getTitle NOTIFY valuesChanged)
-    Q_PROPERTY(QString artist READ getArtist NOTIFY valuesChanged)
-    Q_PROPERTY(QString album READ getAlbum NOTIFY valuesChanged)
+    Q_PROPERTY(QString title READ getTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString artist READ getArtist NOTIFY artistChanged)
+    Q_PROPERTY(QString album READ getAlbum NOTIFY albumChanged)
     Q_PROPERTY(QUrl trackurn READ getURN NOTIFY valuesChanged)
     Q_PROPERTY(QUrl url READ getURL NOTIFY valuesChanged)
     Q_PROPERTY(int length READ getLength NOTIFY valuesChanged)
@@ -46,6 +46,9 @@ public:
     void setInformation(QString title, QString artist, QString album, QString url, QUrl urn, int length, int tracknr, int discnr, int elapsed, int playlistposition, int playlistlength, int playing, int random, int repeat);
 signals:
     void valuesChanged();
+    void artistChanged();
+    void albumChanged();
+    void titleChanged();
 
 public slots:
 

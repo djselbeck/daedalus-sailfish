@@ -53,12 +53,12 @@ Component {
         }
         function playAlbumRemorse() {
             remorseAction(qsTr("playing album"), function () {
-                playAlbum([artistname, title])
+                playAlbum(albumurn)
             }, 3000)
         }
         function addAlbumRemorse() {
             remorseAction(qsTr("adding album"), function () {
-                addAlbum([artistname, title])
+                addAlbum(albumurn)
             }, 3000)
         }
         Component {

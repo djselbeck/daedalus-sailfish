@@ -17,11 +17,16 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mArtistsModel = new ArtistsModel(0,mSparQLConnection,mModelThread);
     mAlbumTracksModel = new AlbumTracksModel(0,mSparQLConnection,mModelThread);
 
+    // Metadata-db
+    mImgDB = new ImageDatabase(this);
+    mQMLImgProvider = new QMLImageProvider(mImgDB);
+
     mPlaylist = new Playlist(0);
     mPlaybackStatus = new PlaybackStatusObject();
     // Register PlaybackStatusObject in metasystem
     qmlRegisterType<PlaybackStatusObject>();
     //qRegisterMetaType<PlaybackStatusObject>("PlaybackStatusObject");
+    viewer->engine()->addImageProvider("imagedbprovider",mQMLImgProvider);
 
     mQuickView = viewer;
 
@@ -40,6 +45,9 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
 
     readSettings();
     mPlaylist->registerStatusObject(mPlaybackStatus);
+
+    mDBStatistic = 0;
+    emit requestDBStatistic();
 }
 
 void MainController::requestAlbums()
@@ -95,6 +103,10 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(addActiveAlbum()),this,SLOT(addActiveAlbum()));
     connect(item,SIGNAL(playPlaylistIndex(int)),mPlaylist,SLOT(playPosition(int)));
     connect(item,SIGNAL(playActiveAlbum()),this,SLOT(playActiveAlbum()));
+    connect(item,SIGNAL(addAlbum(QString)),this,SLOT(addAlbumTracksStart(QString)));
+    connect(item,SIGNAL(playAlbum(QString)),this,SLOT(playAlbumTracksStart(QString)));
+    connect(item,SIGNAL(addArtist(QString)),this,SLOT(addArtistTracksStart(QString)));
+    connect(item,SIGNAL(playArtist(QString)),this,SLOT(playArtistTracksStart(QString)));
 
     // basic controls
     connect(item,SIGNAL(next()),mPlaylist,SLOT(next()));
@@ -111,12 +123,32 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(playPlaylistSongNext(int)),mPlaylist,SLOT(playNext(int)));
     connect(item,SIGNAL(requestTrackAlbumTracks(QString)),mAlbumTracksModel,SLOT(requestAlbumTracksReverseFromTrack(QString)));
     connect(item,SIGNAL(requestTrackArtistAlbums(QString)),mAlbumsModel,SLOT(requestArtistAlbumsReverseFromTrack(QString)));
+
+    // metadata-db stuff
+    connect(mImgDB,SIGNAL(coverAlbumArtReady(QVariant)),item,SLOT(coverArtReceiver(QVariant)));
+
+    connect(mImgDB,SIGNAL(coverArtistArtReady(QVariant)),item,SLOT(coverArtistArtReceiver(QVariant)));
+    connect(item,SIGNAL(newDownloadSize(int)),this,SLOT(receiveDownloadSize(int)));
+
+    connect(this, SIGNAL(requestDBStatistic()),mImgDB,SLOT(requestStatisticUpdate()));
+    connect(mImgDB,SIGNAL(newStasticReady(DatabaseStatistic*)),this,SLOT(newDBStatisticReceiver(DatabaseStatistic*)));
+
 }
 
 void MainController::connectModelSignals()
 {
 //    connect(mAlbumsModel,SIGNAL(albumsReady()),this,SLOT(albumsReady()));
 //    connect(mArtistsModel,SIGNAL(artistsReady()),this,SLOT(artistsReady()));
+    connect(mPlaybackStatus,SIGNAL(artistChanged()),this,SLOT(newPlaybackStatus()));
+    connect(mPlaybackStatus,SIGNAL(albumChanged()),this,SLOT(newPlaybackStatus()));
+
+    connect(this,SIGNAL(requestCoverArt(Albumtype)),mImgDB,SLOT(requestCoverImage(Albumtype)));
+    connect(this,SIGNAL(requestCoverArtistArt(QString)),mImgDB,SLOT(requestCoverArtistImage(QString)));
+
+    // Set downloading enabled variable to imagedatabase
+    connect(this,SIGNAL(newDownloadEnabled(bool)),mImgDB,SLOT(setDownloadEnabled(bool)));
+    // Received new Download size from database GUI settings
+    connect(this,SIGNAL(newDownloadSize(QString)),mImgDB,SLOT(setDownloadSize(QString)));
 }
 
 void MainController::readSettings()
@@ -286,6 +318,7 @@ void MainController::addActiveAlbum()
     for ( int i = 0; i < mAlbumTracksModel->rowCount() ; i++) {
         addAlbumTrack(i);
     }
+    disconnect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(addActiveAlbum()));
 }
 
 void MainController::playActiveAlbum()
@@ -293,4 +326,47 @@ void MainController::playActiveAlbum()
     mPlaylist->clear();
     addActiveAlbum();
     mPlaylist->playPosition(0);
+    disconnect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
+
+}
+
+void MainController::addAlbumTracksStart(QString albumurn)
+{
+    mAlbumTracksModel->requestAlbumTracks(albumurn);
+    connect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(addActiveAlbum()));
+}
+
+void MainController::playAlbumTracksStart(QString albumurn)
+{
+    mAlbumTracksModel->requestAlbumTracks(albumurn);
+    connect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
+}
+
+
+void MainController::addArtistTracksStart(QString artisturn)
+{
+    mAlbumTracksModel->requestArtistTracks(artisturn);
+    connect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(addActiveAlbum()));
+}
+
+void MainController::playArtistTracksStart(QString artisturn)
+{
+    mAlbumTracksModel->requestArtistTracks(artisturn);
+    connect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
+}
+
+void MainController::newPlaybackStatus()
+{
+    Albumtype albumObj = {mPlaybackStatus->getAlbum(),mPlaybackStatus->getArtist()};
+    emit requestCoverArt(albumObj);
+    emit requestCoverArtistArt(mPlaybackStatus->getArtist());
+}
+
+void MainController::newDBStatisticReceiver(DatabaseStatistic *statistic)
+{
+    mQuickView->rootContext()->setContextProperty("dbStatistic",statistic);
+    if ( mDBStatistic ) {
+        delete mDBStatistic;
+    }
+    mDBStatistic = statistic;
 }

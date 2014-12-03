@@ -14,7 +14,9 @@ TARGET = harbour-odyssey
 
 CONFIG += sailfishapp qtsparql
 
-QT += multimedia
+QT += multimedia sql
+
+INCLUDEPATH += src
 
 SOURCES += src/harbour-odyssey.cpp \
     src/maincontroller.cpp \
@@ -24,7 +26,14 @@ SOURCES += src/harbour-odyssey.cpp \
     src/mediaplayer/odysseymediaplayer.cpp \
     src/mediaplayer/playlist.cpp \
     src/model/trackobject.cpp \
-    src/model/playbackstatusobject.cpp
+    src/model/playbackstatusobject.cpp \
+    src/metadata/albuminformation.cpp \
+    src/metadata/artistinformation.cpp \
+    src/metadata/imagedatabase.cpp \
+    src/metadata/imagedownloader.cpp \
+    src/metadata/lastfmalbumprovider.cpp \
+    src/metadata/lastfmartistprovider.cpp \
+    src/metadata/qmlimageprovider.cpp
 
 OTHER_FILES += qml/harbour-odyssey.qml \
     rpm/harbour-odyssey.changes.in \
@@ -76,7 +85,16 @@ HEADERS += \
     src/mediaplayer/odysseymediaplayer.h \
     src/mediaplayer/playlist.h \
     src/model/trackobject.h \
-    src/model/playbackstatusobject.h
+    src/model/playbackstatusobject.h \
+    src/metadata/albuminformation.h \
+    src/metadata/artistinformation.h \
+    src/metadata/databasestatistic.h \
+    src/metadata/imagedatabase.h \
+    src/metadata/imagedownloader.h \
+    src/metadata/lastfmalbumprovider.h \
+    src/metadata/lastfmartistprovider.h \
+    src/metadata/qmlimageprovider.h \
+    src/metadata/album.h
 
 RESOURCES += \
     images.qrc

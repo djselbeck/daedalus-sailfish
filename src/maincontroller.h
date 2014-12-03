@@ -17,6 +17,9 @@
 #include "model/playbackstatusobject.h"
 #include "mediaplayer/playlist.h"
 
+#include "metadata/imagedatabase.h"
+#include "metadata/qmlimageprovider.h"
+
 class MainController : public QObject
 {
     Q_OBJECT
@@ -39,6 +42,13 @@ signals:
     void newDownloadSize(QString);
     void newDownloadEnabled(bool);
 
+    void requestCoverArt(Albumtype album);
+    void requestCoverArtistArt(QString artist);
+
+    void requestDBStatistic();
+
+
+
 public slots:
     // request slos
     void requestAlbums();
@@ -50,7 +60,13 @@ public slots:
     void folderReady();
 
 private:
+    // Local metadata-db
+    DatabaseStatistic *mDBStatistic;
+    int mDownloadSize;
+    int mDownloadEnabled;
     QString getLastFMArtSize(int index);
+    ImageDatabase *mImgDB;
+    QMLImageProvider *mQMLImgProvider;
 
     // SparQL
     QSparqlConnection *mSparQLConnection;
@@ -70,8 +86,6 @@ private:
     void connectQMLSignals();
 
     // GUI Settings
-    int mDownloadEnabled;
-    int mDownloadSize;
     int mAlbumViewSetting;
     int mArtistViewSetting;
     int mListImageSize;
@@ -94,8 +108,14 @@ private slots:
     void addActiveAlbum();
     void playActiveAlbum();
 
+    void addAlbumTracksStart(QString albumurn);
+    void playAlbumTracksStart(QString albumurn);
 
+    void addArtistTracksStart(QString artisturn);
+    void playArtistTracksStart(QString artisturn);
 
+    void newPlaybackStatus();
+    void newDBStatisticReceiver(DatabaseStatistic *statistic);
 
 };
 

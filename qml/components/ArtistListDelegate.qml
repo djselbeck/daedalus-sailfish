@@ -48,12 +48,12 @@ Component {
         }
         function playArtistRemorse() {
             remorseAction(qsTr("playing artist"), function () {
-                playArtist(artist)
+                playArtist(artisturn)
             }, 3000)
         }
         function addArtistRemorse() {
             remorseAction(qsTr("adding artist"), function () {
-                addArtist(artist)
+                addArtist(artisturn)
             }, 3000)
         }
         Component {

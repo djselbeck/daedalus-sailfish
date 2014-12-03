@@ -55,6 +55,10 @@ ApplicationWindow
     // playlist management
     signal addAlbumTrack(int index);
     signal addAlbumTrackAfterCurrent(int index);
+    signal addAlbum(string albumurn);
+    signal playAlbum(string albumurn);
+    signal addArtist(string artisturn);
+    signal playArtist(string artisturn)
     signal playAlbumTrack(int index);
     signal addActiveAlbum();
     signal playPlaylistIndex(int index);
@@ -132,6 +136,17 @@ ApplicationWindow
             temp=((temphours<10?"0":"")+temphours)+":"+((min<10?"0":"")+min)+":"+(sec<10?"0":"")+(sec);
         }
         return temp;
+    }
+
+
+    function coverArtReceiver(url)
+    {
+        coverimageurl = url;
+    }
+
+    function coverArtistArtReceiver(url)
+    {
+        artistimageurl = url;
     }
 
     ControlPanel {

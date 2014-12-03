@@ -34,6 +34,16 @@ void AlbumTracksModel::requestAlbumTracksReverseFromTrack(QString urn)
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 
+void AlbumTracksModel::requestArtistTracks(QString artisturn)
+{
+    artisturn = artisturn.replace('\'',"\\\'");
+    artisturn = artisturn.replace('<','\<');
+    artisturn = artisturn.replace('>','\>');
+    qDebug() << "Album tracks requested: " + artisturn;
+    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?album nmm:albumArtist '"+artisturn+"' . ?piece nmm:musicAlbum ?album ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?albumname ?discnr ?tracknr";
+    mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
+}
+
 QHash<int, QByteArray> AlbumTracksModel::roleNames() const {
     QHash<int,QByteArray> roles;
     roles[TitleRole] = "title";
@@ -52,7 +62,7 @@ void AlbumTracksModel::sparqlModelfinished()
 {
     beginResetModel();
     qDebug() << "underlaying model finished result fetching";
-    //    emit artistsReady();
+    emit modelReady();
     endResetModel();
 }
 

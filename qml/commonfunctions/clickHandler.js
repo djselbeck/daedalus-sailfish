@@ -2,7 +2,8 @@ function artistClicked(artist, urn) {
     mainWindow.artistname = artist
     requestArtistAlbums(urn)
     pageStack.push(Qt.resolvedUrl("../pages/AlbumsList.qml"), {
-                       artistname: artist
+                       artistname: artist,
+                       artisturn: urn
                    })
 }
 

@@ -7,6 +7,7 @@ Page {
     id: albumslistPage
     allowedOrientations: bothOrientation
     property string artistname
+    property string artisturn;
     property int lastIndex
     property int lastOrientation
     property int oldCount
@@ -50,13 +51,13 @@ Page {
                     MenuItem {
                         text: qsTr("add albums")
                         onClicked: {
-                            addArtist(artistname)
+                            addArtist(artisturn)
                         }
                     }
                     MenuItem {
                         text: qsTr("play albums")
                         onClicked: {
-                            playArtist(artistname)
+                            playArtist(artisturn)
                         }
                     }
                 }
@@ -111,13 +112,13 @@ Page {
                     MenuItem {
                         text: qsTr("add albums")
                         onClicked: {
-                            addArtist(artistname)
+                            addArtist(artisturn)
                         }
                     }
                     MenuItem {
                         text: qsTr("play albums")
                         onClicked: {
-                            playArtist(artistname)
+                            playArtist(artisturn)
                         }
                     }
                 }

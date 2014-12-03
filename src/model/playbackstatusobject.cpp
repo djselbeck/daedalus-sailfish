@@ -117,9 +117,18 @@ QString PlaybackStatusObject::getLengthFormatted()
 
 void PlaybackStatusObject::setInformation(QString title, QString artist, QString album, QString url, QUrl urn, int length, int tracknr, int discnr, int elapsed, int playlistposition, int playlistlength, int playing, int random, int repeat)
 {
-    mTitle = title;
-    mArtist = artist;
-    mAlbum = album;
+    if ( title != mTitle) {
+        mTitle = title;
+        emit titleChanged();
+    }
+    if ( artist != mArtist) {
+        mArtist = artist;
+        emit artistChanged();
+    }
+    if ( album != mAlbum ) {
+        mAlbum = album;
+        emit albumChanged();
+    }
     mURL = url;
     mURN = urn;
     mLength = length;
