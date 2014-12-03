@@ -140,6 +140,11 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(bulkDownloadArtists()),this,SLOT(doBulkArtistDownload()));
     connect(item,SIGNAL(bulkDownloadAlbums()),this,SLOT(doBulkAlbumDownload()));
 
+    connect(item,SIGNAL(cleanupBlacklisted()),mImgDB,SLOT(cleanUPBlacklistedAlbums()));
+    connect(item,SIGNAL(cleanupAlbums()),mImgDB,SLOT(cleanupAlbums()));
+    connect(item,SIGNAL(cleanupArtists()),mImgDB,SLOT(cleanupArtists()));
+    connect(item,SIGNAL(cleanupDB()),mImgDB,SLOT(cleanupDatabase()));
+
 }
 
 void MainController::connectModelSignals()

@@ -88,6 +88,10 @@ ApplicationWindow
     // Signal for db control
     signal bulkDownloadArtists();
     signal bulkDownloadAlbums();
+    signal cleanupBlacklisted();
+    signal cleanupArtists();
+    signal cleanupAlbums();
+    signal cleanupDB();
 
     // Wiki/Biography information requests for sqlDB
     signal requestArtistInfo(string artist);
