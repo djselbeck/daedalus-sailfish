@@ -85,6 +85,10 @@ ApplicationWindow
     // [settingkey,value]
     signal newSettingKey(variant setting);
 
+    // Signal for db control
+    signal bulkDownloadArtists();
+    signal bulkDownloadAlbums();
+
     // Wiki/Biography information requests for sqlDB
     signal requestArtistInfo(string artist);
     signal requestAlbumInfo(variant album);

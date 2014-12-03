@@ -11,15 +11,20 @@ MainController::MainController(QObject *parent) :
 
 MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(parent)
 {
+    // Metadata-db
+    mDBThread = new QThread(this);
+    mImgDB = new ImageDatabase(0);
+    mImgDB->moveToThread(mDBThread);
+    mDBThread->start();
+
+    mQMLImgProvider = new QMLImageProvider(mImgDB);
+
     mModelThread = new QThread(this);
     mSparQLConnection = new QSparqlConnection("QTRACKER_DIRECT");
-    mAlbumsModel = new AlbumsModel(0,mSparQLConnection,mModelThread);
-    mArtistsModel = new ArtistsModel(0,mSparQLConnection,mModelThread);
+    mAlbumsModel = new AlbumsModel(0,mSparQLConnection,mModelThread,mImgDB,mDownloadEnabled);
+    mArtistsModel = new ArtistsModel(0,mSparQLConnection,mModelThread,mImgDB);
     mAlbumTracksModel = new AlbumTracksModel(0,mSparQLConnection,mModelThread);
 
-    // Metadata-db
-    mImgDB = new ImageDatabase(this);
-    mQMLImgProvider = new QMLImageProvider(mImgDB);
 
     mPlaylist = new Playlist(0);
     mPlaybackStatus = new PlaybackStatusObject();
@@ -132,6 +137,8 @@ void MainController::connectQMLSignals()
 
     connect(this, SIGNAL(requestDBStatistic()),mImgDB,SLOT(requestStatisticUpdate()));
     connect(mImgDB,SIGNAL(newStasticReady(DatabaseStatistic*)),this,SLOT(newDBStatisticReceiver(DatabaseStatistic*)));
+    connect(item,SIGNAL(bulkDownloadArtists()),this,SLOT(doBulkArtistDownload()));
+    connect(item,SIGNAL(bulkDownloadAlbums()),this,SLOT(doBulkAlbumDownload()));
 
 }
 
@@ -147,8 +154,13 @@ void MainController::connectModelSignals()
 
     // Set downloading enabled variable to imagedatabase
     connect(this,SIGNAL(newDownloadEnabled(bool)),mImgDB,SLOT(setDownloadEnabled(bool)));
+    connect(this,SIGNAL(newDownloadEnabled(bool)),mAlbumsModel,SLOT(setDownloadEnabled(bool)));
     // Received new Download size from database GUI settings
     connect(this,SIGNAL(newDownloadSize(QString)),mImgDB,SLOT(setDownloadSize(QString)));
+    connect(this,SIGNAL(newDownloadSize(QString)),mAlbumsModel,SLOT(setDownloadSize(QString)));
+
+    connect(this,SIGNAL(requestArtistBulkDownload(QList<QString>*)),mImgDB,SLOT(fillDatabase(QList<QString>*)));
+    connect(this,SIGNAL(requestAlbumBulkDownload(QMap<QString,QList<Albumtype>*>*)),mImgDB,SLOT(fillDatabase(QMap<QString,QList<Albumtype>*>*)));
 }
 
 void MainController::readSettings()
@@ -369,4 +381,49 @@ void MainController::newDBStatisticReceiver(DatabaseStatistic *statistic)
         delete mDBStatistic;
     }
     mDBStatistic = statistic;
+}
+
+void MainController::doBulkAlbumDownload()
+{
+    connect(mAlbumsModel,SIGNAL(albumsReady()),this,SLOT(receiveBulkAlbumList()));
+    mAlbumsModel->requestArtistAlbumList();
+}
+
+void MainController::doBulkArtistDownload()
+{
+    // Get Artist list
+    connect(mArtistsModel,SIGNAL(artistsReady()),this,SLOT(receiveBulkArtistList()));
+    mArtistsModel->requestArtists();
+}
+
+void MainController::receiveBulkArtistList()
+{
+    QList<QString>* artistList = new QList<QString>();
+    for ( int i = 0; i < mArtistsModel->rowCount(); i++) {
+        artistList->append(mArtistsModel->get(i)["artist"].toString());
+    }
+    disconnect(mArtistsModel,SIGNAL(artistsReady()),this,SLOT(receiveBulkArtistList()));
+    emit requestArtistBulkDownload(artistList);
+}
+
+void MainController::receiveBulkAlbumList()
+{
+    qDebug() << "start bulk download for " << mAlbumsModel->rowCount() << " albums";
+    QMap<QString, QList<Albumtype>* > *map = new QMap<QString, QList<Albumtype>* >();
+    QString artistname = "";
+    QList<Albumtype> *list;
+    for ( int i = 0 ; i < mAlbumsModel->rowCount(); i++ ) {
+        QString tempArtist = mAlbumsModel->get(i)["artist"].toString();
+        if ( artistname != tempArtist ) {
+            qDebug() << "append artist: " << tempArtist;
+            // New artist begins, create new list append old one
+            list = new QList<Albumtype>();
+            artistname = tempArtist;
+            (*map)[artistname] = list;
+        }
+        Albumtype tmpAlbum = {mAlbumsModel->get(i)["title"].toString(),artistname};
+        list->append(tmpAlbum);
+    }
+    disconnect(mAlbumsModel,SIGNAL(albumsReady()),this,SLOT(receiveBulkAlbumList()));
+    emit requestAlbumBulkDownload(map);
 }

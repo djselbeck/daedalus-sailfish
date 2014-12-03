@@ -47,6 +47,9 @@ signals:
 
     void requestDBStatistic();
 
+    void requestArtistBulkDownload(QList<QString>*);
+    void requestAlbumBulkDownload(QMap<QString, QList<Albumtype>* > *map);
+
 
 
 public slots:
@@ -74,8 +77,9 @@ private:
     AlbumsModel *mAlbumsModel;
     ArtistsModel *mArtistsModel;
     AlbumTracksModel *mAlbumTracksModel;
-    QThread *mModelThread;
 
+    QThread *mModelThread;
+    QThread *mDBThread;
 
     // Qml stuff
     QQuickView *mQuickView;
@@ -116,6 +120,12 @@ private slots:
 
     void newPlaybackStatus();
     void newDBStatisticReceiver(DatabaseStatistic *statistic);
+
+    void doBulkArtistDownload();
+    void doBulkAlbumDownload();
+
+    void receiveBulkArtistList();
+    void receiveBulkAlbumList();
 
 };
 

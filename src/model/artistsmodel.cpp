@@ -2,7 +2,7 @@
 
 #include <QUrl>
 
-ArtistsModel::ArtistsModel(QObject *parent, QSparqlConnection *connection, QThread *fetchthread) :
+ArtistsModel::ArtistsModel(QObject *parent, QSparqlConnection *connection, QThread *fetchthread, ImageDatabase *db) :
     QAbstractListModel(parent)
 {
     if ( connection != NULL ) {
@@ -15,6 +15,7 @@ ArtistsModel::ArtistsModel(QObject *parent, QSparqlConnection *connection, QThre
         mSparqlModel->moveToThread(mThread);
     }
     connect(mSparqlModel,SIGNAL(finished()),this,SLOT(sparqlModelfinished()));
+    mImgDB = db;
 }
 
 
@@ -68,11 +69,26 @@ QVariant ArtistsModel::data(const QModelIndex &index, int role) const {
     case AlbumCountRole:
 
         break;
-    case ImageURLRole:
+    }
+    if ( role == ImageURLRole) {
+        QString tmpArtist = mSparqlModel->data(index,NameRole).toString();
+        int imageID = mImgDB->imageIDFromArtist(tmpArtist);
 
-        break;
-    default:
-        return "";
+        // No image found return dummy url
+        if ( imageID == -1 ) {
+            // Start image retrieval
+            qDebug() << "returning dummy image for artist: " << tmpArtist;
+            //emit requestAlbumInformation(*album);
+            // Return dummy for the time being
+            return DUMMY_ARTISTIMAGE;
+        } else if (imageID == -2 ) {
+            qDebug() << "returning dummy image for blacklisted artist: " << tmpArtist;
+            return DUMMY_ARTISTIMAGE;
+        } else {
+            qDebug() << "returning database image for album: " << tmpArtist;
+            QString url = "image://imagedbprovider/artistid/" + QString::number(imageID);
+            return url;
+        }
     }
 
     return "";

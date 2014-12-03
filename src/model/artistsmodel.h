@@ -5,13 +5,16 @@
 #include <Qt5Sparql/QSparqlQueryModel>
 #include <QThread>
 
+#include <metadata/imagedatabase.h>
+#include <global.h>
+
 class ArtistsModel : public QAbstractListModel
 {
     Q_OBJECT    
     Q_PROPERTY(int count READ rowCount)
 
 public:
-    explicit ArtistsModel(QObject *parent = 0, QSparqlConnection *connection = 0, QThread *fetchthread = 0);
+    explicit ArtistsModel(QObject *parent = 0, QSparqlConnection *connection = 0, QThread *fetchthread = 0, ImageDatabase *db = 0);
 
     enum EntryRoles {
         NameRole = Qt::UserRole + 1,
@@ -42,6 +45,7 @@ private:
     QSparqlConnection *mConnection;
     QSparqlQueryModel *mSparqlModel;
     QThread *mThread;
+    ImageDatabase *mImgDB;
 
 
 };

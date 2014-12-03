@@ -5,6 +5,9 @@
 
 #define LASTFMDEFAULTSIZE "mega"
 #define LASTFMAPIKEY "bfc8875ac955bcfaf9feb015ffa6887b"
-#define LASTFMAPISECRET "039525529046d59fb01916f24d882351""
+#define LASTFMAPISECRET "039525529046d59fb01916f24d882351"
+
+#define DUMMY_ALBUMIMAGE "image://theme/icon-l-music"
+#define DUMMY_ARTISTIMAGE "image://theme/icon-l-music"
 
 #endif // GLOBAL_H

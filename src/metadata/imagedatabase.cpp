@@ -18,7 +18,7 @@ ImageDatabase::ImageDatabase(QObject *parent) :
         createTables();
     }
     mDownloader = new ImageDownloader();
-
+    qRegisterMetaType<Albumtype>("Albumtype");
     connect(mDownloader,SIGNAL(albumInformationReady(AlbumInformation*)),this,SLOT(enterAlbumInformation(AlbumInformation*)));
     connect(this,SIGNAL(requestAlbumDownload(Albumtype)),mDownloader,SLOT(requestAlbumArt(Albumtype)));
 
@@ -105,6 +105,7 @@ void ImageDatabase::fillDatabase(QMap<QString, QList<Albumtype>* > *map)
             if ( imageID == -1 ) {
                 // Check if downloading is enabled first
                 if ( mDownloadEnabled ) {
+                    qDebug() << "Download: " << album.album << album.artist;
                     emit requestAlbumDownload(album);
                 }
             }

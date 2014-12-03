@@ -5,7 +5,7 @@
 // REmove me
 #include <QSparqlResult>
 
-AlbumsModel::AlbumsModel(QObject *parent, QSparqlConnection *connection, QThread *fetchthread) :
+AlbumsModel::AlbumsModel(QObject *parent, QSparqlConnection *connection, QThread *fetchthread, ImageDatabase *db, bool downloadEnable) :
     QAbstractListModel(parent)
 {
 
@@ -17,13 +17,22 @@ AlbumsModel::AlbumsModel(QObject *parent, QSparqlConnection *connection, QThread
         mThread = fetchthread;
         mSparqlModel->moveToThread(mThread);
     }
+    mDB = db;
+    mDownloadEnabled = downloadEnable;
     connect(mSparqlModel,SIGNAL(finished()),this,SLOT(sparqlModelfinished()));
+    mDownloader = new ImageDownloader();
+
+    connect(this,SIGNAL(requestAlbumInformation(Albumtype)),mDownloader,SLOT(requestAlbumArt(Albumtype)),Qt::QueuedConnection);
+    connect(mDownloader,SIGNAL(albumInformationReady(AlbumInformation*)),this,SLOT(albumInformationReady(AlbumInformation*)));
+    connect(this,SIGNAL(requestDBEnter(AlbumInformation*)),mDB,SLOT(enterAlbumInformation(AlbumInformation*)));
+    connect(mDB,SIGNAL(albumEntered(QString)),this,SLOT(albumEntered(QString)));
 }
 
 
 void AlbumsModel::requestAlbums()
 {
     // Initialize the query
+    mPartialModel = false;
     mSparqlModel->clear();
     beginResetModel();
     qDebug() << "getting albums";
@@ -33,10 +42,25 @@ void AlbumsModel::requestAlbums()
     endResetModel();
 }
 
+
+void AlbumsModel::requestArtistAlbumList()
+{
+    // Initialize the query
+    mPartialModel = false;
+    mSparqlModel->clear();
+    beginResetModel();
+    qDebug() << "getting albums";
+    // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
+    mAlbumsQueryString = "SELECT ?albumname COUNT(distinct ?piece) as ?trackcount SUM( distinct ?tracklength) as ?totalduration ?artistname ?album WHERE { ?piece nmm:musicAlbum ?album . ?piece nfo:duration ?tracklength . ?album nmm:albumTitle ?albumname ; nmm:albumArtist ?artistIns . ?artistIns nmm:artistName ?artistname } GROUP BY ?artistname ?album ORDER BY ?artistname";
+    mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
+    endResetModel();
+}
+
 void AlbumsModel::requestAlbums(QString artist)
 {
     qDebug() << "getting albums of: " << artist;
     // Initialize the query
+    mPartialModel = true;
     mSparqlModel->clear();
     beginResetModel();
     qDebug() << "getting albums";
@@ -47,8 +71,9 @@ void AlbumsModel::requestAlbums(QString artist)
 
 void AlbumsModel::requestArtistAlbumsReverseFromTrack(QString urn)
 {
-    urn = urn.replace('<','\<');
-    urn = urn.replace('>','\>');
+    urn = urn.replace('<','\\<');
+    urn = urn.replace('>','\\>');
+    mPartialModel = true;
     qDebug() << "getting albums of: " << urn;
     // Initialize the query
     mSparqlModel->clear();
@@ -64,6 +89,7 @@ void AlbumsModel::sparqlModelfinished()
 {
     beginResetModel();
     qDebug() << "underlaying model finished result fetching";
+    emit albumsReady();
     endResetModel();
 }
 
@@ -99,21 +125,70 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const {
         break;
     case SectionRole:
         albumTitle = mSparqlModel->data(index,AlbumRole).toString();
-        return QString(albumTitle.at(0)).toUpper();
+       return QString(albumTitle.at(0)).toUpper();
         break;
     case ArtistRole:
-
-        break; case AlbumCleandRole:
+        return mSparqlModel->data(index,role);
+        break;
+    case AlbumCleandRole:
 
         break;
     case AlbumImageRole:
-        // FIXME
-        return "";
         break;
     default:
-        return "";
+        break;
     }
+    if ( role == AlbumImageRole) {
+        QString album = mSparqlModel->data(index,AlbumRole).toString();
+        QString artist = mSparqlModel->data(index,ArtistRole).toString();
+                qDebug() << "Image for album: " << album << "requested";
+                if ( artist != "" ) {
+                    int imageID = mDB->imageIDFromAlbumArtist(album,artist);
+                    // No image found return dummy url
+                    if ( imageID == -1 ) {
+                        // Start image retrieval
+                        qDebug() << "returning dummy image for album: " << album;
+                        if ( mDownloadEnabled && mPartialModel) {
+                            Albumtype albumObj = {album,artist};
+                            emit requestAlbumInformation(albumObj);
+                        }
+                        // Return dummy for the time being
+                        return DUMMY_ALBUMIMAGE;
+                    } else if (imageID == -2 ) {
+                        // Try getting album art for album with out artist (think samplers)
+                        imageID = mDB->imageIDFromAlbum(album);
+                        if ( imageID >= 0 ) {
+                            QString url = "image://imagedbprovider/albumid/" + QString::number(imageID);
+                            return url;
+                        }
+                        qDebug() << "returning dummy image for blacklisted album: " << album;
+                        return DUMMY_ALBUMIMAGE;
+                    } else {
+                        qDebug() << "returning database image for album: " << album;
+                        QString url = "image://imagedbprovider/albumid/" + QString::number(imageID);
+                        return url;
+                    }
+                }
+                else {
+                    int imageID = mDB->imageIDFromAlbum(album);
 
+                    // No image found return dummy url
+                    if ( imageID == -1 ) {
+                        // Start image retrieval
+                        qDebug() << "returning dummy image for album: " << album;
+                        // Return dummy for the time being
+                        return DUMMY_ALBUMIMAGE;
+                    } else if (imageID == -2 ) {
+                        qDebug() << "returning dummy image for blacklisted album: " << album;
+                        return DUMMY_ALBUMIMAGE;
+                    }
+                    else {
+                        qDebug() << "returning database image for album: " << album;
+                        QString url = "image://imagedbprovider/albumid/" + QString::number(imageID);
+                        return url;
+                    }
+                }
+    }
     return "";
 }
 
@@ -134,4 +209,44 @@ QVariantMap AlbumsModel::get(int row){
         res[i.value()] = data;
     }
     return res;
+}
+
+
+void AlbumsModel::setDownloadEnabled(bool enabled)
+{
+    mDownloadEnabled = enabled;
+}
+
+void AlbumsModel::setDownloadSize(QString size)
+{
+    mDownloadSize = size;
+    mDownloader->setDownloadSize(mDownloadSize);
+}
+
+
+void AlbumsModel::albumInformationReady(AlbumInformation *info)
+{
+    if( info == 0 ) {
+        return;
+    }
+
+    emit requestDBEnter(info);
+
+}
+
+void AlbumsModel::albumEntered(QString albumName)
+{
+    qDebug() << "received new information for album: " << albumName;
+
+
+    // Search for it in entries
+    for ( int i = 0; i < rowCount(); i++ ) {
+        QString album = mSparqlModel->data(index(i),AlbumRole).toString();
+        qDebug() << "Check album: " << album;
+        // Found corresponding albumObj, update coverimage url
+        if (album == albumName) {
+            qDebug() << "Found it at row: " << i;
+            emit dataChanged(index(i),index(i));
+        }
+    }
 }
