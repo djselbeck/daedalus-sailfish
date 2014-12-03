@@ -146,6 +146,11 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(cleanupArtists()),mImgDB,SLOT(cleanupArtists()));
     connect(item,SIGNAL(cleanupDB()),mImgDB,SLOT(cleanupDatabase()));
 
+    connect(item,SIGNAL(requestAlbumInfo(QVariant)),mImgDB,SLOT(requestAlbumWikiInformation(QVariant)));
+    connect(item,SIGNAL(requestArtistInfo(QString)),mImgDB,SLOT(requestArtistBioInformation(QString)));
+
+    connect(mImgDB,SIGNAL(albumWikiInformationReady(QString)),this,SLOT(setAlbumWikiInfo(QString)));
+    connect(mImgDB,SIGNAL(artistBioInformationReady(QString)),this,SLOT(setArtistBioInfo(QString)));
 }
 
 void MainController::connectModelSignals()
@@ -176,7 +181,7 @@ void MainController::readSettings()
     settings.beginGroup("general_properties");
     int dlSize = settings.value("download_size",LASTFM_EXTRALARGE).toInt();
     mArtistViewSetting = settings.value("artist_view",0).toInt();
-    mAlbumViewSetting = settings.value("album_view",1).toInt();
+    mAlbumViewSetting = settings.value("album_view",0).toInt();
     mListImageSize = settings.value("list_image_size",0).toInt();
     mSectionsInSearch = settings.value("sections_in_search",1).toInt();
     mSectionsInPlaylist = settings.value("sections_in_playlist",1).toInt();
@@ -432,4 +437,15 @@ void MainController::receiveBulkAlbumList()
     }
     disconnect(mAlbumsModel,SIGNAL(albumsReady()),this,SLOT(receiveBulkAlbumList()));
     emit requestAlbumBulkDownload(map);
+}
+
+
+void MainController::setArtistBioInfo(QString info)
+{
+    mQuickView->rootContext()->setContextProperty("artistInfoText",info);
+}
+
+void MainController::setAlbumWikiInfo(QString info)
+{
+    mQuickView->rootContext()->setContextProperty("albumInfoText",info);
 }

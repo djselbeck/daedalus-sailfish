@@ -179,7 +179,7 @@ BackgroundItem {
                             id: playButton
                             icon.source: "image://theme/icon-m-play"
                             onClicked: {
-                                playArtist(artist)
+                                playArtist(artisturn)
                                 if ( flipped ) {
                                     rotateOut.running = true
                                     flipped = false
@@ -191,7 +191,7 @@ BackgroundItem {
                             id: addButton
                             icon.source: "image://theme/icon-m-add"
                             onClicked: {
-                                addArtist(artist)
+                                addArtist(artisturn)
                                 if ( flipped ) {
                                     rotateOut.running = true
                                     flipped = false

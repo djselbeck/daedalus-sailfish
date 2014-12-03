@@ -127,6 +127,9 @@ private slots:
     void receiveBulkArtistList();
     void receiveBulkAlbumList();
 
+    void setArtistBioInfo(QString info);
+    void setAlbumWikiInfo(QString info);
+
 };
 
 #endif // MAINCONTROLLER_H
