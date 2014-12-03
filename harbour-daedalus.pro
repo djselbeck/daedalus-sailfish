@@ -10,7 +10,7 @@
 #   - translation filenames have to be changed
 
 # The name of your application
-TARGET = harbour-odyssey
+TARGET = harbour-daedalus
 
 CONFIG += sailfishapp qtsparql
 
@@ -18,12 +18,12 @@ QT += multimedia sql
 
 INCLUDEPATH += src
 
-SOURCES += src/harbour-odyssey.cpp \
+SOURCES += \
     src/maincontroller.cpp \
     src/model/albumsmodel.cpp \
     src/model/artistsmodel.cpp \
     src/model/albumtracksmodel.cpp \
-    src/mediaplayer/odysseymediaplayer.cpp \
+    src/mediaplayer/daedalusmediaplayer.cpp \
     src/mediaplayer/playlist.cpp \
     src/model/trackobject.cpp \
     src/model/playbackstatusobject.cpp \
@@ -33,14 +33,15 @@ SOURCES += src/harbour-odyssey.cpp \
     src/metadata/imagedownloader.cpp \
     src/metadata/lastfmalbumprovider.cpp \
     src/metadata/lastfmartistprovider.cpp \
-    src/metadata/qmlimageprovider.cpp
+    src/metadata/qmlimageprovider.cpp \
+    src/harbour-daedalus.cpp
 
-OTHER_FILES += qml/harbour-odyssey.qml \
-    rpm/harbour-odyssey.changes.in \
-    rpm/harbour-odyssey.spec \
-    rpm/harbour-odyssey.yaml \
+OTHER_FILES += qml/harbour-daedalus.qml \
+    rpm/harbour-daedalus.changes.in \
+    rpm/harbour-daedalus.spec \
+    rpm/harbour-daedalus.yaml \
     translations/*.ts \
-    harbour-odyssey.desktop \
+    harbour-daedalus.desktop \
     qml/pages/MainPage.qml \
     qml/pages/AlbumsList.qml \
     qml/components/AlbumListDelegate.qml \
@@ -74,7 +75,7 @@ OTHER_FILES += qml/harbour-odyssey.qml \
 # to disable building translations every time, comment out the
 # following CONFIG line
 CONFIG += sailfishapp_i18n
-TRANSLATIONS += translations/harbour-odyssey-de.ts
+TRANSLATIONS += translations/harbour-daedalus-de.ts
 
 HEADERS += \
     src/maincontroller.h \
@@ -82,7 +83,7 @@ HEADERS += \
     src/global.h \
     src/model/artistsmodel.h \
     src/model/albumtracksmodel.h \
-    src/mediaplayer/odysseymediaplayer.h \
+    src/mediaplayer/daedalusmediaplayer.h \
     src/mediaplayer/playlist.h \
     src/model/trackobject.h \
     src/model/playbackstatusobject.h \

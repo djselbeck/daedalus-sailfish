@@ -1,4 +1,4 @@
-Name: harbour-odyssey
+Name: harbour-daedalus
 Summary: Sailfish music player on basis of smpc
 Version: 1.0.0
 Release: 1
@@ -12,7 +12,7 @@ License: LICENSE
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Short description of my SailfishOS Application
+  Sailfish music player on basis of smpc.
 Configure: none
 # The qtc5 builder inserts macros to allow QtCreator to have fine
 # control over qmake/make execution

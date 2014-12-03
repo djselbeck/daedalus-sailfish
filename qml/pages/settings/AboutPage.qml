@@ -18,7 +18,7 @@ Page {
             }
             Image {
                 id: logo
-                source: "qrc:images/odyssey-big.png"
+                source: "qrc:images/daedalus-big.png"
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: (orientation === Orientation.Portrait ? aboutPage.width - Theme.paddingLarge * 5 : (aboutPage.height-pageHeading.height-nameText.height-versionText.height))
                 height: width
@@ -38,7 +38,7 @@ Page {
             Label {
                 id: nameText
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "Odyssey for SailfishOS"
+                text: "Daedalus for SailfishOS"
                 font.pixelSize: Theme.fontSizeExtraLarge
             }
             Label {
@@ -51,7 +51,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "source code"
                 onClicked: {
-                    Qt.openUrlExternally('https://github.com/djselbeck/odyssey-sailfish')
+                    Qt.openUrlExternally('https://github.com/djselbeck/odyssey-daedalus')
                 }
             }
             Separator {

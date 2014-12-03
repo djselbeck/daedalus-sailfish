@@ -48,13 +48,13 @@ int main(int argc, char *argv[])
     //
     // To display the view, call "show()" (will show fullscreen on device).
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    app->setOrganizationName("harbour-odyssey");
-    app->setApplicationName("harbour-odyssey");
+    app->setOrganizationName("harbour-daedalus");
+    app->setApplicationName("harbour-daedalus");
 
     QScopedPointer<QQuickView> view(SailfishApp::createView());
 
-    view->engine()->addImportPath("/usr/share/harbour-odyssey/qml/");
-    view->setSource(SailfishApp::pathTo("qml/harbour-odyssey.qml"));
+    view->engine()->addImportPath("/usr/share/harbour-daedalus/qml/");
+    view->setSource(SailfishApp::pathTo("qml/harbour-daedalus.qml"));
     view->setDefaultAlphaBuffer(true);
 
     MainController controller(&(*view));

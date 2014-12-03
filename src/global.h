@@ -1,6 +1,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+#define VERSION "1.0.0"
+
 #define IMAGEPROVIDERNAME "imagedbprovider"
 
 #define LASTFMDEFAULTSIZE "mega"

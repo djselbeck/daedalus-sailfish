@@ -43,6 +43,7 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
 
     mQuickView->rootContext()->setContextProperty("artistInfoText","");
     mQuickView->rootContext()->setContextProperty("albumInfoText","");
+    mQuickView->rootContext()->setContextProperty("versionstring",QVariant::fromValue(QString(VERSION)));
 
     connectQMLSignals();
     connectModelSignals();

@@ -298,7 +298,9 @@ Page {
                 gridViewLoader.item.positionViewAtIndex(lastIndex,
                                                         GridView.Center)
             }
-            requestArtistInfo(artistname)
+            if (artistname != "" ) {
+                requestArtistInfo(artistname)
+            }
         } else if (status === PageStatus.Active) {
             if (artistname != "")
                 pageStack.pushAttached(Qt.resolvedUrl("ArtistInfoPage.qml"), {
