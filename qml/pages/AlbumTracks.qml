@@ -94,15 +94,6 @@ Page {
                     }
                 }
                 PullDownMenu {
-                    /*MenuItem {
-                        enabled: (artistname!=="")
-                        visible: enabled
-                        text: qsTr("show all tracks")
-                        onClicked: {
-                            albumClicked("", albumname);
-                            artistname = "";
-                        }
-                    }*/
                     MenuItem {
                         text: qsTr("add album")
                         onClicked: {
@@ -195,15 +186,6 @@ Page {
                     }
                     quickScrollEnabled: jollaQuickscroll
                     PullDownMenu {
-                        MenuItem {
-                            enabled: (artistname!=="")
-                            visible: enabled
-                            text: qsTr("show all tracks")
-                            onClicked: {
-                                albumClicked("", albumname);
-                                artistname = "";
-                            }
-                        }
                         MenuItem {
                             text: qsTr("add album")
                             onClicked: {

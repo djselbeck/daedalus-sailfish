@@ -70,7 +70,8 @@ OTHER_FILES += qml/harbour-daedalus.qml \
     qml/components/PlaylistSectionDelegate.qml \
     qml/pages/CurrentSong.qml \
     qml/components/CoverPage.qml \
-    qml/components/ControlPanel.qml
+    qml/components/ControlPanel.qml \
+    harbour-daedalus.png
 
 # to disable building translations every time, comment out the
 # following CONFIG line

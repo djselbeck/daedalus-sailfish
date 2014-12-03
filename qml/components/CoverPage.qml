@@ -56,23 +56,25 @@ CoverBackground {
     Image {
         id: logo
         visible: ( (!coverimg.ready) && (playbackstatus.title == ""))
-        source: "qrc:images/pictogram.png"
+        source: "qrc:images/pictogramm.png"
+        fillMode:  Image.reserveAspectFit
         anchors.centerIn: parent
+        width: parent.width - Theme.paddingSmall
     }
 
     onStatusChanged: {
         recheckActive()
     }
 
-    //    Image{
-    //        visible: (stopped||(coverimg.sourceprimary==""&&coverimg.sourcesecondary==""))
-    //        anchors.centerIn: coverrpage
-    //        source: "qrc:/images/smpc-big.png"
-    //        width: coverpage.width-(coverpage.width/3)
-    //        height: width
-    //        smooth: true
-    //        opacity: 0.8
-    //    }
+//        Image{
+//            visible: (stopped||(coverimg.sourceprimary==""&&coverimg.sourcesecondary==""))
+//            anchors.centerIn: coverrpage
+//            source: "qrc:/images/smpc-big.png"
+//            width: coverpage.width-(coverpage.width/3)
+//            height: width
+//            smooth: true
+//            opacity: 0.8
+//        }
     Label {
         id: textLabel
         anchors.centerIn: coverpage
@@ -84,7 +86,7 @@ CoverBackground {
         style: Text.Raised
         styleColor: Theme.secondaryColor
         horizontalAlignment: Text.AlignHCenter
-        text: (playbackstatus.title == "" ? "Odyssey" : playbackstatus.title)
+        text: (playbackstatus.title == "" ? "Daedalus" : playbackstatus.title)
     }
 
     CoverActionList {

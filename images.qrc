@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/images">
         <file>icon-m-stop.png</file>
+        <file>pictogramm.png</file>
+        <file>daedalus-big.png</file>
     </qresource>
 </RCC>
