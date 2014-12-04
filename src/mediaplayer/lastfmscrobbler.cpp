@@ -16,6 +16,10 @@ LastFMScrobbler::LastFMScrobbler(PlaybackStatusObject *status, QObject *parent) 
     }
     mNetAccess = new QNetworkAccessManager(this);
     connect(mNetAccess,SIGNAL(finished(QNetworkReply*)),this,SLOT(parseReply(QNetworkReply*)));
+
+    mLastAlbum = "";
+    mLastArtist = "";
+    mLastTitle = "";
 }
 
 void LastFMScrobbler::authenticate(QString username, QString password)
@@ -47,20 +51,28 @@ void LastFMScrobbler::trackChanged()
     QString artist = mStatus->getArtist();
     QString title = mStatus->getTitle();
     if ( mLastAlbum != album || mLastArtist != artist || mLastTitle != title ) {
+        // See last.fm documentation: http://www.lastfm.de/api/scrobbling
+        // Scrobble last track if any
+        if ( (mElapsed >= mDuration/2 || mElapsed >= 4*60) &&
+             (mLastArtist != "" && mLastTitle != "") ) {
+            scrobbleTrack();
+//            mTrackScrobbled = true;
+        }
         mTimeTrackStarted = QString::number(QDateTime::currentDateTime().toTime_t());
-        qDebug() << "New track: " << mTimeTrackStarted << mStatus->getTitle() << mStatus->getArtist() << mStatus->getAlbum();
-        mTrackScrobbled = false;
-        sendNowPlaying();
+//        mTrackScrobbled = false;
         mLastAlbum = album;
         mLastArtist = artist;
         mLastTitle = title;
+        mTrackNR = QString::number(mStatus->getTrackNr());
+        mDuration = mStatus->getLength();
+        if ( mLastArtist != "" && mLastTitle != "") {
+            qDebug() << "New track: " << mTimeTrackStarted << mStatus->getTitle() << mStatus->getArtist() << mStatus->getAlbum();
+            sendNowPlaying();
+        }
     }
+    mElapsed = mStatus->getElapsed();
 
-    // See last.fm documentation: http://www.lastfm.de/api/scrobbling
-    if ( !mTrackScrobbled && (mStatus->getElapsed() >= mStatus->getLength()/2 || mStatus->getElapsed() >= 4*60) ) {
-        scrobbleTrack();
-        mTrackScrobbled = true;
-    }
+
 
 }
 
@@ -69,11 +81,11 @@ void LastFMScrobbler::sendNowPlaying()
         QMap<QString, QString> requestVariables;
         requestVariables["method"] = "track.updateNowPlaying";
         requestVariables["api_key"] = LASTFMAPIKEY;
-        requestVariables["artist"] = mStatus->getArtist();
-        requestVariables["album"] = mStatus->getAlbum();
-        requestVariables["track"] = mStatus->getTitle();
-        requestVariables["trackNumber"] = QString::number(mStatus->getTrackNr());
-        requestVariables["duration"] = QString::number(mStatus->getLength());
+        requestVariables["artist"] = mLastArtist;
+        requestVariables["album"] = mLastAlbum;
+        requestVariables["track"] = mLastTitle;
+        requestVariables["trackNumber"] = mTrackNR;
+        requestVariables["duration"] = QString::number(mDuration);
         requestVariables["sk"] = mSessionKey;
         QString request = makeRequest(requestVariables);
         qDebug() << "Auth request is: " << request;
@@ -86,16 +98,16 @@ void LastFMScrobbler::sendNowPlaying()
 
 void LastFMScrobbler::scrobbleTrack()
 {
-    qDebug() << "Scrobble track: " << mStatus->getTitle() << mStatus->getArtist() << mStatus->getAlbum();
+    qDebug() << "Scrobble track: " << mLastTitle << mLastArtist << mLastAlbum;
     QMap<QString, QString> requestVariables;
     requestVariables["method"] = "track.scrobble";
     requestVariables["api_key"] = LASTFMAPIKEY;
-    requestVariables["artist"] = mStatus->getArtist();
-    requestVariables["album"] = mStatus->getAlbum();
+    requestVariables["artist"] = mLastArtist;
+    requestVariables["album"] = mLastAlbum;
     requestVariables["timestamp"] = mTimeTrackStarted;
-    requestVariables["track"] = mStatus->getTitle();
-    requestVariables["trackNumber"] = QString::number(mStatus->getTrackNr());
-    requestVariables["duration"] = QString::number(mStatus->getLength());
+    requestVariables["track"] = mLastTitle;
+    requestVariables["trackNumber"] = mTrackNR;
+    requestVariables["duration"] = QString::number(mDuration);
     requestVariables["sk"] = mSessionKey;
     QString request = makeRequest(requestVariables);
     qDebug() << "Auth request is: " << request;

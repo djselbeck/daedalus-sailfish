@@ -43,6 +43,9 @@ private:
     QString mLastArtist;
     QString mLastTitle;
     QString mTimeTrackStarted;
+    uint mDuration;
+    QString mTrackNR;
+    uint mElapsed;
     bool mTrackScrobbled;
 
     void parseSession(QXmlStreamReader &);
