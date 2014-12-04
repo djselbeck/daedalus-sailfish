@@ -116,7 +116,7 @@ Page {
                         Image {
                             id: fallbackImage
                             enabled: showCoverNowPlaying
-                            source: "qrc:/images/smpc-big.png"
+                            source: "qrc:/images/daedalus-big.png"
                             anchors.fill: parent
                             visible: (!coverImage.ready && showCoverNowPlaying)
                         }

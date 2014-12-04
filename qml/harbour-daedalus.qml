@@ -84,6 +84,7 @@ ApplicationWindow
     // Signals changed settings key
     // [settingkey,value]
     signal newSettingKey(variant setting);
+    signal newLastfmUserData(variant data);
 
     // Signal for db control
     signal bulkDownloadArtists();

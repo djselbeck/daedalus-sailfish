@@ -16,6 +16,7 @@
 #include "model/albumtracksmodel.h"
 #include "model/playbackstatusobject.h"
 #include "mediaplayer/playlist.h"
+#include "mediaplayer/lastfmscrobbler.h"
 
 #include "metadata/imagedatabase.h"
 #include "metadata/qmlimageprovider.h"
@@ -101,6 +102,10 @@ private:
     Playlist *mPlaylist;
     PlaybackStatusObject *mPlaybackStatus;
 
+    // Scrobbling
+    QString mLastFMSessionKey;
+    LastFMScrobbler *mScrobbler;
+
 
 private slots:
     void receiveDownloadSize(int);
@@ -129,6 +134,8 @@ private slots:
 
     void setArtistBioInfo(QString info);
     void setAlbumWikiInfo(QString info);
+
+    void receiveLastFMSessionKey(QString key);
 
 };
 

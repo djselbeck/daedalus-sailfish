@@ -25,7 +25,6 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mArtistsModel = new ArtistsModel(0,mSparQLConnection,mModelThread,mImgDB);
     mAlbumTracksModel = new AlbumTracksModel(0,mSparQLConnection,mModelThread);
 
-
     mPlaylist = new Playlist(0);
     mPlaybackStatus = new PlaybackStatusObject();
     // Register PlaybackStatusObject in metasystem
@@ -45,14 +44,19 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mQuickView->rootContext()->setContextProperty("albumInfoText","");
     mQuickView->rootContext()->setContextProperty("versionstring",QVariant::fromValue(QString(VERSION)));
 
-    connectQMLSignals();
-    connectModelSignals();
+
     mModelThread->start();
 
-    readSettings();
     mPlaylist->registerStatusObject(mPlaybackStatus);
 
+    mScrobbler = new LastFMScrobbler(mPlaybackStatus,0);
+
     mDBStatistic = 0;
+
+
+    readSettings();
+    connectQMLSignals();
+    connectModelSignals();
     emit requestDBStatistic();
 }
 
@@ -101,6 +105,8 @@ void MainController::connectQMLSignals()
     // Settings
     connect(item,SIGNAL(newDownloadSize(int)),this,SLOT(receiveDownloadSize(int)));
     connect(item,SIGNAL(newSettingKey(QVariant)),this,SLOT(receiveSettingKey(QVariant)));
+    // Last.fm userdata
+    connect(item,SIGNAL(newLastfmUserData(QVariant)),mScrobbler,SLOT(authenticate(QVariant)));
 
     // playlist management
     connect(item,SIGNAL(addAlbumTrack(int)),this,SLOT(addAlbumTrack(int)));
@@ -172,6 +178,7 @@ void MainController::connectModelSignals()
 
     connect(this,SIGNAL(requestArtistBulkDownload(QList<QString>*)),mImgDB,SLOT(fillDatabase(QList<QString>*)));
     connect(this,SIGNAL(requestAlbumBulkDownload(QMap<QString,QList<Albumtype>*>*)),mImgDB,SLOT(fillDatabase(QMap<QString,QList<Albumtype>*>*)));
+    connect(mScrobbler,SIGNAL(newLastFMSessionKey(QString)),this,SLOT(receiveLastFMSessionKey(QString)));
 }
 
 void MainController::readSettings()
@@ -187,7 +194,7 @@ void MainController::readSettings()
     mSectionsInPlaylist = settings.value("sections_in_playlist",1).toInt();
     mDownloadEnabled = settings.value("lastfm_download",1).toInt();
     mCoverInNowPlaying = settings.value("show_covernowplaying",1).toInt();
-
+    mLastFMSessionKey = settings.value("lastfmsession","").toString();
     emit newDownloadEnabled(mDownloadEnabled);
 
     mQuickView->rootContext()->setContextProperty("artistView", mArtistViewSetting);
@@ -202,6 +209,7 @@ void MainController::readSettings()
     mDownloadSize = dlSize;
     emit newDownloadSize(getLastFMArtSize(mDownloadSize));
     settings.endGroup();
+    mScrobbler->setSessionKey(mLastFMSessionKey);
 }
 
 void MainController::writeSettings()
@@ -217,6 +225,7 @@ void MainController::writeSettings()
     settings.setValue("sections_in_playlist",mSectionsInPlaylist);
     settings.setValue("lastfm_download",mDownloadEnabled);
     settings.setValue("show_covernowplaying",mCoverInNowPlaying);
+    settings.setValue("lastfmsession",mLastFMSessionKey);
     settings.endGroup();
 }
 
@@ -282,7 +291,6 @@ void MainController::receiveSettingKey(QVariant setting)
             mCoverInNowPlaying = settings.at(1).toInt();
             mQuickView->rootContext()->setContextProperty("showCoverNowPlaying", mCoverInNowPlaying);
         }
-
     }
     writeSettings();
 }
@@ -448,4 +456,11 @@ void MainController::setArtistBioInfo(QString info)
 void MainController::setAlbumWikiInfo(QString info)
 {
     mQuickView->rootContext()->setContextProperty("albumInfoText",info);
+}
+
+void MainController::receiveLastFMSessionKey(QString key)
+{
+    qDebug() << "Received last.fm session: " << key;
+    mLastFMSessionKey = key;
+    writeSettings();
 }

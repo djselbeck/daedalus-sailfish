@@ -591,13 +591,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="68"/>
-        <source>search</source>
+        <location filename="../qml/pages/MainPage.qml" line="72"/>
+        <source>settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScrobbleSettings</name>
+    <message>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="20"/>
+        <source>Scrobbling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="72"/>
-        <source>settings</source>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="23"/>
+        <source>username:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="32"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="45"/>
+        <source>input username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="36"/>
+        <source>password:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -620,11 +639,16 @@
     </message>
     <message>
         <location filename="../qml/pages/settings/SettingsPage.qml" line="40"/>
+        <source>scrobbling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/SettingsPage.qml" line="41"/>
         <source>about</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/SettingsPage.qml" line="43"/>
+        <location filename="../qml/pages/settings/SettingsPage.qml" line="44"/>
         <source>garbage collection</source>
         <translation type="unfinished"></translation>
     </message>

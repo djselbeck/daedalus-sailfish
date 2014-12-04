@@ -6,8 +6,8 @@
 #define IMAGEPROVIDERNAME "imagedbprovider"
 
 #define LASTFMDEFAULTSIZE "mega"
-#define LASTFMAPIKEY "bfc8875ac955bcfaf9feb015ffa6887b"
-#define LASTFMAPISECRET "039525529046d59fb01916f24d882351"
+#define LASTFMAPIKEY "48570d887cca45f05f8094dca4f79c0d"
+#define LASTFMSECRET "20a6f66338c86858fb89b3160df15fa9"
 
 #define DUMMY_ALBUMIMAGE "image://theme/icon-l-music"
 #define DUMMY_ARTISTIMAGE "image://theme/icon-l-music"

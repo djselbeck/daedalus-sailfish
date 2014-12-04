@@ -37,6 +37,7 @@ Page
     Component.onCompleted: {
         settingsMenuModel.append({"name":qsTr("database settings"), "ident":"database"})
         settingsMenuModel.append({"name":qsTr("gui settings"), "ident":"guisettings"})
+        settingsMenuModel.append({"name":qsTr("scrobbling"), "ident":"scrobbling"})
         settingsMenuModel.append({"name":qsTr("about"), "ident":"about"})
         // Debug-only
         if(mDebugEnabled) {
@@ -59,6 +60,9 @@ Page
             break;
         case "guisettings" :
             pageStack.push(Qt.resolvedUrl("GUISettings.qml"))
+            break;
+        case "scrobbling" :
+            pageStack.push(Qt.resolvedUrl("ScrobbleSettings.qml"))
             break;
         case "gc" :
             console.debug("Calling garbage collection")

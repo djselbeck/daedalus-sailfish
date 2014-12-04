@@ -64,10 +64,10 @@ Page {
                                  name: qsTr("files"),
                                  ident: "files"
                              })*/
-        mainMenuModel.append({
-                                 name: qsTr("search"),
-                                 ident: "search"
-                             })
+//        mainMenuModel.append({
+//                                 name: qsTr("search"),
+//                                 ident: "search"
+//                             })
         mainMenuModel.append({
                                  name: qsTr("settings"),
                                  ident: "settings"

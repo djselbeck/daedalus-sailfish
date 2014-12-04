@@ -34,7 +34,8 @@ SOURCES += \
     src/metadata/lastfmalbumprovider.cpp \
     src/metadata/lastfmartistprovider.cpp \
     src/metadata/qmlimageprovider.cpp \
-    src/harbour-daedalus.cpp
+    src/harbour-daedalus.cpp \
+    src/mediaplayer/lastfmscrobbler.cpp
 
 OTHER_FILES += qml/harbour-daedalus.qml \
     rpm/harbour-daedalus.changes.in \
@@ -71,7 +72,8 @@ OTHER_FILES += qml/harbour-daedalus.qml \
     qml/pages/CurrentSong.qml \
     qml/components/CoverPage.qml \
     qml/components/ControlPanel.qml \
-    harbour-daedalus.png
+    harbour-daedalus.png \
+    qml/pages/settings/ScrobbleSettings.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -96,7 +98,8 @@ HEADERS += \
     src/metadata/lastfmalbumprovider.h \
     src/metadata/lastfmartistprovider.h \
     src/metadata/qmlimageprovider.h \
-    src/metadata/album.h
+    src/metadata/album.h \
+    src/mediaplayer/lastfmscrobbler.h
 
 RESOURCES += \
     images.qrc
