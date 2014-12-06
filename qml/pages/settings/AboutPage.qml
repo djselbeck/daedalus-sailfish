@@ -54,6 +54,13 @@ Page {
                     Qt.openUrlExternally('https://github.com/djselbeck/daedalus-sailfish')
                 }
             }
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "homepage"
+                onClicked: {
+                    Qt.openUrlExternally('http://www.daedalus-music.org')
+                }
+            }
             Separator {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: parent.width - Theme.paddingLarge

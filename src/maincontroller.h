@@ -15,6 +15,10 @@
 #include "model/artistsmodel.h"
 #include "model/albumtracksmodel.h"
 #include "model/playbackstatusobject.h"
+#include "model/savedplaylistsmodel.h"
+#include "model/playlistmanager.h"
+#include "model/savedplaylisttracksmodel.h"
+
 #include "mediaplayer/playlist.h"
 #include "mediaplayer/lastfmscrobbler.h"
 
@@ -78,6 +82,9 @@ private:
     AlbumsModel *mAlbumsModel;
     ArtistsModel *mArtistsModel;
     AlbumTracksModel *mAlbumTracksModel;
+    SavedPlaylistsModel *mPlaylistsModel;
+    PlaylistManager *mPlaylistManager;
+    SavedPlaylistTracksModel *mPlaylistTracksModel;
 
     QThread *mModelThread;
     QThread *mDBThread;
@@ -108,6 +115,8 @@ private:
 
 
 private slots:
+    void receiveSavedPlaylistTracks(SavedPlaylistTracksModel *model);
+
     void receiveDownloadSize(int);
     void receiveSettingKey(QVariant setting);
 
@@ -116,6 +125,10 @@ private slots:
     void addAlbumTrackAfterCurrent(int index);
     void addActiveAlbum();
     void playActiveAlbum();
+
+    void addSavedPlaylistTrack(int index);
+    void addSavedPlaylistTrackAfterCurrent(int index);
+    void playSavedPlaylistTrack(int index);
 
     void addAlbumTracksStart(QString albumurn);
     void playAlbumTracksStart(QString albumurn);

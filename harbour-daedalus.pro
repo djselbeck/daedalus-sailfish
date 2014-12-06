@@ -35,7 +35,11 @@ SOURCES += \
     src/metadata/lastfmartistprovider.cpp \
     src/metadata/qmlimageprovider.cpp \
     src/harbour-daedalus.cpp \
-    src/mediaplayer/lastfmscrobbler.cpp
+    src/mediaplayer/lastfmscrobbler.cpp \
+    src/model/playlistmanager.cpp \
+    src/model/plsparser.cpp \
+    src/model/savedplaylistsmodel.cpp \
+    src/model/savedplaylisttracksmodel.cpp
 
 OTHER_FILES += qml/harbour-daedalus.qml \
     rpm/harbour-daedalus.changes.in \
@@ -73,7 +77,9 @@ OTHER_FILES += qml/harbour-daedalus.qml \
     qml/components/CoverPage.qml \
     qml/components/ControlPanel.qml \
     harbour-daedalus.png \
-    qml/pages/settings/ScrobbleSettings.qml
+    qml/pages/settings/ScrobbleSettings.qml \
+    qml/pages/SavedPlaylistsPage.qml \
+    qml/pages/PlaylistTracksPage.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
@@ -99,8 +105,15 @@ HEADERS += \
     src/metadata/lastfmartistprovider.h \
     src/metadata/qmlimageprovider.h \
     src/metadata/album.h \
-    src/mediaplayer/lastfmscrobbler.h
+    src/mediaplayer/lastfmscrobbler.h \
+    src/model/playlistmanager.h \
+    src/model/plsparser.h \
+    src/model/savedplaylistsmodel.h \
+    src/model/savedplaylisttracksmodel.h
 
 RESOURCES += \
     images.qrc
+
+#DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS QT_NO_DEBUG_OUTPUT
+DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS
 

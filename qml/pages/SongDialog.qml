@@ -18,6 +18,7 @@ Dialog {
     property int fontsize: Theme.fontSizeMedium
     property int fontsizegrey: Theme.fontSizeSmall
     property int index;
+    property bool playlistTrack: false;
 
     SilicaFlickable {
 
@@ -177,14 +178,26 @@ Dialog {
             MenuItem {
                 text: qsTr("play after current")
                 onClicked: {
-                    addAlbumTrackAfterCurrent(index);
+                    if ( !playlistTrack ) {
+                        addAlbumTrackAfterCurrent(index);
+                    }
+                    else {
+                        addSavedPlaylistTrackAfterCurrent(index);
+                    }
+
                     pageStack.navigateBack(PageStackAction.Animated)
                 }
             }
             MenuItem {
                 text: qsTr("play song")
                 onClicked: {
-                    playAlbumTrack(index);
+                    if ( !playlistTrack ) {
+                        playAlbumTrack(index);
+                    }
+                    else {
+                        console.debug("play saved playlistsong: " + index);
+                        playSavedPlaylistTrack(index);
+                    }
                     pageStack.navigateBack(PageStackAction.Animated)
                 }
             }
@@ -202,7 +215,13 @@ Dialog {
             id: playButton
             icon.source: "image://theme/icon-m-play"
             onClicked: {
-                playAlbumTrack(index);
+                if ( !playlistTrack ) {
+                    playAlbumTrack(index);
+                }
+                else {
+                    console.debug("play saved playlistsong: " + index);
+                    playSavedPlaylistTrack(index);
+                }
                 pageStack.pop()
             }
         }
@@ -217,42 +236,11 @@ Dialog {
 
     onAccepted: {
         console.debug("adding song index: " + index);
-        addAlbumTrack(index);
+        if ( !playlistTrack ) {
+            addAlbumTrack(index);
+        }
+        else {
+            addSavedPlaylistTrack(index);
+        }
     }
-//    states: [
-//        State {
-//            name: "portrait"
-//            when: orientation === Orientation.Portrait
-//            PropertyChanges {
-//                target: buttonRow
-//                anchors.bottomMargin: quickControlPanel.visibleSize
-//                anchors.rightMargin: 0
-//                anchors.leftMargin: 0
-//                anchors.topMargin: 0
-//            }
-//            PropertyChanges {
-//                target: songFlickable
-//                anchors.bottomMargin: 0
-//                anchors.rightMargin: 0
-//                anchors.leftMargin: 0
-//                anchors.topMargin: 0
-//            }
-//        },State {
-//            name: "landscape"
-//            when: orientation === Orientation.Landscape
-//            PropertyChanges {
-//                target: buttonRow
-//                anchors.bottomMargin: 0
-//                anchors.rightMargin: quickControlPanel.visibleSize
-//                anchors.leftMargin: 0
-//                anchors.topMargin: 0
-//            }
-//            PropertyChanges {
-//                target: songFlickable
-//                anchors.bottomMargin: 0
-//                anchors.rightMargin: quickControlPanel.visibleSize
-//                anchors.leftMargin: 0
-//                anchors.topMargin: 0
-//            }
-//        }]
 }

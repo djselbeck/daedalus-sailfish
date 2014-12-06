@@ -137,9 +137,19 @@ QVariant Playlist::data(const QModelIndex &index, int role) const
             return true;
         }
         return false;
-    case SectionRole:
-        return mTrackList->at(index.row())->getArtist() + '|' + mTrackList->at(index.row())->getAlbum();
+//    case SectionRole:
+//        return mTrackList->at(index.row())->getArtist() + QString('|') + mTrackList->at(index.row())->getAlbum();
+//    }
+       }
+    if (role == SectionRole) {
+        QString album = mTrackList->at(index.row())->getAlbum();
+        QString artist = mTrackList->at(index.row())->getArtist();
+
+        QString sectionString;
+        sectionString = artist + '|' + album;
+        return sectionString;
     }
+
 
 
     return "";

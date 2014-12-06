@@ -14,12 +14,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/AboutPage.qml" line="92"/>
+        <location filename="../qml/pages/settings/AboutPage.qml" line="99"/>
         <source>Licensed under GPLv3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/AboutPage.qml" line="103"/>
+        <location filename="../qml/pages/settings/AboutPage.qml" line="110"/>
         <source>Fetches metadata from last.fm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -597,6 +597,98 @@
     </message>
 </context>
 <context>
+    <name>PlaylistTracksPage</name>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="32"/>
+        <source>delete list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="39"/>
+        <source>add list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="45"/>
+        <source>play list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="130"/>
+        <source>playing track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="133"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="136"/>
+        <source>adding track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="141"/>
+        <source>removing track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="150"/>
+        <source>play track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="157"/>
+        <source>add track to list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="163"/>
+        <source>play after current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="169"/>
+        <source>remove from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="187"/>
+        <source>delete playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="190"/>
+        <source>really delete playlist?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SavedPlaylistsPage</name>
+    <message>
+        <location filename="../qml/pages/SavedPlaylistsPage.qml" line="21"/>
+        <source>playlists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SavedPlaylistsPage.qml" line="50"/>
+        <source>playing list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SavedPlaylistsPage.qml" line="53"/>
+        <source>adding list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SavedPlaylistsPage.qml" line="60"/>
+        <source>play playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SavedPlaylistsPage.qml" line="67"/>
+        <source>add list</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ScrobbleSettings</name>
     <message>
         <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="20"/>
@@ -656,43 +748,43 @@
 <context>
     <name>SongDialog</name>
     <message>
-        <location filename="../qml/pages/SongDialog.qml" line="45"/>
-        <location filename="../qml/pages/SongDialog.qml" line="172"/>
+        <location filename="../qml/pages/SongDialog.qml" line="46"/>
+        <location filename="../qml/pages/SongDialog.qml" line="173"/>
         <source>add song</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SongDialog.qml" line="90"/>
+        <location filename="../qml/pages/SongDialog.qml" line="91"/>
         <source>length:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SongDialog.qml" line="106"/>
+        <location filename="../qml/pages/SongDialog.qml" line="107"/>
         <source>date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SongDialog.qml" line="122"/>
+        <location filename="../qml/pages/SongDialog.qml" line="123"/>
         <source>nr.:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SongDialog.qml" line="138"/>
+        <location filename="../qml/pages/SongDialog.qml" line="139"/>
         <source>disc nr.:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SongDialog.qml" line="154"/>
+        <location filename="../qml/pages/SongDialog.qml" line="155"/>
         <source>uri:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SongDialog.qml" line="178"/>
+        <location filename="../qml/pages/SongDialog.qml" line="179"/>
         <source>play after current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SongDialog.qml" line="185"/>
+        <location filename="../qml/pages/SongDialog.qml" line="192"/>
         <source>play song</source>
         <translation type="unfinished"></translation>
     </message>

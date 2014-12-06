@@ -24,6 +24,10 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mAlbumsModel = new AlbumsModel(0,mSparQLConnection,mModelThread,mImgDB,mDownloadEnabled);
     mArtistsModel = new ArtistsModel(0,mSparQLConnection,mModelThread,mImgDB);
     mAlbumTracksModel = new AlbumTracksModel(0,mSparQLConnection,mModelThread);
+    mPlaylistsModel = new SavedPlaylistsModel(0,mSparQLConnection,mModelThread);
+    mPlaylistTracksModel = 0;
+
+    mPlaylistManager = new PlaylistManager(0,mSparQLConnection);
 
     mPlaylist = new Playlist(0);
     mPlaybackStatus = new PlaybackStatusObject();
@@ -37,8 +41,11 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mQuickView->rootContext()->setContextProperty("albumsModel",mAlbumsModel);
     mQuickView->rootContext()->setContextProperty("artistsModel",mArtistsModel);
     mQuickView->rootContext()->setContextProperty("albumTracksModel",mAlbumTracksModel);
+    mQuickView->rootContext()->setContextProperty("savedPlaylistsModel",mPlaylistsModel);
     mQuickView->rootContext()->setContextProperty("playlistModel",mPlaylist);
     mQuickView->rootContext()->setContextProperty("playbackstatus",mPlaybackStatus);
+    mQuickView->rootContext()->setContextProperty("playlistTracksModel",0);
+
 
     mQuickView->rootContext()->setContextProperty("artistInfoText","");
     mQuickView->rootContext()->setContextProperty("albumInfoText","");
@@ -119,6 +126,9 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(playAlbum(QString)),this,SLOT(playAlbumTracksStart(QString)));
     connect(item,SIGNAL(addArtist(QString)),this,SLOT(addArtistTracksStart(QString)));
     connect(item,SIGNAL(playArtist(QString)),this,SLOT(playArtistTracksStart(QString)));
+    connect(item,SIGNAL(addSavedPlaylistTrack(int)),this,SLOT(addSavedPlaylistTrack(int)));
+    connect(item,SIGNAL(addSavedPlaylistTrackAfterCurrent(int)),this,SLOT(addSavedPlaylistTrackAfterCurrent(int)));
+    connect(item,SIGNAL(playSavedPlaylistTrack(int)),this,SLOT(playSavedPlaylistTrack(int)));
 
     // basic controls
     connect(item,SIGNAL(next()),mPlaylist,SLOT(next()));
@@ -135,6 +145,8 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(playPlaylistSongNext(int)),mPlaylist,SLOT(playNext(int)));
     connect(item,SIGNAL(requestTrackAlbumTracks(QString)),mAlbumTracksModel,SLOT(requestAlbumTracksReverseFromTrack(QString)));
     connect(item,SIGNAL(requestTrackArtistAlbums(QString)),mAlbumsModel,SLOT(requestArtistAlbumsReverseFromTrack(QString)));
+    connect(item,SIGNAL(requestSavedPlaylists()),mPlaylistsModel,SLOT(requestSavedPlaylists()));
+    connect(item,SIGNAL(requestSavedPlaylist(QString)),mPlaylistManager,SLOT(requestPlaylist(QString)));
 
     // metadata-db stuff
     connect(mImgDB,SIGNAL(coverAlbumArtReady(QVariant)),item,SLOT(coverArtReceiver(QVariant)));
@@ -179,6 +191,8 @@ void MainController::connectModelSignals()
     connect(this,SIGNAL(requestArtistBulkDownload(QList<QString>*)),mImgDB,SLOT(fillDatabase(QList<QString>*)));
     connect(this,SIGNAL(requestAlbumBulkDownload(QMap<QString,QList<Albumtype>*>*)),mImgDB,SLOT(fillDatabase(QMap<QString,QList<Albumtype>*>*)));
     connect(mScrobbler,SIGNAL(newLastFMSessionKey(QString)),this,SLOT(receiveLastFMSessionKey(QString)));
+
+    connect(mPlaylistManager,SIGNAL(playlistTracksReady(SavedPlaylistTracksModel*)),this,SLOT(receiveSavedPlaylistTracks(SavedPlaylistTracksModel*)));
 }
 
 void MainController::readSettings()
@@ -463,4 +477,39 @@ void MainController::receiveLastFMSessionKey(QString key)
     qDebug() << "Received last.fm session: " << key;
     mLastFMSessionKey = key;
     writeSettings();
+}
+
+void MainController::receiveSavedPlaylistTracks(SavedPlaylistTracksModel *model)
+{
+    mQuickView->rootContext()->setContextProperty("playlistTracksModel",0);
+    if ( mPlaylistTracksModel != 0 ) {
+        delete(mPlaylistTracksModel);
+    }
+    mPlaylistTracksModel = model;
+    mQuickView->rootContext()->setContextProperty("playlistTracksModel",mPlaylistTracksModel);
+    qDebug() << "received saved playlist tracks";
+}
+
+
+void MainController::addSavedPlaylistTrack(int index)
+{
+    if ( mPlaylistTracksModel != 0 ) {
+        mPlaylist->addFile(mPlaylistTracksModel->getTrack(index));
+    }
+}
+
+void MainController::addSavedPlaylistTrackAfterCurrent(int index)
+{
+    if ( mPlaylistTracksModel != 0 ) {
+           mPlaylist->insertAt(mPlaylistTracksModel->getTrack(index),mPlaylist->currentIndex() + 1);
+    }
+}
+
+
+void MainController::playSavedPlaylistTrack(int index)
+{
+    qDebug() << "Play saved playlist song: " << index;
+    if ( mPlaylistTracksModel != 0 ) {
+        mPlaylist->playSong(mPlaylistTracksModel->getTrack(index));
+    }
 }

@@ -43,6 +43,8 @@ ApplicationWindow
     signal requestAlbum(string albumurn);
     signal requestTrackAlbumTracks(string trackurn);
     signal requestTrackArtistAlbums(string trackurn);
+    signal requestSavedPlaylists();
+    signal requestSavedPlaylist(string url);
 
     // Controller model clear signals (memory cleanup)
     signal clearAlbumList();
@@ -66,6 +68,9 @@ ApplicationWindow
     signal playActiveAlbum();
     signal deletePlaylist();
     signal deletePlaylistTrack(int index);
+    signal addSavedPlaylistTrack(int index);
+    signal addSavedPlaylistTrackAfterCurrent(int index);
+    signal playSavedPlaylistTrack(int index);
 
     // basic controls
     signal next();
