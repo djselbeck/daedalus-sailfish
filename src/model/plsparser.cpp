@@ -43,8 +43,27 @@ QList<QUrl>* PLSParser::parsePlaylist(QUrl filename)
         if ( inputLine.startsWith("File") ) {
             // Found an path
             QStringList subStrings = inputLine.split('=');
-            qDebug() << "Found track path: " << subStrings.at(1);
-            mTrackURLs->append(QUrl(subStrings.at(1)));
+            QString filePath = subStrings.at(1);
+            filePath = filePath.replace("file://","");
+            qDebug() << "Found track path: " << filePath;
+            if ( QFile(filePath).exists() ) {
+                qDebug() << "File exists";
+                mTrackURLs->append(QUrl::fromLocalFile(filePath));
+            } else {
+                // Try path prefix from playlist path
+                QString playlistPrefix = filename.toLocalFile();
+                QStringList pathComponents = playlistPrefix.split('/');
+                playlistPrefix = "";
+                for ( int i = 0; i < pathComponents.size() - 1 ; i++ ) {
+                    playlistPrefix += pathComponents.at(i) + '/';
+                }
+                filePath = playlistPrefix + filePath;
+                qDebug() << "trying with prefix: " << filePath;
+                if ( QFile(filePath).exists()) {
+                    qDebug() << "File exists";
+                    mTrackURLs->append(QUrl::fromLocalFile(filePath));
+                }
+            }
         }
     }
     return mTrackURLs;

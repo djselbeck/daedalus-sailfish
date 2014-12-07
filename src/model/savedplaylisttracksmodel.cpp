@@ -18,6 +18,7 @@ SavedPlaylistTracksModel::SavedPlaylistTracksModel(QObject *parent, QList<QUrl> 
         // Start adding songs with sparql
         QUrl url = mURLs->at(0);
         mURLs->removeAt(0);
+        mCurrentFile = url.toEncoded();
         requestTrack(url);
     }
     mTracks = new QList<TrackObject*>();
@@ -37,15 +38,34 @@ void SavedPlaylistTracksModel::trackReady()
 {
     // Parse sparql result
     qDebug() << "trackReady, rowCount: " << mSparqlModel->rowCount();
-    QString title = mSparqlModel->data(mSparqlModel->index(0,0),0).toString();
-    QString artist = mSparqlModel->data(mSparqlModel->index(0,1),0).toString();
-    QString album = mSparqlModel->data(mSparqlModel->index(0,2),0).toString();
-    int length = mSparqlModel->data(mSparqlModel->index(0,3),0).toInt();
-    int tracknr = mSparqlModel->data(mSparqlModel->index(0,4),0).toInt();
-    int discnr = mSparqlModel->data(mSparqlModel->index(0,5),0).toInt();
-    QString fileurl = mSparqlModel->data(mSparqlModel->index(0,6),0).toString();
-    QString trackurn = mSparqlModel->data(mSparqlModel->index(0,7),0).toString();
-    qDebug() << "Found title: " << title << artist << album << length << tracknr << discnr << fileurl << trackurn;
+    QString title;
+    QString artist;
+    QString album;
+    int length;
+    int tracknr;
+    int discnr;
+    QString fileurl;
+    QString trackurn;
+    if ( mSparqlModel->rowCount() > 0 ) {
+        title = mSparqlModel->data(mSparqlModel->index(0,0),0).toString();
+        artist = mSparqlModel->data(mSparqlModel->index(0,1),0).toString();
+        album = mSparqlModel->data(mSparqlModel->index(0,2),0).toString();
+        length = mSparqlModel->data(mSparqlModel->index(0,3),0).toInt();
+        tracknr = mSparqlModel->data(mSparqlModel->index(0,4),0).toInt();
+        discnr = mSparqlModel->data(mSparqlModel->index(0,5),0).toInt();
+        fileurl = mSparqlModel->data(mSparqlModel->index(0,6),0).toString();
+        trackurn = mSparqlModel->data(mSparqlModel->index(0,7),0).toString();
+        qDebug() << "Found title: " << title << artist << album << length << tracknr << discnr << fileurl << trackurn;
+    } else {
+        title = tr("Undefined");
+        artist = tr("Undefined");
+        album = tr("Undefined");
+        length = 0;
+        tracknr = 0;
+        discnr = 0;
+        fileurl = mCurrentFile;
+        trackurn = "null";
+    }
 
     TrackObject* tempTrack = new TrackObject(title,artist,album,fileurl,trackurn,length,tracknr,discnr,0);
 
@@ -58,6 +78,7 @@ void SavedPlaylistTracksModel::trackReady()
         // Start adding songs with sparql
         QUrl url = mURLs->at(0);
         mURLs->removeAt(0);
+        mCurrentFile = url.toEncoded();
         requestTrack(url);
     }
 }

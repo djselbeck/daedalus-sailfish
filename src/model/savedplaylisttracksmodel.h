@@ -41,6 +41,7 @@ public slots:
 private:
     QList<QUrl>  *mURLs;
     QList<TrackObject*>* mTracks;
+    QString mCurrentFile;
 
     QSparqlConnection *mConnection;
     QSparqlQueryModel *mSparqlModel;

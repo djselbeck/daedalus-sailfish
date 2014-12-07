@@ -661,6 +661,16 @@
     </message>
 </context>
 <context>
+    <name>SavedPlaylistTracksModel</name>
+    <message>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="60"/>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="61"/>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="62"/>
+        <source>Undefined</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SavedPlaylistsPage</name>
     <message>
         <location filename="../qml/pages/SavedPlaylistsPage.qml" line="21"/>
