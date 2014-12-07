@@ -13,7 +13,9 @@ Page {
         anchors.fill: parent
 
         contentWidth: width
-
+        header: PageHeader {
+            title: "Daedalus"
+        }
         model: mainMenuModel
         delegate: ListItem {
             Label {

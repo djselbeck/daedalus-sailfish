@@ -576,22 +576,22 @@
 <context>
     <name>MainPage</name>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="52"/>
+        <location filename="../qml/pages/MainPage.qml" line="54"/>
         <source>playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="56"/>
+        <location filename="../qml/pages/MainPage.qml" line="58"/>
         <source>artists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="60"/>
+        <location filename="../qml/pages/MainPage.qml" line="62"/>
         <source>albums</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="72"/>
+        <location filename="../qml/pages/MainPage.qml" line="74"/>
         <source>settings</source>
         <translation type="unfinished"></translation>
     </message>
