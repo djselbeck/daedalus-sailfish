@@ -15,6 +15,7 @@ class Playlist : public QAbstractListModel
     Q_OBJECT
 public:
     explicit Playlist(QObject *parent = 0);
+    ~Playlist();
 
     enum EntryRoles {
         TitleRole = Qt::UserRole + 1,
@@ -76,9 +77,6 @@ private:
     QList<TrackObject*> *mTrackList;
     int mOldIndex;
     PlaybackStatusObject *mStatusObject;
-    QTimer *mStatusTimer;
-
-    int mStatusInterval;
 
 
 private slots:

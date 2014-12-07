@@ -67,15 +67,12 @@ Item {
         preventStealing: true
         onMouseYChanged: {
             if(pressed) {
-                console.debug("Speedsacroll pressed")
                 listviewCache = listview.cacheBuffer
                 listview.cacheBuffer = -1
                 var relPos = (mouseY/height)*100;
                 var item = Sections.getItemPositionFromRelative(relPos);
                 if(listview && listview.model) {
-                    console.debug("model and lv existing")
                     var count = (typeof listview.model.rowCount === 'undefined' ? listview.model.length : listview.model.rowCount());
-                    console.debug("item count: " + count + " item pos: " + item)
                     if ( item < count )
                         listview.positionViewAtIndex(item,ListView.Beginning);
                 }

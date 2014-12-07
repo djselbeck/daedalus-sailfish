@@ -40,6 +40,7 @@ class MainController : public QObject
 
 public:
     explicit MainController(QObject *parent = 0);
+    ~MainController();
     MainController(QQuickView *viewer,QObject *parent = 0);
 
 signals:
@@ -149,6 +150,12 @@ private slots:
     void setAlbumWikiInfo(QString info);
 
     void receiveLastFMSessionKey(QString key);
+    void clearLastFMAuthentication();
+
+    void playActivePlaylist();
+    void addActivePlaylist();
+
+    void clearSavedPlaylistTracks();
 
 };
 

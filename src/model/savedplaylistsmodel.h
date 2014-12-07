@@ -29,6 +29,7 @@ signals:
 public slots:
     void requestSavedPlaylists();
     void sparqlModelfinished();
+    void clearData();
 
 private:
     int mRolesCount;

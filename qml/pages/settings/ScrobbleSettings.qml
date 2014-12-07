@@ -46,6 +46,21 @@ Dialog {
                 inputMethodHints: Qt.ImhNoPredictiveText
                 echoMode: TextInput.Password
             }
+            Button {
+                id: clearAuthentication
+                anchors.right: parent.right
+                anchors.left: parent.left
+                text: qsTr("clear authentication")
+                onClicked: {
+                    clearLastFMAuthentication();
+                }
+            }
+
+            Label {
+                text: lastfmsessionkey === "" ? qsTr("not authenticated") : qsTr("authenticated with key:\n") + lastfmsessionkey
+                anchors.right: parent.right
+                anchors.left: parent.left
+            }
         }
     }
     onAccepted: {

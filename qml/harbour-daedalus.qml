@@ -46,14 +46,6 @@ ApplicationWindow
     signal requestSavedPlaylists();
     signal requestSavedPlaylist(string url);
 
-    // Controller model clear signals (memory cleanup)
-    signal clearAlbumList();
-    signal clearArtistList();
-    signal clearTrackList();
-    signal clearPlaylistTracks();
-    signal clearPlaylists();
-    signal clearSearchTracks();
-
     // playlist management
     signal addAlbumTrack(int index);
     signal addAlbumTrackAfterCurrent(int index);
@@ -72,6 +64,16 @@ ApplicationWindow
     signal addSavedPlaylistTrack(int index);
     signal addSavedPlaylistTrackAfterCurrent(int index);
     signal playSavedPlaylistTrack(int index);
+    signal addActivePlaylist();
+    signal playActivePlaylist();
+
+
+    // memory preasure methods
+    signal clearAlbumsList();
+    signal clearAlbumTrackList();
+    signal clearArtistsList();
+    signal clearSavedPlaylists();
+    signal clearSavedPlaylistTracks();
 
     // basic controls
     signal next();
@@ -91,6 +93,7 @@ ApplicationWindow
     // [settingkey,value]
     signal newSettingKey(variant setting);
     signal newLastfmUserData(variant data);
+    signal clearLastFMAuthentication();
 
     // Signal for db control
     signal bulkDownloadArtists();

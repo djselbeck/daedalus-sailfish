@@ -12,10 +12,11 @@ Page
     SilicaListView {
             id : playlistTracksListView
             model: playlistTracksModel
-            quickScrollEnabled: jollaQuickscroll
-            SpeedScroller {
-                listview: playlistTracksListView
-            }
+            // FIXME SpeedScroller
+            quickScrollEnabled: true // jollaQuickscroll
+//            SpeedScroller {
+//                listview: playlistTracksListView
+//            }
             ScrollDecorator {}
             anchors.fill: parent
 //            anchors.bottomMargin: quickControlPanel.visibleSize
@@ -38,13 +39,13 @@ Page
                 MenuItem {
                     text: qsTr("add list")
                     onClicked: {
-                        addPlaylist(playlistname)
+                        addActivePlaylist()
                     }
                 }
                 MenuItem {
                     text: qsTr("play list")
                     onClicked: {
-                        playPlaylist(playlistname)
+                        playActivePlaylist()
                     }
                 }
             }
@@ -127,20 +128,16 @@ Page
                                    })
                 }
                 function playTrackRemorse() {
-                    remorseAction(qsTr("playing track"), function() { playSong(path); },3000)
+                    remorseAction(qsTr("playing track"), function() {
+                        playSavedPlaylistTrack(index); },3000)
                 }
                 function addTrackRemorse() {
-                    remorseAction(qsTr("adding track"), function() { addSong(path); },3000)
+                    remorseAction(qsTr("adding track"), function() {
+                        addSavedPlaylistTrack(index); },3000)
                 }
                 function addTrackAfterCurrentRemorse() {
                     remorseAction(qsTr("adding track"), function () {
-                        addSongAfterCurrent(path)
-                    }, 3000)
-                }
-                function removeFromListRemorse() {
-                    remorseAction(qsTr("removing track"), function () {
-                        removeSongFromSaved([index,playlistname]);
-                        savedPlaylistClicked(playlistname);
+                        addSavedPlaylistTrackAfterCurrent(index)
                     }, 3000)
                 }
                 Component {
@@ -163,12 +160,6 @@ Page
                             text: qsTr("play after current")
                             onClicked: {
                                 addTrackAfterCurrentRemorse();
-                            }
-                        }
-                        MenuItem {
-                            text: qsTr("remove from list")
-                            onClicked: {
-                                removeFromListRemorse();
                             }
                         }
                     }
@@ -210,6 +201,6 @@ Page
     }
 
     Component.onDestruction: {
-        clearPlaylistTracks();
+        clearSavedPlaylistTracks();
     }
 }

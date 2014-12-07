@@ -125,12 +125,22 @@ QString LastFMScrobbler::makeRequest(QMap<QString, QString> variables)
     QMap<QString, QString>::iterator i;
     for ( i = variables.begin(); i != variables.end(); ++i) {
         qDebug() << "key: " << i.key() << " value: " << i.value();
+        QString key = i.key();
+        key = key.replace('&'," ");
+        key = key.replace('?'," ");
+        key = key.replace(':'," ");
+//        key = key.replace(' ',"%20");
+        QString value = i.value();
+        value = value.replace('&'," ");
+        value = value.replace('?'," ");
+        value = value.replace(':'," ");
+//        value = value.replace(' '," ");
         if( i == variables.begin() ) {
-            request += "" + i.key() + "=" + i.value();
+            request += "" + key + "=" + value;
         } else {
-            request += "&" + i.key() + "=" + i.value();
+            request += "&" + key + "=" + value;
         }
-        signatureInput += i.key() + i.value();
+        signatureInput += key + value;
     }
     QByteArray sigInputRaw;
     sigInputRaw.append(signatureInput + LASTFMSECRET);

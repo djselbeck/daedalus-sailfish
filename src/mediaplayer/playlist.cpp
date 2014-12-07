@@ -12,11 +12,18 @@ Playlist::Playlist(QObject *parent) :
     mPlayer = new QMediaPlayer(this);
     mPlayer->setPlaylist(mQPlaylist);
     connect(mQPlaylist,SIGNAL(currentIndexChanged(int)),this,SLOT(indexChanged(int)));
-    mStatusTimer = 0;
-    mStatusInterval = 1000;
 
     connect(mPlayer,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(updateStatus()));
     connect(mPlayer,SIGNAL(positionChanged(qint64)),this,SLOT(updateStatus()));
+}
+
+Playlist::~Playlist()
+{
+    mPlayer->stop();
+    delete(mPlayer);
+    delete(mQPlaylist);
+    qDeleteAll(*mTrackList);
+    delete(mTrackList);
 }
 
 
@@ -186,16 +193,6 @@ void Playlist::registerStatusObject(PlaybackStatusObject *obj)
         return;
     }
     mStatusObject = obj;
-    if ( mStatusTimer != 0 ) {
-        mStatusTimer->stop();
-        mStatusTimer->deleteLater();
-        mStatusTimer = 0;
-    }
-//    mStatusTimer = new QTimer();
-//    mStatusTimer->setSingleShot(false);
-//    mStatusTimer->setInterval(mStatusInterval);
-//    connect(mStatusTimer,SIGNAL(timeout()),this,SLOT(updateStatus()));
-//    mStatusTimer->start();
 }
 
 void Playlist::updateStatus()

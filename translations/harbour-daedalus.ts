@@ -599,63 +599,53 @@
 <context>
     <name>PlaylistTracksPage</name>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="32"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="33"/>
         <source>delete list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="39"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="40"/>
         <source>add list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="45"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="46"/>
         <source>play list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="130"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="131"/>
         <source>playing track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="133"/>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="136"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="135"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="139"/>
         <source>adding track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="141"/>
-        <source>removing track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="150"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="147"/>
         <source>play track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="157"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="154"/>
         <source>add track to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="163"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="160"/>
         <source>play after current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="169"/>
-        <source>remove from list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="187"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="178"/>
         <source>delete playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="190"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="181"/>
         <source>really delete playlist?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -719,6 +709,22 @@
     <message>
         <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="36"/>
         <source>password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="53"/>
+        <source>clear authentication</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="60"/>
+        <source>not authenticated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="60"/>
+        <source>authenticated with key:
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

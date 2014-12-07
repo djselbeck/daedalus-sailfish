@@ -268,7 +268,7 @@ Page {
     }
 
     Component.onDestruction: {
-        clearTrackList()
+        clearAlbumTrackList()
     }
 
     Component {

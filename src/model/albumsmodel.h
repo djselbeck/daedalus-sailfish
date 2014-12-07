@@ -49,6 +49,8 @@ public slots:
     void setDownloadEnabled(bool enabled);
     void setDownloadSize(QString size);
 
+    void clearData();
+
 
 private:
     int mRolesCount;

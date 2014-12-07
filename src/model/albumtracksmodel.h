@@ -38,6 +38,8 @@ public slots:
     void requestAlbumTracksReverseFromTrack(QString urn);
     void requestArtistTracks(QString artisturn);
 
+    void clearData();
+
 private:
     QString mAlbumTracksQueryString;
     QSparqlConnection *mConnection;

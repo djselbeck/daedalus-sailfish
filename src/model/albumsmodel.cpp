@@ -265,3 +265,10 @@ void AlbumsModel::albumEntered(QString albumName)
         }
     }
 }
+
+void AlbumsModel::clearData()
+{
+    beginResetModel();
+    mSparqlModel->clear();
+    endResetModel();
+}

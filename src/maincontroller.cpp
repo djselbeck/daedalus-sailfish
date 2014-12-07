@@ -67,6 +67,20 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     emit requestDBStatistic();
 }
 
+MainController::~MainController()
+{
+    clearSavedPlaylistTracks();
+    delete(mAlbumsModel);
+    delete(mArtistsModel);
+    delete(mAlbumTracksModel);
+    delete(mPlaylistsModel);
+    delete(mImgDB);
+    delete(mPlaylist);
+    delete(mScrobbler);
+    mModelThread->exit(0);
+    mDBThread->exit(0);
+}
+
 void MainController::requestAlbums()
 {
     qDebug() << "Albums requested";
@@ -114,6 +128,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(newSettingKey(QVariant)),this,SLOT(receiveSettingKey(QVariant)));
     // Last.fm userdata
     connect(item,SIGNAL(newLastfmUserData(QVariant)),mScrobbler,SLOT(authenticate(QVariant)));
+    connect(item,SIGNAL(clearLastFMAuthentication()),this,SLOT(clearLastFMAuthentication()));
 
     // playlist management
     connect(item,SIGNAL(addAlbumTrack(int)),this,SLOT(addAlbumTrack(int)));
@@ -129,6 +144,8 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(addSavedPlaylistTrack(int)),this,SLOT(addSavedPlaylistTrack(int)));
     connect(item,SIGNAL(addSavedPlaylistTrackAfterCurrent(int)),this,SLOT(addSavedPlaylistTrackAfterCurrent(int)));
     connect(item,SIGNAL(playSavedPlaylistTrack(int)),this,SLOT(playSavedPlaylistTrack(int)));
+    connect(item,SIGNAL(addActivePlaylist()),this,SLOT(addActivePlaylist()));
+    connect(item,SIGNAL(playActivePlaylist()),this,SLOT(playActivePlaylist()));
     connect(item,SIGNAL(savePlaylist(QString)),mPlaylist,SLOT(savePlaylist(QString)));
 
     // basic controls
@@ -170,6 +187,13 @@ void MainController::connectQMLSignals()
 
     connect(mImgDB,SIGNAL(albumWikiInformationReady(QString)),this,SLOT(setAlbumWikiInfo(QString)));
     connect(mImgDB,SIGNAL(artistBioInformationReady(QString)),this,SLOT(setArtistBioInfo(QString)));
+
+    // memory release methods
+    connect(item,SIGNAL(clearAlbumsList()),mAlbumsModel,SLOT(clearData()));
+    connect(item,SIGNAL(clearAlbumTrackList()),mAlbumTracksModel,SLOT(clearData()));
+    connect(item,SIGNAL(clearArtistsList()),mArtistsModel,SLOT(clearData()));
+    connect(item,SIGNAL(clearSavedPlaylists()),mPlaylistsModel,SLOT(clearData()));
+    connect(item,SIGNAL(clearSavedPlaylistTracks()),this,SLOT(clearSavedPlaylistTracks()));
 }
 
 void MainController::connectModelSignals()
@@ -219,6 +243,7 @@ void MainController::readSettings()
     mQuickView->rootContext()->setContextProperty("sectionsInPlaylist", mSectionsInPlaylist);
     mQuickView->rootContext()->setContextProperty("lastfmEnabled", mDownloadEnabled);
     mQuickView->rootContext()->setContextProperty("showCoverNowPlaying", mCoverInNowPlaying);
+    mQuickView->rootContext()->setContextProperty("lastfmsessionkey",mLastFMSessionKey);
 
     mQuickView->rootContext()->setContextProperty("downloadSize",dlSize);
     mDownloadSize = dlSize;
@@ -242,6 +267,7 @@ void MainController::writeSettings()
     settings.setValue("show_covernowplaying",mCoverInNowPlaying);
     settings.setValue("lastfmsession",mLastFMSessionKey);
     settings.endGroup();
+    readSettings();
 }
 
 QString MainController::getLastFMArtSize(int index)
@@ -482,10 +508,7 @@ void MainController::receiveLastFMSessionKey(QString key)
 
 void MainController::receiveSavedPlaylistTracks(SavedPlaylistTracksModel *model)
 {
-    mQuickView->rootContext()->setContextProperty("playlistTracksModel",0);
-    if ( mPlaylistTracksModel != 0 ) {
-        delete(mPlaylistTracksModel);
-    }
+    clearSavedPlaylistTracks();
     mPlaylistTracksModel = model;
     mQuickView->rootContext()->setContextProperty("playlistTracksModel",mPlaylistTracksModel);
     qDebug() << "received saved playlist tracks";
@@ -513,4 +536,39 @@ void MainController::playSavedPlaylistTrack(int index)
     if ( mPlaylistTracksModel != 0 ) {
         mPlaylist->playSong(mPlaylistTracksModel->getTrack(index));
     }
+}
+
+void MainController::addActivePlaylist()
+{
+    if ( mPlaylistTracksModel != 0 ) {
+        for ( int i = 0; i < mPlaylistTracksModel->rowCount(); i++ ) {
+            mPlaylist->addFile(mPlaylistTracksModel->getTrack(i));
+        }
+    }
+}
+
+void MainController::playActivePlaylist()
+{
+    mPlaylist->clear();
+    if ( mPlaylistTracksModel != 0 ) {
+        for ( int i = 0; i < mPlaylistTracksModel->rowCount(); i++ ) {
+            mPlaylist->addFile(mPlaylistTracksModel->getTrack(i));
+        }
+    }
+    mPlaylist->playPosition(0);
+}
+
+void MainController::clearSavedPlaylistTracks()
+{
+    mQuickView->rootContext()->setContextProperty("playlistTracksModel",0);
+    if ( mPlaylistTracksModel != 0 ) {
+        delete(mPlaylistTracksModel);
+        mPlaylistTracksModel = 0;
+    }
+}
+
+void MainController::clearLastFMAuthentication()
+{
+    mLastFMSessionKey = "";
+    writeSettings();
 }

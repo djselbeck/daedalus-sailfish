@@ -332,6 +332,6 @@ Page {
     }
 
     Component.onDestruction: {
-        clearAlbumList()
+        clearAlbumsList()
     }
 }

@@ -112,3 +112,10 @@ QVariantMap ArtistsModel::get(int row){
     }
     return res;
 }
+
+void ArtistsModel::clearData()
+{
+    beginResetModel();
+    mSparqlModel->clear();
+    endResetModel();
+}

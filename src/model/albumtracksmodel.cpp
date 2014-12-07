@@ -143,3 +143,9 @@ inline QString AlbumTracksModel::getLengthFormatted(int length) const
     return temp;
 }
 
+void AlbumTracksModel::clearData()
+{
+    beginResetModel();
+    mSparqlModel->clear();
+    endResetModel();
+}

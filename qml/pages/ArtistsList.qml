@@ -293,6 +293,6 @@ Page {
 
     Component.onDestruction: {
         //artistListView.model = null
-        clearArtistList()
+        clearArtistsList()
     }
 }

@@ -87,3 +87,10 @@ QVariantMap SavedPlaylistsModel::get(int row){
     }
     return res;
 }
+
+void SavedPlaylistsModel::clearData()
+{
+    beginResetModel();
+    mSparqlModel->clear();
+    endResetModel();
+}

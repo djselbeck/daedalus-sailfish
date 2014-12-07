@@ -74,7 +74,7 @@ Page
             }
     }
     Component.onDestruction: {
-        clearPlaylists();
+        clearSavedPlaylists();
         console.debug("Clearing playlists");
     }
 }

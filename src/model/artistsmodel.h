@@ -35,6 +35,7 @@ signals:
 
 public slots:
     void requestArtists();
+    void clearData();
 
 private slots:
     void sparqlModelfinished();
