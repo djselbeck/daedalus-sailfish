@@ -18,17 +18,17 @@ AlbumTracksModel::AlbumTracksModel(QObject *parent, QSparqlConnection *connectio
 
 void AlbumTracksModel::requestAlbumTracks(QString albumurn)
 {
-    albumurn = albumurn.replace('\'',"\\\'");
+    albumurn = albumurn.replace('<',"%3C");
+    albumurn = albumurn.replace('>',"%3E");
     qDebug() << "Album tracks requested: " + albumurn;
-    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?piece nmm:musicAlbum '" + albumurn + "' ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?discnr ?tracknr";
+    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?piece nmm:musicAlbum <" + albumurn + "> ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 
 void AlbumTracksModel::requestAlbumTracksReverseFromTrack(QString urn)
 {
-    urn = urn.replace('\'',"\\\'");
-    urn = urn.replace('<','\<');
-    urn = urn.replace('>','\>');
+    urn =  urn.replace('<',"%3C");
+    urn =  urn.replace('>',"%3E");
     qDebug() << "Album tracks requested: " + urn;
     mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { <"+ urn +">  nmm:musicAlbum ?album . ?piece nmm:musicAlbum ?album ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
@@ -36,11 +36,10 @@ void AlbumTracksModel::requestAlbumTracksReverseFromTrack(QString urn)
 
 void AlbumTracksModel::requestArtistTracks(QString artisturn)
 {
-    artisturn = artisturn.replace('\'',"\\\'");
-    artisturn = artisturn.replace('<','\<');
-    artisturn = artisturn.replace('>','\>');
+    artisturn = artisturn.replace('<',"%3C");
+    artisturn = artisturn.replace('>',"%3E");
     qDebug() << "Album tracks requested: " + artisturn;
-    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?album nmm:albumArtist '"+artisturn+"' . ?piece nmm:musicAlbum ?album ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?albumname ?discnr ?tracknr";
+    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?album nmm:albumArtist <"+artisturn+"> . ?piece nmm:musicAlbum ?album ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?albumname ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 

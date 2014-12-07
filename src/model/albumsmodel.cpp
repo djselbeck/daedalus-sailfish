@@ -69,7 +69,9 @@ void AlbumsModel::requestAlbums(QString artist)
     mSparqlModel->clear();
     beginResetModel();
     qDebug() << "getting albums";
-    mAlbumsQueryString = "SELECT ?albumname COUNT(?piece) as ?trackcount SUM(?tracklength) as ?totalduration ?artistname ?album WHERE { ?piece nmm:performer '" + artist + "'  . ?piece nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?piece nfo:duration ?tracklength . ?piece nmm:performer ?performer . ?performer nmm:artistName ?artistname  } GROUP BY ?album ORDER BY ?album";
+    artist = artist.replace('<',"%3C");
+    artist = artist.replace('>',"%3E");
+    mAlbumsQueryString = "SELECT ?albumname COUNT(?piece) as ?trackcount SUM(?tracklength) as ?totalduration ?artistname ?album WHERE { ?piece nmm:performer <" + artist + ">  . ?piece nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?piece nfo:duration ?tracklength . ?piece nmm:performer ?performer . ?performer nmm:artistName ?artistname  } GROUP BY ?album ORDER BY ?album";
     // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
     mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
     connect(this,SIGNAL(requestAlbumInformation(Albumtype)),mDownloader,SLOT(requestAlbumArt(Albumtype)),Qt::QueuedConnection);
@@ -80,8 +82,8 @@ void AlbumsModel::requestAlbums(QString artist)
 
 void AlbumsModel::requestArtistAlbumsReverseFromTrack(QString urn)
 {
-    urn = urn.replace('<','\\<');
-    urn = urn.replace('>','\\>');
+    urn = urn.replace('<',"%3C");
+    urn = urn.replace('>',"%3E");
     mPartialModel = true;
     qDebug() << "getting albums of: " << urn;
     // Initialize the query

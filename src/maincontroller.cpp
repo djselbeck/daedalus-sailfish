@@ -129,6 +129,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(addSavedPlaylistTrack(int)),this,SLOT(addSavedPlaylistTrack(int)));
     connect(item,SIGNAL(addSavedPlaylistTrackAfterCurrent(int)),this,SLOT(addSavedPlaylistTrackAfterCurrent(int)));
     connect(item,SIGNAL(playSavedPlaylistTrack(int)),this,SLOT(playSavedPlaylistTrack(int)));
+    connect(item,SIGNAL(savePlaylist(QString)),mPlaylist,SLOT(savePlaylist(QString)));
 
     // basic controls
     connect(item,SIGNAL(next()),mPlaylist,SLOT(next()));

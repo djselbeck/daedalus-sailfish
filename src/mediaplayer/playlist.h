@@ -39,6 +39,8 @@ public:
 
     void registerStatusObject(PlaybackStatusObject *obj);
 
+    static QString getXDGMusicDir();
+
 signals:
 
 public slots:
@@ -63,6 +65,8 @@ public slots:
     void togglePlayPause();
     void stop();
     void seek(int pos);
+
+    void savePlaylist(QString name);
 
 
 

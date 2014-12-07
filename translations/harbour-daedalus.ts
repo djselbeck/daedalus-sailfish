@@ -663,9 +663,9 @@
 <context>
     <name>SavedPlaylistTracksModel</name>
     <message>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="60"/>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="61"/>
         <location filename="../src/model/savedplaylisttracksmodel.cpp" line="62"/>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="63"/>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="64"/>
         <source>Undefined</source>
         <translation type="unfinished"></translation>
     </message>

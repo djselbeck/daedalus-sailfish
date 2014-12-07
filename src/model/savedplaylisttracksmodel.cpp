@@ -28,9 +28,11 @@ SavedPlaylistTracksModel::SavedPlaylistTracksModel(QObject *parent, QList<QUrl> 
 void SavedPlaylistTracksModel::requestTrack(QUrl track)
 {
     QString urlString = track.toEncoded();
+    urlString = urlString.replace('<',"%3C");
+    urlString = urlString.replace('>',"%3E");
     qDebug() << "search for: " << urlString << " in sparql";
-    QString requestString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?piece nie:url '"
-            + urlString + "' ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr }";
+    QString requestString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?piece nie:url <"
+            + urlString + "> ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr }";
     mSparqlModel->setQuery(QSparqlQuery(requestString),*mConnection);
 }
 

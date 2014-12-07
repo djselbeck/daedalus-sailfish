@@ -1,4 +1,8 @@
 #include "playlist.h"
+#include "../model/plswriter.h"
+
+#include <QFile>
+#include <QTextStream>
 
 Playlist::Playlist(QObject *parent) :
     QAbstractListModel(parent)
@@ -349,4 +353,42 @@ void Playlist::playNext(int position)
 int Playlist::currentIndex()
 {
     return mQPlaylist->currentIndex();
+}
+
+void Playlist::savePlaylist(QString name)
+{
+    name = name.replace(".pls","");
+    QString outputPath = Playlist::getXDGMusicDir() + '/' + name + ".pls";
+    QUrl destination = QUrl::fromLocalFile(outputPath);
+    PLSWriter::writePlaylist(mTrackList,destination,name);
+}
+
+QString Playlist::getXDGMusicDir()
+{
+    QString xdgConfigHome = qgetenv("XDG_CONFIG_HOME");
+    QString homePath = qgetenv("HOME");
+    QString configPath = "";
+    if ( xdgConfigHome != "") {
+        configPath = xdgConfigHome + "/.config/user-dirs.dirs";
+    } else {
+        configPath = homePath + "/.config/user-dirs.dirs";
+    }
+    qDebug() << "Try getting xdg dirs at: " << configPath;
+    QFile xdgConfig(configPath);
+    if ( !xdgConfig.open(QIODevice::ReadOnly) ) {
+        return "";
+    }
+    QTextStream inputStream(&xdgConfig);
+    while ( !inputStream.atEnd() ) {
+        QString textLine = inputStream.readLine();
+        if ( textLine.startsWith("XDG_MUSIC_DIR") ) {
+            QStringList splitList = textLine.split('=');
+            QString envString = splitList[1];
+            envString = envString.replace('\"',"");
+            envString = envString.replace("$HOME",homePath);
+            qDebug() << "Music env:" << envString;
+            return envString;
+        }
+    }
+    return "";
 }

@@ -1,5 +1,7 @@
 #include "savedplaylistsmodel.h"
 
+#include <QUrl>
+
 SavedPlaylistsModel::SavedPlaylistsModel(QObject *parent, QSparqlConnection *connection, QThread *fetchthread) :
     QAbstractListModel(parent)
 {
@@ -49,12 +51,19 @@ int SavedPlaylistsModel::rowCount(const QModelIndex &parent) const {
 QVariant SavedPlaylistsModel::data(const QModelIndex &index, int role) const {
     QString albumTitle;
     switch ( role ) {
-    case NameRole:
-        return mSparqlModel->data(index,role);
     case PlaylistURLRole:
         return mSparqlModel->data(index,role);
     case PlaylistURNRole:
         return mSparqlModel->data(index,role);
+    }
+    if ( role == NameRole) {
+        QString sparQLName = mSparqlModel->data(mSparqlModel->index(index.row(),0),0).toString();
+        QUrl sparQLURL = mSparqlModel->data(mSparqlModel->index(index.row(),1),0).toString();
+        qDebug() << "name " << sparQLName << sparQLURL;
+        if ( sparQLName == "" ) {
+            return sparQLURL.fileName();
+        }
+        return sparQLName;
     }
 
     return "";

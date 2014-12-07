@@ -40,7 +40,8 @@ SOURCES += \
     src/model/plsparser.cpp \
     src/model/savedplaylistsmodel.cpp \
     src/model/savedplaylisttracksmodel.cpp \
-    src/model/m3uparser.cpp
+    src/model/m3uparser.cpp \
+    src/model/plswriter.cpp
 
 OTHER_FILES += qml/harbour-daedalus.qml \
     rpm/harbour-daedalus.changes.in \
@@ -111,7 +112,8 @@ HEADERS += \
     src/model/plsparser.h \
     src/model/savedplaylistsmodel.h \
     src/model/savedplaylisttracksmodel.h \
-    src/model/m3uparser.h
+    src/model/m3uparser.h \
+    src/model/plswriter.h
 
 RESOURCES += \
     images.qrc
