@@ -13,6 +13,7 @@ public:
 
 signals:
     void playlistTracksReady(SavedPlaylistTracksModel *model);
+    void sendBusy(bool);
 
 public slots:
     void requestPlaylist(QString url);

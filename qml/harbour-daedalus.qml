@@ -167,6 +167,12 @@ ApplicationWindow
         artistimageurl = url;
     }
 
+    BusyIndicator {
+        anchors.centerIn: parent
+        size: BusyIndicatorSize.Large
+        running: mBusy
+    }
+
     ControlPanel {
             id: quickControlPanel
     }

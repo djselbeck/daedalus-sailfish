@@ -6,9 +6,11 @@
 #include <QMediaPlayer>
 #include <QAbstractListModel>
 #include <QTimer>
+#include <QThread>
 
 #include "../model/trackobject.h"
 #include "../model/playbackstatusobject.h"
+#include "../model/playbackstate.h"
 
 class Playlist : public QAbstractListModel
 {
@@ -42,7 +44,12 @@ public:
 
     static QString getXDGMusicDir();
 
+    void savePlaylistToSql();
+
 signals:
+    void requestSavedPlaylistState();
+    void requestPlaylistStateSave(QList<TrackObject*>*);
+    void sendBusy(bool);
 
 public slots:
     void addFile(TrackObject *track);
@@ -68,6 +75,7 @@ public slots:
     void seek(int pos);
 
     void savePlaylist(QString name);
+    void resumePlaylist();
 
 
 
@@ -77,11 +85,17 @@ private:
     QList<TrackObject*> *mTrackList;
     int mOldIndex;
     PlaybackStatusObject *mStatusObject;
+    PlaybackState *mPlaybackState;
+
+    QThread *mBackgroundThread;
+
 
 
 private slots:
     void indexChanged(int index);
     void updateStatus();
+
+    void receiveSavedPlaybackStateList(QList<TrackObject*>*);
 
 };
 

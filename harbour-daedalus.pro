@@ -12,7 +12,7 @@
 # The name of your application
 TARGET = harbour-daedalus
 
-CONFIG += sailfishapp qtsparql
+CONFIG += sailfishapp
 
 QT += multimedia sql
 
@@ -46,7 +46,6 @@ SOURCES += \
 
 OTHER_FILES += qml/harbour-daedalus.qml \
     rpm/harbour-daedalus.changes.in \
-    rpm/harbour-daedalus.spec \
     rpm/harbour-daedalus.yaml \
     translations/*.ts \
     harbour-daedalus.desktop \
@@ -120,6 +119,21 @@ HEADERS += \
 RESOURCES += \
     images.qrc
 
-DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS QT_NO_DEBUG_OUTPUT
-#DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS
+#DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS QT_NO_DEBUG_OUTPUT
+DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS
+
+
+
+INCLUDEPATH += $$PWD/libqtsparql/include/Qt5Sparql
+
+QMAKE_RPATHDIR += /usr/share/harbour-daedalus/lib
+
+LIBS += -L$$PWD/libqtsparql/lib/ -lQt5Sparql
+
+lib.files += libqtsparql/lib/libQt5Sparql.so.0 \
+        libqtsparql/lib/sparqldrivers
+
+lib.path = /usr/share/harbour-daedalus/lib
+INSTALLS += lib
+
 

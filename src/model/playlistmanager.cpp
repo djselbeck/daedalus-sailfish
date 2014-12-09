@@ -19,6 +19,7 @@ PlaylistManager::PlaylistManager(QObject *parent, QSparqlConnection *connection)
 void PlaylistManager::requestPlaylist(QString url)
 {
     qDebug() << "Playlist requested: " << url;
+    emit sendBusy(true);
     // Check which ending
     if ( url.toLower().endsWith(".pls")  ) {
         QList<QUrl> *urls;

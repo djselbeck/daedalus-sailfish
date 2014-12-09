@@ -20,7 +20,7 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mQMLImgProvider = new QMLImageProvider(mImgDB);
 
     mModelThread = new QThread(this);
-    mSparQLConnection = new QSparqlConnection("QTRACKER_DIRECT");
+    mSparQLConnection = new QSparqlConnection("QTRACKER");
     mAlbumsModel = new AlbumsModel(0,mSparQLConnection,mModelThread,mImgDB,mDownloadEnabled);
     mArtistsModel = new ArtistsModel(0,mSparQLConnection,mModelThread,mImgDB);
     mAlbumTracksModel = new AlbumTracksModel(0,mSparQLConnection,mModelThread);
@@ -28,6 +28,7 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mPlaylistTracksModel = 0;
 
     mPlaylistManager = new PlaylistManager(0,mSparQLConnection);
+//    mPlaylistManager->moveToThread(mModelThread);
 
     mPlaylist = new Playlist(0);
     mPlaybackStatus = new PlaybackStatusObject();
@@ -45,11 +46,13 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mQuickView->rootContext()->setContextProperty("playlistModel",mPlaylist);
     mQuickView->rootContext()->setContextProperty("playbackstatus",mPlaybackStatus);
     mQuickView->rootContext()->setContextProperty("playlistTracksModel",0);
+    mQuickView->rootContext()->setContextProperty("mBusy",true);
 
 
     mQuickView->rootContext()->setContextProperty("artistInfoText","");
     mQuickView->rootContext()->setContextProperty("albumInfoText","");
     mQuickView->rootContext()->setContextProperty("versionstring",QVariant::fromValue(QString(VERSION)));
+
 
 
     mModelThread->start();
@@ -65,10 +68,12 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     connectQMLSignals();
     connectModelSignals();
     emit requestDBStatistic();
+    mPlaylist->resumePlaylist();
 }
 
 MainController::~MainController()
 {
+    mPlaylist->savePlaylistToSql();
     clearSavedPlaylistTracks();
     delete(mAlbumsModel);
     delete(mArtistsModel);
@@ -194,6 +199,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(clearArtistsList()),mArtistsModel,SLOT(clearData()));
     connect(item,SIGNAL(clearSavedPlaylists()),mPlaylistsModel,SLOT(clearData()));
     connect(item,SIGNAL(clearSavedPlaylistTracks()),this,SLOT(clearSavedPlaylistTracks()));
+
 }
 
 void MainController::connectModelSignals()
@@ -218,6 +224,9 @@ void MainController::connectModelSignals()
     connect(mScrobbler,SIGNAL(newLastFMSessionKey(QString)),this,SLOT(receiveLastFMSessionKey(QString)));
 
     connect(mPlaylistManager,SIGNAL(playlistTracksReady(SavedPlaylistTracksModel*)),this,SLOT(receiveSavedPlaylistTracks(SavedPlaylistTracksModel*)));
+
+    connect(mPlaylist,SIGNAL(sendBusy(bool)),this,SLOT(backgroundBusy(bool)));
+    connect(mPlaylistManager,SIGNAL(sendBusy(bool)),this,SLOT(backgroundBusy(bool)));
 }
 
 void MainController::readSettings()
@@ -509,6 +518,7 @@ void MainController::receiveLastFMSessionKey(QString key)
 void MainController::receiveSavedPlaylistTracks(SavedPlaylistTracksModel *model)
 {
     clearSavedPlaylistTracks();
+    connect(model,SIGNAL(sendBusy(bool)),this,SLOT(backgroundBusy(bool)));
     mPlaylistTracksModel = model;
     mQuickView->rootContext()->setContextProperty("playlistTracksModel",mPlaylistTracksModel);
     qDebug() << "received saved playlist tracks";
@@ -571,4 +581,9 @@ void MainController::clearLastFMAuthentication()
 {
     mLastFMSessionKey = "";
     writeSettings();
+}
+
+void MainController::backgroundBusy(bool busy)
+{
+    mQuickView->rootContext()->setContextProperty("mBusy",busy);
 }

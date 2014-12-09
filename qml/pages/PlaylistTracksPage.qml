@@ -52,6 +52,7 @@ Page
                     text: qsTr("play list")
                     onClicked: {
                         playActivePlaylist()
+                        // GO BACK
                     }
                 }
             }

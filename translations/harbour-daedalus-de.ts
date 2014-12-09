@@ -614,38 +614,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="137"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="138"/>
         <source>playing track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="141"/>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="145"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="142"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="146"/>
         <source>adding track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="153"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="154"/>
         <source>play track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="160"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="161"/>
         <source>add track to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="166"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="167"/>
         <source>play after current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="184"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="185"/>
         <source>delete playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="187"/>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="188"/>
         <source>really delete playlist?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -653,9 +653,9 @@
 <context>
     <name>SavedPlaylistTracksModel</name>
     <message>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="62"/>
         <location filename="../src/model/savedplaylisttracksmodel.cpp" line="63"/>
         <location filename="../src/model/savedplaylisttracksmodel.cpp" line="64"/>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="65"/>
         <source>Undefined</source>
         <translation type="unfinished"></translation>
     </message>

@@ -53,6 +53,9 @@ int main(int argc, char *argv[])
     app->setOrganizationName("harbour-daedalus");
     app->setApplicationName("harbour-daedalus");
 
+    // needed for sparql drivers
+    app->addLibraryPath("/usr/share/harbour-daedalus/lib");
+
     QScopedPointer<QQuickView> view(SailfishApp::createView());
 
     view->engine()->addImportPath("/usr/share/harbour-daedalus/qml/");

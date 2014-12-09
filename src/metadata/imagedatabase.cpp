@@ -13,8 +13,13 @@ ImageDatabase::ImageDatabase(QObject *parent) :
             return;
         }
         mDBFilePath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/imgDB.sqlite3";
-        mDB = new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"));
+        mDB = new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE","imagedatabase"));
         mDB->setDatabaseName(mDBFilePath);
+        if ( !mDB->open() ) {
+            qDebug() << "Imagedatabase not opened";
+        } else {
+            qDebug() << "DB opened";
+        }
         createTables();
     }
     mDownloader = new ImageDownloader();
@@ -35,7 +40,7 @@ ImageDatabase::~ImageDatabase() {
 
 //bool ImageDatabase::syncAlbums(QList<MpdAlbum*> *albums,MpdArtist *artist) {
 //    // Remove orphaned items
-//    QSqlQuery query;
+//    QSqlQuery query(*mDB);
 //    query.setForwardOnly(true);
 //    query.prepare("SELECT * FROM albums");
 //    query.exec();
@@ -124,7 +129,7 @@ void ImageDatabase::fillDatabase(QMap<QString, QList<Albumtype>* > *map)
 
 bool ImageDatabase::hasAlbumArt(QString album,QString artist)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM albums WHERE "
                   "albumname=\"" + album + "\" AND "
                   "artistname=\"" + artist + "\"");
@@ -142,7 +147,7 @@ bool ImageDatabase::hasAlbumArt(QString album,QString artist)
 
 bool ImageDatabase::hasArtistArt(QString artist)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM artist WHERE "
                   "artistname=\"" + artist + "\"");
     qDebug() << "Check for image: " << query.lastQuery();
@@ -179,7 +184,7 @@ void ImageDatabase::enterAlbumInformation(AlbumInformation *info)
 
     // Enter Album into SQL DB
     if (imgID == -1 && info->getImageData() ) {
-        QSqlQuery query;
+        QSqlQuery query(*mDB);
         query.prepare("INSERT INTO images ("
                       "imghash, imgdata ) "
                       "VALUES ("
@@ -205,7 +210,7 @@ void ImageDatabase::enterAlbumInformation(AlbumInformation *info)
         if ( imgID == -1 ) {
             imgID = -2;
         }
-        QSqlQuery query;
+        QSqlQuery query(*mDB);
         query.prepare("INSERT INTO albums ("
                       "albumname, artistname, albuminfo, imageID ) "
                       "VALUES ("
@@ -257,7 +262,7 @@ void ImageDatabase::enterArtistInformation(ArtistInformation  *info)
 
     // Enter Artist into SQL DB
     if (imgID == -1 && info->getImageData() ) {
-        QSqlQuery query;
+        QSqlQuery query(*mDB);
         query.prepare("INSERT INTO images ("
                       "imghash, imgdata ) "
                       "VALUES ("
@@ -283,7 +288,7 @@ void ImageDatabase::enterArtistInformation(ArtistInformation  *info)
         if ( imgID == -1 ) {
             imgID = -2;
         }
-        QSqlQuery query;
+        QSqlQuery query(*mDB);
         query.prepare("INSERT INTO artists ("
                       "name, artistinfo, imageID ) "
                       "VALUES ("
@@ -313,7 +318,7 @@ void ImageDatabase::enterArtistInformation(ArtistInformation  *info)
 
 int ImageDatabase::imageIDFromHash(QString hashValue)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM images WHERE "
                   "imghash=\"" + hashValue + "\"" );
     qDebug() << "Check for image: " << query.lastQuery();
@@ -330,7 +335,7 @@ int ImageDatabase::imageIDFromHash(QString hashValue)
 
 int ImageDatabase::imageIDFromAlbumArtist(QString album, QString artist)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM albums WHERE "
                   "albumname=\"" + album + "\" AND "
                   "artistname=\"" + artist + "\"");
@@ -350,7 +355,7 @@ int ImageDatabase::imageIDFromAlbumArtist(QString album, QString artist)
 
 int ImageDatabase::imageIDFromAlbum(QString album)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     album = album.replace('\"',"\\\"");
     query.prepare("SELECT * FROM albums WHERE "
                   "albumname=\"" + album + "\" "
@@ -371,7 +376,7 @@ int ImageDatabase::imageIDFromAlbum(QString album)
 
 int ImageDatabase::imageIDFromArtist(QString artist)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     artist = artist.replace('\"',"\\\"");
     query.prepare("SELECT * FROM artists WHERE "
                   "name=\"" + artist + "\"");
@@ -426,7 +431,7 @@ QPixmap ImageDatabase::getAlbumImage(QString album,bool download)
         qDebug() << "Returning empty image";
         return QPixmap();
     }
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM images WHERE "
                   "id=\"" + QString::number(artworkID) + "\"");
     qDebug() << "Check for image: " << query.lastQuery();
@@ -454,7 +459,7 @@ QPixmap ImageDatabase::getArtistImage(QString artist,bool download)
         qDebug() << "Returning empty image";
         return QPixmap();
     }
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM images WHERE "
                   "id=\"" + QString::number(artworkID) + "\"");
     qDebug() << "Check for image: " << query.lastQuery();
@@ -479,7 +484,7 @@ QPixmap ImageDatabase::getArtistImage(QString artist,bool download)
 
 QPixmap ImageDatabase::getAlbumImage(int artworkID)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM images WHERE "
                   "id=\"" + QString::number(artworkID) + "\"");
     qDebug() << "Check for image: " << query.lastQuery();
@@ -501,7 +506,7 @@ QPixmap ImageDatabase::getAlbumImage(int artworkID)
 
 QPixmap ImageDatabase::getArtistImage(int artworkID)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM images WHERE "
                   "id=\"" + QString::number(artworkID) + "\"");
     qDebug() << "Check for image: " << query.lastQuery();
@@ -523,7 +528,7 @@ QPixmap ImageDatabase::getArtistImage(int artworkID)
 
 QPixmap ImageDatabase::getArtistImageForAlbum(QString album)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     album = album.replace('\"',"\\\"");
     query.prepare("SELECT * FROM albums WHERE "
                   "albumname=\"" + album + "\" " );
@@ -549,7 +554,7 @@ QPixmap ImageDatabase::getArtistImageForAlbum(QString album)
 
 void ImageDatabase::cleanUPBlacklistedAlbums()
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("DELETE FROM albums WHERE "
                   "imageID=\"" + QString::number(-2) + "\"");
     query.exec();
@@ -558,7 +563,7 @@ void ImageDatabase::cleanUPBlacklistedAlbums()
 
 void ImageDatabase::cleanupAlbums()
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("DELETE FROM albums ");
     query.exec();
     cleanupOrphans();
@@ -570,7 +575,7 @@ void ImageDatabase::cleanupAlbums()
 
 void ImageDatabase::cleanupArtists()
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("DELETE FROM artists ");
     query.exec();
     cleanupOrphans();
@@ -582,7 +587,7 @@ void ImageDatabase::cleanupArtists()
 
 void ImageDatabase::cleanupOrphans()
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("DELETE FROM images WHERE NOT EXISTS "
                   " (SELECT imageid as idartist FROM artists WHERE images.id=idartist) "
                   " AND NOT EXISTS "
@@ -597,7 +602,7 @@ void ImageDatabase::cleanupOrphans()
 void ImageDatabase::cleanupDatabase()
 {
     qDebug() << "Clearing all tables";
-    //    QSqlQuery query;
+    //    QSqlQuery query(*mDB);
     //    query.prepare("DROP TABLE images ");
     //    query.exec();
     //    qDebug() << "Last error: drop: " << query.lastError().text();
@@ -628,7 +633,7 @@ void ImageDatabase::createTables()
     if ( mDB->open() ) {
         // Check if database contains necessary tables
         if ( !mDB->tables().contains("albums") ) {
-            QSqlQuery createQuery;
+            QSqlQuery createQuery(*mDB);
             if (createQuery.exec("CREATE TABLE albums"
                                  "(id integer primary key AUTOINCREMENT,"
                                  "albumname text default '',"
@@ -638,7 +643,7 @@ void ImageDatabase::createTables()
             }
         }
         if ( !mDB->tables().contains("images") ) {
-            QSqlQuery createQuery;
+            QSqlQuery createQuery(*mDB);
             if (createQuery.exec("CREATE TABLE images"
                                  "(id integer primary key AUTOINCREMENT,"
                                  "imghash text default '',"
@@ -646,7 +651,7 @@ void ImageDatabase::createTables()
             }
         }
         if ( !mDB->tables().contains("artist") ) {
-            QSqlQuery createQuery;
+            QSqlQuery createQuery(*mDB);
             if (createQuery.exec("CREATE TABLE artists"
                                  "(id integer primary key,"
                                  "name text default '',"
@@ -722,7 +727,7 @@ void ImageDatabase::fillDatabase(QList<QString> *artistList)
 
 int ImageDatabase::getAlbumCount()
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT count(albumname) as albumcount FROM albums "
                   " WHERE imageid>=0");
     query.exec();
@@ -736,7 +741,7 @@ int ImageDatabase::getAlbumCount()
 
 int ImageDatabase::getArtistCount()
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT count(name) as artistcount FROM artists");
     query.exec();
 
@@ -749,7 +754,7 @@ int ImageDatabase::getArtistCount()
 
 int ImageDatabase::getBlacklistCount()
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT count(albumname) as albumcount FROM albums"
                   " WHERE imageID=\"-2\"");
     query.exec();
@@ -762,7 +767,7 @@ int ImageDatabase::getBlacklistCount()
 
 int ImageDatabase::getImageCount()
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT count(id) as imagecount FROM images");
     query.exec();
 
@@ -791,7 +796,7 @@ void ImageDatabase::requestStatisticUpdate()
 
 QString ImageDatabase::getAlbumWikiInformation(QString album, QString artist)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     if ( artist != "" ) {
         query.prepare("SELECT * FROM albums WHERE "
                       "albumname=\"" + album + "\" AND "
@@ -820,7 +825,7 @@ QString ImageDatabase::getAlbumWikiInformation(QString album, QString artist)
 
 QString ImageDatabase::getArtistBioInformation(QString artist)
 {
-    QSqlQuery query;
+    QSqlQuery query(*mDB);
     query.prepare("SELECT * FROM artists WHERE "
                   "name=\"" + artist +"\" ");
     qDebug() << "Check for artist wiki information: " << query.lastQuery();

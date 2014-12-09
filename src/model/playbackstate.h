@@ -17,6 +17,7 @@ public:
 
 signals:
     void lastPlaylistReady(QList<TrackObject*> *list);
+    void workDone();
 
 public slots:
     void saveCurrentPlaylist(QList<TrackObject*> *list);
@@ -26,7 +27,9 @@ private:
     bool openDB();
     bool createTables();
 
-    QSqlDatabase *mDatabase;
+    QSqlDatabase *mDB;
+    QString mDBFilePath;
+
 
 };
 

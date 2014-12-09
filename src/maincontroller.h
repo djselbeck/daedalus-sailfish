@@ -18,6 +18,7 @@
 #include "model/savedplaylistsmodel.h"
 #include "model/playlistmanager.h"
 #include "model/savedplaylisttracksmodel.h"
+#include "model/playbackstate.h"
 
 #include "mediaplayer/playlist.h"
 #include "mediaplayer/lastfmscrobbler.h"
@@ -67,6 +68,8 @@ public slots:
 
     void playlistsReady();
     void folderReady();
+
+    void backgroundBusy(bool);
 
 private:
     // Local metadata-db

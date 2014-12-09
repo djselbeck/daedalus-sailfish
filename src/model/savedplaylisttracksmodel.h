@@ -34,6 +34,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
 
 signals:
+    void sendBusy(bool);
 
 public slots:
     void requestTrack(QUrl track);

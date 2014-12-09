@@ -28,7 +28,7 @@ private:
     QString mTitle;
     QString mArtist;
     QString mAlbum;
-    QString mURL;
+    QUrl mURL;
     QUrl mURN;
     int mLength;
     int mTrackNr;

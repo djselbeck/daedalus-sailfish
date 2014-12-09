@@ -11,6 +11,7 @@ SavedPlaylistTracksModel::SavedPlaylistTracksModel(QObject *parent, QList<QUrl> 
         mThread = fetchthread;
         mSparqlModel->moveToThread(mThread);
     }
+    mTracks = new QList<TrackObject*>();
     connect(mSparqlModel,SIGNAL(finished()),this,SLOT(trackReady()));
 
     mURLs = urls;
@@ -20,8 +21,8 @@ SavedPlaylistTracksModel::SavedPlaylistTracksModel(QObject *parent, QList<QUrl> 
         mURLs->removeAt(0);
         mCurrentFile = url.toEncoded();
         requestTrack(url);
+        emit sendBusy(true);
     }
-    mTracks = new QList<TrackObject*>();
 }
 
 
@@ -86,6 +87,7 @@ void SavedPlaylistTracksModel::trackReady()
         // All tracks ready
         beginResetModel();
         endResetModel();
+        emit sendBusy(false);
     }
 }
 

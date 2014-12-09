@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QTextStream>
 
+#include "../model/playbackstate.h"
+
 Playlist::Playlist(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -15,11 +17,29 @@ Playlist::Playlist(QObject *parent) :
 
     connect(mPlayer,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(updateStatus()));
     connect(mPlayer,SIGNAL(positionChanged(qint64)),this,SLOT(updateStatus()));
+
+    mBackgroundThread = new QThread(this);
+    mBackgroundThread->start();
+
+    mPlaybackState = new PlaybackState(0);
+    mPlaybackState->moveToThread(mBackgroundThread);
+
+    connect(this,SIGNAL(requestSavedPlaylistState()),mPlaybackState,SLOT(resumeLastPlaylist()));
+    connect(this,SIGNAL(requestPlaylistStateSave(QList<TrackObject*>*)),mPlaybackState,SLOT(saveCurrentPlaylist(QList<TrackObject*>*)));
+    connect(mPlaybackState,SIGNAL(lastPlaylistReady(QList<TrackObject*>*)),this,SLOT(receiveSavedPlaybackStateList(QList<TrackObject*>*)));
+    connect(mPlaybackState,SIGNAL(workDone()),mBackgroundThread,SLOT(terminate()));
+
+
+    emit sendBusy(false);
 }
 
 Playlist::~Playlist()
 {
+    qDebug() << "Waiting for background thread";
+    mBackgroundThread->wait(3 * 60 * 1000);
+    qDebug() << "Waiting for background thread done";
     mPlayer->stop();
+    mQPlaylist->clear();
     delete(mPlayer);
     delete(mQPlaylist);
     qDeleteAll(*mTrackList);
@@ -395,4 +415,33 @@ QString Playlist::getXDGMusicDir()
         }
     }
     return "";
+}
+
+void Playlist::savePlaylistToSql()
+{
+    emit requestPlaylistStateSave(mTrackList);
+}
+
+void Playlist::receiveSavedPlaybackStateList(QList<TrackObject *> *list)
+{
+    if ( list != 0 ) {
+        if ( mTrackList != 0 ) {
+            qDeleteAll(*mTrackList);
+            delete(mTrackList);
+        }
+        foreach(TrackObject *track,*list) {
+            mQPlaylist->addMedia(track->getURL());
+        }
+
+        beginResetModel();
+        mTrackList = list;
+        endResetModel();
+    }
+    emit sendBusy(false);
+}
+
+void Playlist::resumePlaylist()
+{
+    emit sendBusy(true);
+    emit requestSavedPlaylistState();
 }
