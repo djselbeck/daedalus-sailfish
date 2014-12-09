@@ -13,6 +13,18 @@ TrackObject::TrackObject(QString title, QString artist, QString album, QString u
     mURN = urn;
 }
 
+TrackObject::TrackObject(TrackObject &object)
+{
+    mTitle = object.mTitle;
+    mArtist = object.mArtist;
+    mAlbum = object.mAlbum;
+    mURL = object.mURL;
+    mLength = object.mLength;
+    mTrackNr = object.mTrackNr;
+    mDiscNr = object.mDiscNr;
+    mURN = object.mURN;
+}
+
 QString TrackObject::getTitle(){
     return mTitle;
 }

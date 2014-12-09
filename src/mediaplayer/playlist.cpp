@@ -49,6 +49,7 @@ void Playlist::insertAt(TrackObject *track, int pos)
     }
     bool retVal = mQPlaylist->insertMedia(insPos,track->getURL());
     if ( !retVal ) {
+        delete(track);
         qDebug() << "Couldn't add " << track->getURL();
         return;
     }
@@ -319,7 +320,6 @@ void Playlist::setRepeat(bool repeat)
 
 void Playlist::moveTrack(int from, int to)
 {
-    beginRemoveRows(QModelIndex(),from,from);
     if ( mQPlaylist->currentIndex() == from || from >= rowCount()) {
         // Abort here
         return;
@@ -329,6 +329,7 @@ void Playlist::moveTrack(int from, int to)
         qDebug() << "error moving track";
         return;
     }
+    beginRemoveRows(QModelIndex(),from,from);
     TrackObject *tempTrack = mTrackList->at(from);
     mTrackList->removeAt(from);
     endRemoveRows();
@@ -344,7 +345,13 @@ void Playlist::moveTrack(int from, int to)
 
 void Playlist::playNext(int position)
 {
-    moveTrack(position,currentIndex()+1);
+//    moveTrack(position,currentIndex()+1);
+    // create a copy of the track
+    if ( position >= mTrackList->size() || position < 0 ) {
+        return;
+    }
+    TrackObject *copy = new TrackObject(*(mTrackList->at(position)));
+    insertAt(copy,mQPlaylist->currentIndex() + 1);
 }
 
 int Playlist::currentIndex()

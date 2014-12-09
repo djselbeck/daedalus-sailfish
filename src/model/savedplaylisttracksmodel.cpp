@@ -71,9 +71,9 @@ void SavedPlaylistTracksModel::trackReady()
 
     TrackObject* tempTrack = new TrackObject(title,artist,album,fileurl,trackurn,length,tracknr,discnr,0);
 
-    beginInsertRows(QModelIndex(),mTracks->size(),mTracks->size());
+//    beginInsertRows(QModelIndex(),mTracks->size(),mTracks->size());
     mTracks->append(tempTrack);
-    endInsertRows();
+//    endInsertRows();
 
     // continue
     if ( mURLs != 0 && mURLs->size() > 0) {
@@ -82,6 +82,10 @@ void SavedPlaylistTracksModel::trackReady()
         mURLs->removeAt(0);
         mCurrentFile = url.toEncoded();
         requestTrack(url);
+    } else {
+        // All tracks ready
+        beginResetModel();
+        endResetModel();
     }
 }
 

@@ -13,10 +13,16 @@ Page
             id : playlistTracksListView
             model: playlistTracksModel
             // FIXME SpeedScroller
-            quickScrollEnabled: true // jollaQuickscroll
-//            SpeedScroller {
-//                listview: playlistTracksListView
-//            }
+            quickScrollEnabled: jollaQuickscroll
+            SpeedScroller {
+                id: speedScroller
+                listview: playlistTracksListView
+            }
+            onCountChanged:
+            {
+                speedScroller.reReadSections();
+            }
+
             ScrollDecorator {}
             anchors.fill: parent
 //            anchors.bottomMargin: quickControlPanel.visibleSize

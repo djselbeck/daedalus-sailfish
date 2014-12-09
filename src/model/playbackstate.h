@@ -2,6 +2,11 @@
 #define PLAYBACKSTATE_H
 
 #include <QObject>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+
+#include "trackobject.h"
 
 class PlaybackState : public QObject
 {
@@ -9,9 +14,19 @@ class PlaybackState : public QObject
 public:
     explicit PlaybackState(QObject *parent = 0);
 
+
 signals:
+    void lastPlaylistReady(QList<TrackObject*> *list);
 
 public slots:
+    void saveCurrentPlaylist(QList<TrackObject*> *list);
+    void resumeLastPlaylist();
+
+private:
+    bool openDB();
+    bool createTables();
+
+    QSqlDatabase *mDatabase;
 
 };
 

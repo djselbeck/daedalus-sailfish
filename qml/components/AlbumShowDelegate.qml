@@ -319,7 +319,6 @@ BackgroundItem {
                     }
 
                 Component.onCompleted: {
-                    clearTrackList()
                     rotateIn.running = true
                     delegateButtons.visible = true
                     albumTracksListView.visible = true
@@ -328,6 +327,7 @@ BackgroundItem {
                 }
                 Component.onDestruction: {
 //                    clearTrackList()
+                    clearAlbumTrackList()
                     console.debug("Album backpage destroyed")
                 }
             }
