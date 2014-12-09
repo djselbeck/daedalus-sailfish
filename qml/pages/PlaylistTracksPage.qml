@@ -46,6 +46,7 @@ Page
                     text: qsTr("add list")
                     onClicked: {
                         addActivePlaylist()
+                        pageStack.pop();
                     }
                 }
                 MenuItem {
@@ -53,6 +54,7 @@ Page
                     onClicked: {
                         playActivePlaylist()
                         // GO BACK
+                        pageStack.pop();
                     }
                 }
             }

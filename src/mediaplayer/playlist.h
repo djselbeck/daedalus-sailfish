@@ -77,6 +77,8 @@ public slots:
     void savePlaylist(QString name);
     void resumePlaylist();
 
+    void setResumeIndex(unsigned int pos);
+    void setResumeTime(unsigned int pos);
 
 
 private:
@@ -88,6 +90,9 @@ private:
     PlaybackState *mPlaybackState;
 
     QThread *mBackgroundThread;
+
+    unsigned int mResumeTime;
+    unsigned int mResumeIndex;
 
 
 

@@ -32,11 +32,13 @@ public:
 
 signals:
     void modelReady();
+    void sendBusy(bool);
 
 public slots:
     void requestAlbumTracks(QString);
     void requestAlbumTracksReverseFromTrack(QString urn);
     void requestArtistTracks(QString artisturn);
+    void requestAllTracks();
 
     void clearData();
 

@@ -11,6 +11,7 @@ Page {
     property string albumname
     property string artistname
     property int lastIndex: 0
+    property bool allTracksPage
 
     Loader {
         id: portraitLoader
@@ -32,6 +33,15 @@ Page {
                         duration: populateDuration
                     }
                 }
+                SpeedScroller {
+                    id: speedScroller
+                    listview: albumTracksListView
+                }
+                onCountChanged:
+                {
+                    speedScroller.reReadSections();
+                }
+
                 header: Item {
                     height: headerColumn.height
                     width: parent.width
@@ -46,7 +56,7 @@ Page {
                         Row {
                             id: imageRow
                             width: parent.width
-                            height: width / 2
+                            height: allTracksPage ? 0 : width / 2
                             Image {
                                 id: artistImage
                                 width: parent.width / 2
@@ -96,14 +106,24 @@ Page {
                 PullDownMenu {
                     MenuItem {
                         text: qsTr("add album")
+                        enabled: !allTracksPage
+                        visible: enabled
                         onClicked: {
                             addActiveAlbum();
                         }
                     }
                     MenuItem {
                         text: qsTr("play album")
+                        enabled: !allTracksPage
+                        visible: enabled
                         onClicked: {
                             playActiveAlbum();
+                        }
+                    }
+                    MenuItem {
+                        text: qsTr("play random")
+                        onClicked: {
+                            playActiveAlbumRandom();
                         }
                     }
                 }
@@ -131,7 +151,7 @@ Page {
                         left: parent.left
                     }
 
-                    width: parent.height / 2
+                    width: allTracksPage ? 0 :  parent.height / 2
                     Image {
                         id: artistImageLC
                         width: height
@@ -185,17 +205,35 @@ Page {
                         title: albumname
                     }
                     quickScrollEnabled: jollaQuickscroll
+                    SpeedScroller {
+                        id: speedScroller
+                        listview: listViewLC
+                    }
+                    onCountChanged:
+                    {
+                        speedScroller.reReadSections();
+                    }
                     PullDownMenu {
                         MenuItem {
                             text: qsTr("add album")
+                            enabled: !allTracksPage
+                            visible: enabled
                             onClicked: {
                                 addActiveAlbum();
                             }
                         }
                         MenuItem {
                             text: qsTr("play album")
+                            enabled: !allTracksPage
+                            visible: enabled
                             onClicked: {
                                 playActiveAlbum();
+                            }
+                        }
+                        MenuItem {
+                            text: qsTr("play random")
+                            onClicked: {
+                                playActiveAlbumRandom();
                             }
                         }
 
@@ -269,6 +307,9 @@ Page {
 
     Component.onDestruction: {
         clearAlbumTrackList()
+    }
+    Component.onCompleted: {
+        console.debug("ALLTRACKS: "  + allTracksPage);
     }
 
     Component {
@@ -384,4 +425,5 @@ Page {
             }
         }
     }
+
 }

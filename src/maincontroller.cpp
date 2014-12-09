@@ -27,6 +27,9 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mPlaylistsModel = new SavedPlaylistsModel(0,mSparQLConnection,mModelThread);
     mPlaylistTracksModel = 0;
 
+    mResumeIndex = 0;
+    mResumeTime = 0;
+
     mPlaylistManager = new PlaylistManager(0,mSparQLConnection);
 //    mPlaylistManager->moveToThread(mModelThread);
 
@@ -65,6 +68,8 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
 
 
     readSettings();
+    mPlaylist->setResumeIndex(mResumeIndex);
+    mPlaylist->setResumeTime(mResumeTime);
     connectQMLSignals();
     connectModelSignals();
     emit requestDBStatistic();
@@ -73,6 +78,9 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
 
 MainController::~MainController()
 {
+    mResumeIndex = mPlaybackStatus->getPlaylistPosition();
+    mResumeTime = mPlaybackStatus->getElapsed();
+    writeSettings();
     mPlaylist->savePlaylistToSql();
     clearSavedPlaylistTracks();
     delete(mAlbumsModel);
@@ -127,6 +135,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(requestArtists()),this,SLOT(requestArtists()));
     connect(item,SIGNAL(requestArtistAlbums(QString)),mAlbumsModel,SLOT(requestAlbums(QString)));
     connect(item,SIGNAL(requestAlbum(QString)),mAlbumTracksModel,SLOT(requestAlbumTracks(QString)));
+    connect(item,SIGNAL(requestAllTracks()),mAlbumTracksModel,SLOT(requestAllTracks()));
 
     // Settings
     connect(item,SIGNAL(newDownloadSize(int)),this,SLOT(receiveDownloadSize(int)));
@@ -142,6 +151,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(addActiveAlbum()),this,SLOT(addActiveAlbum()));
     connect(item,SIGNAL(playPlaylistIndex(int)),mPlaylist,SLOT(playPosition(int)));
     connect(item,SIGNAL(playActiveAlbum()),this,SLOT(playActiveAlbum()));
+    connect(item,SIGNAL(playActiveAlbumRandom()),this,SLOT(playActiveAlbumRandom()));
     connect(item,SIGNAL(addAlbum(QString)),this,SLOT(addAlbumTracksStart(QString)));
     connect(item,SIGNAL(playAlbum(QString)),this,SLOT(playAlbumTracksStart(QString)));
     connect(item,SIGNAL(addArtist(QString)),this,SLOT(addArtistTracksStart(QString)));
@@ -225,6 +235,9 @@ void MainController::connectModelSignals()
 
     connect(mPlaylistManager,SIGNAL(playlistTracksReady(SavedPlaylistTracksModel*)),this,SLOT(receiveSavedPlaylistTracks(SavedPlaylistTracksModel*)));
 
+    connect(mAlbumsModel,SIGNAL(sendBusy(bool)),this,SLOT(backgroundBusy(bool)));
+    connect(mArtistsModel,SIGNAL(sendBusy(bool)),this,SLOT(backgroundBusy(bool)));
+    connect(mAlbumTracksModel,SIGNAL(sendBusy(bool)),this,SLOT(backgroundBusy(bool)));
     connect(mPlaylist,SIGNAL(sendBusy(bool)),this,SLOT(backgroundBusy(bool)));
     connect(mPlaylistManager,SIGNAL(sendBusy(bool)),this,SLOT(backgroundBusy(bool)));
 }
@@ -243,6 +256,8 @@ void MainController::readSettings()
     mDownloadEnabled = settings.value("lastfm_download",1).toInt();
     mCoverInNowPlaying = settings.value("show_covernowplaying",1).toInt();
     mLastFMSessionKey = settings.value("lastfmsession","").toString();
+    mResumeIndex = settings.value("resumeindex",1).toInt();
+    mResumeTime  = settings.value("resumetime",1).toInt();
     emit newDownloadEnabled(mDownloadEnabled);
 
     mQuickView->rootContext()->setContextProperty("artistView", mArtistViewSetting);
@@ -275,6 +290,8 @@ void MainController::writeSettings()
     settings.setValue("lastfm_download",mDownloadEnabled);
     settings.setValue("show_covernowplaying",mCoverInNowPlaying);
     settings.setValue("lastfmsession",mLastFMSessionKey);
+    settings.setValue("resumeindex",mResumeIndex);
+    settings.setValue("resumetime",mResumeTime);
     settings.endGroup();
     readSettings();
 }
@@ -407,6 +424,17 @@ void MainController::playActiveAlbum()
     mPlaylist->clear();
     addActiveAlbum();
     mPlaylist->playPosition(0);
+    disconnect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
+
+}
+
+void MainController::playActiveAlbumRandom()
+{
+    mPlaylist->clear();
+    addActiveAlbum();
+    mPlaylist->setRandom(true);
+    mPlaylist->next();
+    mPlaylist->play();
     disconnect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
 
 }

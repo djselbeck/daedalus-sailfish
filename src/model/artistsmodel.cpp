@@ -21,6 +21,7 @@ ArtistsModel::ArtistsModel(QObject *parent, QSparqlConnection *connection, QThre
 
 void ArtistsModel::requestArtists()
 {
+    emit sendBusy(true);
     // Initialize the query
     //mSparqlModel->clear();
     qDebug() << "getting artists";
@@ -30,6 +31,7 @@ void ArtistsModel::requestArtists()
 
 void ArtistsModel::sparqlModelfinished()
 {
+    emit sendBusy(false);
  //   emit dataChanged(QModelIndex().child(0,0),QModelIndex().child(mSparqlModel->rowCount(),mSparqlModel->columnCount()));
     beginResetModel();
     qDebug() << "underlaying model finished result fetching";

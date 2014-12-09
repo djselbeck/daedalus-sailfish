@@ -71,7 +71,14 @@ void LastFMScrobbler::trackChanged()
         }
     }
     mElapsed = mStatus->getElapsed();
-
+    if ( !mStatus->getPlaying() ) {
+        // reset values
+        mLastAlbum = "";
+        mLastArtist = "";
+        mLastTitle = "";
+        mElapsed = 0;
+        qDebug() << "Playing state changed, reset values";
+    }
 
 
 }

@@ -32,6 +32,7 @@ public:
 
 signals:
     void artistsReady();
+    void sendBusy(bool);
 
 public slots:
     void requestArtists();

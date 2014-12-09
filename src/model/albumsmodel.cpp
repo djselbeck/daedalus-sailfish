@@ -28,6 +28,7 @@ AlbumsModel::AlbumsModel(QObject *parent, QSparqlConnection *connection, QThread
 
 void AlbumsModel::requestAlbums()
 {
+    emit sendBusy(true);
     // Initialize the query
     mPartialModel = false;
     mSparqlModel->clear();
@@ -46,6 +47,7 @@ void AlbumsModel::requestAlbums()
 
 void AlbumsModel::requestArtistAlbumList()
 {
+    emit sendBusy(true);
     // Initialize the query
     mPartialModel = false;
     mSparqlModel->clear();
@@ -63,6 +65,7 @@ void AlbumsModel::requestArtistAlbumList()
 
 void AlbumsModel::requestAlbums(QString artist)
 {
+    emit sendBusy(true);
     qDebug() << "getting albums of: " << artist;
     // Initialize the query
     mPartialModel = true;
@@ -82,6 +85,7 @@ void AlbumsModel::requestAlbums(QString artist)
 
 void AlbumsModel::requestArtistAlbumsReverseFromTrack(QString urn)
 {
+    emit sendBusy(true);
     urn = urn.replace('<',"%3C");
     urn = urn.replace('>',"%3E");
     mPartialModel = true;
@@ -106,6 +110,7 @@ void AlbumsModel::sparqlModelfinished()
     qDebug() << "underlaying model finished result fetching";
     emit albumsReady();
     endResetModel();
+    emit sendBusy(false);
 }
 
 
@@ -272,3 +277,4 @@ void AlbumsModel::clearData()
     mSparqlModel->clear();
     endResetModel();
 }
+

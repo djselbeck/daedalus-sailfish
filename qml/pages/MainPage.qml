@@ -40,6 +40,13 @@ Page {
                 } else if ( ident === "playlist" ) {
 //                    pageStack.push(Qt.resolvedUrl("CurrentPlaylistPage.qml"));
                     pageStack.navigateForward();
+                }  else if ( ident === "alltracks" ) {
+                    requestAllTracks();
+                    pageStack.push(Qt.resolvedUrl("AlbumTracks.qml"), {
+                                       artistname: "",
+                                       albumname: "",
+                                       allTracksPage: true
+                                   })
                 }
             }
         }
@@ -61,6 +68,10 @@ Page {
         mainMenuModel.append({
                                  name: qsTr("albums"),
                                  ident: "albums"
+                             })
+        mainMenuModel.append({
+                                 name: qsTr("all tracks"),
+                                 ident: "alltracks"
                              })
         /*mainMenuModel.append({
                                  name: qsTr("files"),

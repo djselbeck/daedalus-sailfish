@@ -39,6 +39,7 @@ signals:
     void albumsReady();
     void requestAlbumInformation(Albumtype album) const;
     void requestDBEnter(AlbumInformation *info);
+    void sendBusy(bool);
 
 public slots:
     void requestAlbums();

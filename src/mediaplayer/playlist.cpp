@@ -436,6 +436,22 @@ void Playlist::receiveSavedPlaybackStateList(QList<TrackObject *> *list)
         beginResetModel();
         mTrackList = list;
         endResetModel();
+        // FIXME disabled for now
+//        qDebug() << "Try resuming at index: " << mResumeIndex << " at position: " << mResumeTime;
+//        if ( mTrackList->size() > mResumeIndex ) {
+//            mQPlaylist->setCurrentIndex(mResumeIndex);
+//            qDebug() << "Index done";
+//        }
+//        mPlayer->play();
+//        while ( mPlayer->state() != QMediaPlayer::PlayingState ) {
+
+//        }
+//        if ( mPlayer->isSeekable()) {
+//            mPlayer->setPosition(mResumeTime * 1000);
+//            mPlayer->pause();
+//            qDebug() << "Seek done";
+//        }
+//        mPlayer->pause();
     }
     emit sendBusy(false);
 }
@@ -444,4 +460,15 @@ void Playlist::resumePlaylist()
 {
     emit sendBusy(true);
     emit requestSavedPlaylistState();
+}
+
+
+void Playlist::setResumeIndex(unsigned int pos)
+{
+    mResumeIndex = pos;
+}
+
+void Playlist::setResumeTime(unsigned int pos)
+{
+    mResumeTime = pos;
 }

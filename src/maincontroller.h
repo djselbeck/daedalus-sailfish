@@ -117,6 +117,9 @@ private:
     QString mLastFMSessionKey;
     LastFMScrobbler *mScrobbler;
 
+    unsigned int mResumeTime;
+    unsigned int mResumeIndex;
+
 
 private slots:
     void receiveSavedPlaylistTracks(SavedPlaylistTracksModel *model);
@@ -129,6 +132,7 @@ private slots:
     void addAlbumTrackAfterCurrent(int index);
     void addActiveAlbum();
     void playActiveAlbum();
+    void playActiveAlbumRandom();
 
     void addSavedPlaylistTrack(int index);
     void addSavedPlaylistTrackAfterCurrent(int index);

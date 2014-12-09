@@ -13,7 +13,8 @@ function albumClicked(artist, albumstring, albumurn) {
     mainWindow.albumname = albumstring
     pageStack.push(Qt.resolvedUrl("../pages/AlbumTracks.qml"), {
                        artistname: artist,
-                       albumname: albumstring
+                       albumname: albumstring,
+                       allTracksPage: false
                    })
 }
 

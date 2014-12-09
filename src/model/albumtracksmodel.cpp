@@ -18,6 +18,7 @@ AlbumTracksModel::AlbumTracksModel(QObject *parent, QSparqlConnection *connectio
 
 void AlbumTracksModel::requestAlbumTracks(QString albumurn)
 {
+    emit sendBusy(true);
     albumurn = albumurn.replace('<',"%3C");
     albumurn = albumurn.replace('>',"%3E");
     qDebug() << "Album tracks requested: " + albumurn;
@@ -27,6 +28,7 @@ void AlbumTracksModel::requestAlbumTracks(QString albumurn)
 
 void AlbumTracksModel::requestAlbumTracksReverseFromTrack(QString urn)
 {
+    emit sendBusy(true);
     urn =  urn.replace('<',"%3C");
     urn =  urn.replace('>',"%3E");
     qDebug() << "Album tracks requested: " + urn;
@@ -36,10 +38,19 @@ void AlbumTracksModel::requestAlbumTracksReverseFromTrack(QString urn)
 
 void AlbumTracksModel::requestArtistTracks(QString artisturn)
 {
+    emit sendBusy(true);
     artisturn = artisturn.replace('<',"%3C");
     artisturn = artisturn.replace('>',"%3E");
     qDebug() << "Album tracks requested: " + artisturn;
     mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?album nmm:albumArtist <"+artisturn+"> . ?piece nmm:musicAlbum ?album ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?albumname ?discnr ?tracknr";
+    mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
+}
+
+void AlbumTracksModel::requestAllTracks()
+{
+    emit sendBusy(true);
+    qDebug() << "All tracks requested: ";
+    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?piece a nmm:MusicPiece ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?artistname ?albumname ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 
@@ -59,6 +70,7 @@ QHash<int, QByteArray> AlbumTracksModel::roleNames() const {
 
 void AlbumTracksModel::sparqlModelfinished()
 {
+    emit sendBusy(false);
     beginResetModel();
     qDebug() << "underlaying model finished result fetching";
     emit modelReady();

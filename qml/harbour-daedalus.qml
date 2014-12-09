@@ -45,6 +45,7 @@ ApplicationWindow
     signal requestTrackArtistAlbums(string trackurn);
     signal requestSavedPlaylists();
     signal requestSavedPlaylist(string url);
+    signal requestAllTracks();
 
     // playlist management
     signal addAlbumTrack(int index);
@@ -58,6 +59,7 @@ ApplicationWindow
     signal playPlaylistIndex(int index);
     signal playPlaylistSongNext(int index);
     signal playActiveAlbum();
+    signal playActiveAlbumRandom();
     signal deletePlaylist();
     signal savePlaylist(string name);
     signal deletePlaylistTrack(int index);
