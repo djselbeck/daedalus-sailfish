@@ -65,6 +65,7 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mScrobbler = new LastFMScrobbler(mPlaybackStatus,0);
 
     mDBStatistic = 0;
+    mPlaylistAction = 0;
 
 
     readSettings();
@@ -163,6 +164,8 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(playActivePlaylist()),this,SLOT(playActivePlaylist()));
     connect(item,SIGNAL(savePlaylist(QString)),mPlaylist,SLOT(savePlaylist(QString)));
     connect(item,SIGNAL(addURL(QString)),mPlaylist,SLOT(addUrl(QString)));
+    connect(item,SIGNAL(playPlaylist(QString)),this,SLOT(playPlaylist(QString)));
+    connect(item,SIGNAL(addPlaylist(QString)),this,SLOT(addPlaylist(QString)));
 
     // basic controls
     connect(item,SIGNAL(next()),mPlaylist,SLOT(next()));
@@ -553,6 +556,12 @@ void MainController::receiveSavedPlaylistTracks(SavedPlaylistTracksModel *model)
     mPlaylistTracksModel = model;
     mQuickView->rootContext()->setContextProperty("playlistTracksModel",mPlaylistTracksModel);
     qDebug() << "received saved playlist tracks";
+    if ( mPlaylistAction == 1 ) {
+        connect(mPlaylistTracksModel,SIGNAL(playlistReady()),this,SLOT(playActivePlaylist()));
+    } else if ( mPlaylistAction == 2 ) {
+        connect(mPlaylistTracksModel,SIGNAL(playlistReady()),this,SLOT(addActivePlaylist()));
+    }
+    mPlaylistAction = 0;
 }
 
 
@@ -586,6 +595,7 @@ void MainController::addActivePlaylist()
             mPlaylist->addFile(mPlaylistTracksModel->getTrack(i));
         }
     }
+    clearSavedPlaylistTracks();
 }
 
 void MainController::playActivePlaylist()
@@ -597,10 +607,12 @@ void MainController::playActivePlaylist()
         }
     }
     mPlaylist->playPosition(0);
+    clearSavedPlaylistTracks();
 }
 
 void MainController::clearSavedPlaylistTracks()
 {
+    qDebug() << "Clear saved pl tracks";
     mQuickView->rootContext()->setContextProperty("playlistTracksModel",0);
     if ( mPlaylistTracksModel != 0 ) {
         delete(mPlaylistTracksModel);
@@ -617,4 +629,16 @@ void MainController::clearLastFMAuthentication()
 void MainController::backgroundBusy(bool busy)
 {
     mQuickView->rootContext()->setContextProperty("mBusy",busy);
+}
+
+void MainController::playPlaylist(QString url)
+{
+    mPlaylistAction = 1;
+    mPlaylistManager->requestPlaylist(url);
+}
+
+void MainController::addPlaylist(QString url)
+{
+    mPlaylistAction = 2;
+    mPlaylistManager->requestPlaylist(url);
 }

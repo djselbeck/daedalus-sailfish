@@ -120,6 +120,9 @@ private:
     unsigned int mResumeTime;
     unsigned int mResumeIndex;
 
+    // FIXME clear this up?
+    int mPlaylistAction;
+
 
 private slots:
     void receiveSavedPlaylistTracks(SavedPlaylistTracksModel *model);
@@ -161,6 +164,9 @@ private slots:
 
     void playActivePlaylist();
     void addActivePlaylist();
+
+    void playPlaylist(QString url);
+    void addPlaylist(QString url);
 
     void clearSavedPlaylistTracks();
 

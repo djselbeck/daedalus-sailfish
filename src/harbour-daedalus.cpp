@@ -53,6 +53,13 @@ int main(int argc, char *argv[])
     app->setOrganizationName("harbour-daedalus");
     app->setApplicationName("harbour-daedalus");
 
+    // Load translation
+    QString locale = QLocale::system().name();
+    QString translationFile = QString(":translations/harbour-daedalus_") + locale;
+    QTranslator translator;
+    translator.load(translationFile);
+    app->installTranslator(&translator);
+
     // needed for sparql drivers
     app->addLibraryPath("/usr/share/harbour-daedalus/lib");
 

@@ -47,10 +47,10 @@ Page
                     pageStack.push(Qt.resolvedUrl("PlaylistTracksPage.qml"),{playlistname:name === undefined ? playlisturl : name})
                 }
                 function playListRemorse() {
-                    remorseAction(qsTr("playing list"), function() { playPlaylist(modelData); },3000)
+                    remorseAction(qsTr("playing list"), function() { playPlaylist(playlisturl); },3000)
                 }
                 function addListRemorse() {
-                    remorseAction(qsTr("adding list"), function() { addPlaylist(modelData); },3000)
+                    remorseAction(qsTr("adding list"), function() { addPlaylist(playlisturl); },3000)
                 }
                 Component {
 
