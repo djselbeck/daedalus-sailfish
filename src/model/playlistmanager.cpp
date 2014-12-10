@@ -28,6 +28,7 @@ void PlaylistManager::requestPlaylist(QString url)
         PLSParser plsParser;
         urls = plsParser.parsePlaylist(url);
         mTracksModel = new SavedPlaylistTracksModel(0,urls,mSparQLConnection,mThread);
+        mActiveFile = url;
         emit playlistTracksReady(mTracksModel);
     } else if ( url.toLower().endsWith(".m3u") ) {
         QList<QUrl> *urls;
@@ -36,6 +37,29 @@ void PlaylistManager::requestPlaylist(QString url)
         M3UParser m3uParser;
         urls = m3uParser.parsePlaylist(url);
         mTracksModel = new SavedPlaylistTracksModel(0,urls,mSparQLConnection,mThread);
+        mActiveFile = url;
         emit playlistTracksReady(mTracksModel);
+    }
+}
+
+void PlaylistManager::deleteActivePlaylist()
+{
+    deletePlaylist(mActiveFile);
+}
+
+void PlaylistManager::deletePlaylist(QString name)
+{
+    name = name.replace("file://","");
+    qDebug() << "Removal of: " << name << " requested";
+    if ( name.toLower().endsWith(".m3u") || name.toLower().endsWith(".pls") ) {
+        QFile plFile(name);
+        if ( plFile.exists() ) {
+            if ( plFile.remove() ) {
+                qDebug() << "Successfully removed";
+            } else {
+                qDebug() << "Error removing file: " << plFile.errorString();
+            }
+
+        }
     }
 }

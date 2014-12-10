@@ -42,16 +42,22 @@ QList<QUrl>* M3UParser::parsePlaylist(QUrl filename)
                 // Try path prefix from playlist path
                 QString playlistPrefix = filename.toLocalFile();
                 QStringList pathComponents = playlistPrefix.split('/');
+                QString prefixPath;
                 playlistPrefix = "";
                 for ( int i = 0; i < pathComponents.size() - 1 ; i++ ) {
                     playlistPrefix += pathComponents.at(i) + '/';
                 }
-                filePath = playlistPrefix + filePath;
-                qDebug() << "trying with prefix: " << filePath;
-                if ( QFile(filePath).exists()) {
+                prefixPath = playlistPrefix + filePath;
+                qDebug() << "trying with prefix: " << prefixPath;
+                if ( QFile(prefixPath).exists()) {
                     qDebug() << "File exists";
-                    mTrackURLs->append(QUrl::fromLocalFile(filePath));
+                    mTrackURLs->append(QUrl::fromLocalFile(prefixPath));
                 }
+            }
+
+            // check if it is an stream
+            if ( filePath.toLower().startsWith("http") || filePath.toLower().startsWith("rtp") ) {
+                mTrackURLs->append(QUrl(filePath));
             }
         }
     }

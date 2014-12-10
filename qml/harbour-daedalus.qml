@@ -68,6 +68,9 @@ ApplicationWindow
     signal playSavedPlaylistTrack(int index);
     signal addActivePlaylist();
     signal playActivePlaylist();
+    signal deleteActivePlaylist();
+    signal deletePlaylistFile(string url);
+    signal addURL(string url);
 
 
     // memory preasure methods

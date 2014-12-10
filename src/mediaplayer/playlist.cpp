@@ -472,3 +472,9 @@ void Playlist::setResumeTime(unsigned int pos)
 {
     mResumeTime = pos;
 }
+
+void Playlist::addUrl(QString url)
+{
+    TrackObject *dummyTrack = new TrackObject(url,"","",url,QUrl(url),0,0,0,0);
+    addFile(dummyTrack);
+}

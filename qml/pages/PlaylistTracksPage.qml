@@ -187,15 +187,18 @@ Page
                 acceptText: qsTr("delete playlist");
             }
             Label {
-                text: qsTr("really delete playlist?")
+                width: parent.width
+                wrapMode: Text.WordWrap
+                height: implicitHeight
+                font.pixelSize: Theme.fontSizeSmall
+                text: qsTr("Do you really want to delete this playlist? This step is irreversible!")
              }
         }
         onDone: {
             if ( result == DialogResult.Accepted)
             {
-                deleteSavedPlaylist(playlistname);
-                pageStack.clear();
-                pageStack.push(initialPage);
+                deleteActivePlaylist();
+                pageStack.pop(mPlaylistPage);
             }
         }
     }

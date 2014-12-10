@@ -162,6 +162,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(addActivePlaylist()),this,SLOT(addActivePlaylist()));
     connect(item,SIGNAL(playActivePlaylist()),this,SLOT(playActivePlaylist()));
     connect(item,SIGNAL(savePlaylist(QString)),mPlaylist,SLOT(savePlaylist(QString)));
+    connect(item,SIGNAL(addURL(QString)),mPlaylist,SLOT(addUrl(QString)));
 
     // basic controls
     connect(item,SIGNAL(next()),mPlaylist,SLOT(next()));
@@ -180,6 +181,8 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(requestTrackArtistAlbums(QString)),mAlbumsModel,SLOT(requestArtistAlbumsReverseFromTrack(QString)));
     connect(item,SIGNAL(requestSavedPlaylists()),mPlaylistsModel,SLOT(requestSavedPlaylists()));
     connect(item,SIGNAL(requestSavedPlaylist(QString)),mPlaylistManager,SLOT(requestPlaylist(QString)));
+    connect(item,SIGNAL(deleteActivePlaylist()),mPlaylistManager,SLOT(deleteActivePlaylist()));
+    connect(item,SIGNAL(deletePlaylistFile(QString)),mPlaylistManager,SLOT(deletePlaylist(QString)));
 
     // metadata-db stuff
     connect(mImgDB,SIGNAL(coverAlbumArtReady(QVariant)),item,SLOT(coverArtReceiver(QVariant)));
