@@ -281,11 +281,12 @@ Page {
                 landscapeLoader.active = false
             }
         } else if (status === PageStatus.Active) {
-
-            requestAlbumInfo([albumname, artistname])
-            pageStack.pushAttached(Qt.resolvedUrl("AlbumInfoPage.qml"), {
-                                       albumname: albumname
-                                   })
+            if ( !allTracksPage ) {
+                requestAlbumInfo([albumname, artistname])
+                pageStack.pushAttached(Qt.resolvedUrl("AlbumInfoPage.qml"), {
+                                           albumname: albumname
+                                       })
+            }
         }
     }
     onOrientationTransitionRunningChanged: {

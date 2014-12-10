@@ -288,12 +288,16 @@ Page {
                     }
 
                     Label {
+                        visible: false
+                        enabled: visible
                         text: qsTr("bitrate:")
                         color: Theme.secondaryColor
                         font.pixelSize: fontsizegrey
                     }
                     Label {
                         id: bitrateText
+                        visible: false
+                        enabled: visible
                         text: "FIXME"
                         color: Theme.primaryColor
                         font.pixelSize: fontsize
@@ -301,12 +305,16 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                     Label {
+                        visible: false
+                        enabled: visible
                         text: qsTr("properties:")
                         color: Theme.secondaryColor
                         font.pixelSize: fontsizegrey
                     }
                     Label {
                         id: audiopropertiesText
+                        visible: false
+                        enabled: visible
                         text: "FIXME"
                         color: Theme.primaryColor
                         font.pixelSize: fontsize

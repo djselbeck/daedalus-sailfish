@@ -47,20 +47,6 @@ Page {
                 text: qsTr("Version:") + " " + versionstring
                 font.pixelSize: Theme.fontSizeLarge
             }
-            Button {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "source code"
-                onClicked: {
-                    Qt.openUrlExternally('https://github.com/djselbeck/daedalus-sailfish')
-                }
-            }
-            Button {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "homepage"
-                onClicked: {
-                    Qt.openUrlExternally('http://www.daedalus-music.org')
-                }
-            }
             Separator {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: parent.width - Theme.paddingLarge
@@ -86,18 +72,37 @@ Page {
                     font.pixelSize: Theme.fontSizeMedium
                 }
             }
-            Button {
+            /*Button {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "@djselbeck"
                 onClicked: {
                     Qt.openUrlExternally('https://twitter.com/djselbeck')
                 }
-            }
+            }*/
 
             Label {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("Licensed under GPLv3")
                 font.pixelSize: Theme.fontSizeMedium
+            }
+            Separator {
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width - Theme.paddingLarge
+                color: Theme.primaryColor
+            }
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "source code"
+                onClicked: {
+                    Qt.openUrlExternally('https://github.com/djselbeck/daedalus-sailfish')
+                }
+            }
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "homepage"
+                onClicked: {
+                    Qt.openUrlExternally('http://www.daedalus-music.org')
+                }
             }
             Separator {
                 anchors.horizontalCenter: parent.horizontalCenter

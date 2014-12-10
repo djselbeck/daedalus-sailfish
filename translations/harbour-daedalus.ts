@@ -14,12 +14,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/AboutPage.qml" line="99"/>
+        <location filename="../qml/pages/settings/AboutPage.qml" line="85"/>
         <source>Licensed under GPLv3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/AboutPage.qml" line="110"/>
+        <location filename="../qml/pages/settings/AboutPage.qml" line="115"/>
         <source>Fetches metadata from last.fm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -109,33 +109,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="377"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="378"/>
         <source>playing track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="382"/>
-        <location filename="../qml/pages/AlbumTracks.qml" line="387"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="383"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="388"/>
         <source>adding track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="399"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="400"/>
         <source>play track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="406"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="407"/>
         <source>add track to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="412"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="413"/>
         <source>play after current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="418"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="419"/>
         <source>add to saved list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -341,22 +341,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/CurrentSong.qml" line="291"/>
+        <location filename="../qml/pages/CurrentSong.qml" line="293"/>
         <source>bitrate:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/CurrentSong.qml" line="304"/>
+        <location filename="../qml/pages/CurrentSong.qml" line="310"/>
         <source>properties:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/CurrentSong.qml" line="317"/>
+        <location filename="../qml/pages/CurrentSong.qml" line="325"/>
         <source>uri:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/CurrentSong.qml" line="444"/>
+        <location filename="../qml/pages/CurrentSong.qml" line="452"/>
         <source>position</source>
         <translation type="unfinished"></translation>
     </message>
@@ -702,38 +702,43 @@
 <context>
     <name>ScrobbleSettings</name>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="20"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="21"/>
         <source>Scrobbling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="23"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="31"/>
+        <source>Please enter your last.fm credentials if you want to scrobble your songs to last.fm. Only an authentication hash is saved on the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="39"/>
         <source>username:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="32"/>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="45"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="47"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="59"/>
         <source>input username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="36"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="51"/>
         <source>password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="53"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="67"/>
         <source>clear authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="60"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="74"/>
         <source>not authenticated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="60"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="74"/>
         <source>authenticated with key:
 </source>
         <translation type="unfinished"></translation>

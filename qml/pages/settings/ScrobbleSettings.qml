@@ -9,6 +9,7 @@ Dialog {
         clip: true
         Column {
             id: mainColumn
+            spacing: Theme.paddingSmall
             anchors {
                 left: parent.left
                 right: parent.right
@@ -20,6 +21,21 @@ Dialog {
                 title: qsTr("Scrobbling")
             }
             Label {
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                }
+                height: implicitHeight
+                font.pixelSize: Theme.fontSizeSmall
+                wrapMode: "WordWrap"
+                text: qsTr("Please enter your last.fm credentials if you want to scrobble your songs to last.fm. Only an authentication hash is saved on the device.")
+            }
+            Separator {
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width - Theme.paddingLarge
+                color: Theme.primaryColor
+            }
+            Label {
                 text: qsTr("username:")
                 anchors.right: parent.right
                 anchors.left: parent.left
@@ -28,7 +44,6 @@ Dialog {
                 anchors.right: parent.right
                 anchors.left: parent.left
                 id: usernameText
-                text: lastfmusername
                 placeholderText: qsTr("input username")
                 inputMethodHints: Qt.ImhNoPredictiveText
             }
@@ -41,7 +56,6 @@ Dialog {
                 anchors.right: parent.right
                 anchors.left: parent.left
                 id: passwordText
-                text: lastfmpassword
                 placeholderText: qsTr("input username")
                 inputMethodHints: Qt.ImhNoPredictiveText
                 echoMode: TextInput.Password
