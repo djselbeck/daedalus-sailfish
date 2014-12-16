@@ -169,6 +169,13 @@ ApplicationWindow
         artistimageurl = url;
     }
 
+    function showFirstUseDialog(){
+        console.debug("Show first use dialog");
+//        pageStack.clear();
+        pageStack.push(firstUseDialog);
+    }
+
+
     BusyIndicator {
         anchors.centerIn: parent
         size: BusyIndicatorSize.Large
@@ -182,6 +189,50 @@ ApplicationWindow
 
     initialPage: Qt.resolvedUrl("pages/MainPage.qml")
     cover: Qt.resolvedUrl("components/CoverPage.qml")
+
+
+
+    Dialog {
+        id: firstUseDialog
+        allowedOrientations: bothOrientation
+        Column {
+            width: parent.width
+            spacing: 10
+            anchors.margins: Theme.paddingMedium
+            DialogHeader {
+                acceptText: qsTr("first use")
+            }
+            Label {
+                width: parent.width
+                height: implicitHeight
+                text: qsTr("This application can download metadata from last.fm on demand. If you want to use this feature enable it below or enable it in the metadata settings.")
+                wrapMode: "WordWrap"
+            }
+            Label {
+                id: warningLabel
+                width: parent.width
+                color: "red"
+                text: qsTr("At the moment this also loads metadata for your played music on data connection. Try using bulk download on wireless network to reduce mobile data traffic.")
+                wrapMode: "WordWrap"
+            }
+
+            TextSwitch
+            {
+                checked: lastfmEnabled
+                id: lastfmEnableSwitch
+                text: qsTr("enable Last.fm download")
+            }
+
+        }
+        onDone: {
+            if ( lastfmEnableSwitch.checked ) {
+                newSettingKey(["lastfmEnabled","1"]);
+            } else {
+                newSettingKey(["lastfmEnabled","0"]);
+            }
+            newSettingKey(["firstuse","0"]);
+        }
+    }
 
 }
 

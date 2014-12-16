@@ -57,6 +57,8 @@ signals:
     void requestArtistBulkDownload(QList<QString>*);
     void requestAlbumBulkDownload(QMap<QString, QList<Albumtype>* > *map);
 
+    void requestFirstUseDialog();
+
 
 
 public slots:
@@ -108,6 +110,7 @@ private:
     int mSectionsInSearch;
     int mSectionsInPlaylist;
     int mCoverInNowPlaying;
+    int mFirstUse;
 
     // Playback objects
     Playlist *mPlaylist;

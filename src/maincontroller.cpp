@@ -72,6 +72,9 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mPlaylist->setResumeTime(mResumeTime);
     connectQMLSignals();
     connectModelSignals();
+    if ( mFirstUse ) {
+        emit ( requestFirstUseDialog());
+    }
     emit requestDBStatistic();
     mPlaylist->resumePlaylist();
 }
@@ -143,6 +146,7 @@ void MainController::connectQMLSignals()
     // Last.fm userdata
     connect(item,SIGNAL(newLastfmUserData(QVariant)),mScrobbler,SLOT(authenticate(QVariant)));
     connect(item,SIGNAL(clearLastFMAuthentication()),this,SLOT(clearLastFMAuthentication()));
+    connect(this,SIGNAL(requestFirstUseDialog()),item,SLOT(showFirstUseDialog()));
 
     // playlist management
     connect(item,SIGNAL(addAlbumTrack(int)),this,SLOT(addAlbumTrack(int)));
@@ -253,11 +257,12 @@ void MainController::readSettings()
     mListImageSize = settings.value("list_image_size",0).toInt();
     mSectionsInSearch = settings.value("sections_in_search",1).toInt();
     mSectionsInPlaylist = settings.value("sections_in_playlist",1).toInt();
-    mDownloadEnabled = settings.value("lastfm_download",1).toInt();
+    mDownloadEnabled = settings.value("lastfm_download",0).toInt();
     mCoverInNowPlaying = settings.value("show_covernowplaying",1).toInt();
     mLastFMSessionKey = settings.value("lastfmsession","").toString();
     mResumeIndex = settings.value("resumeindex",1).toInt();
     mResumeTime  = settings.value("resumetime",1).toInt();
+    mFirstUse = settings.value("firstuse",1).toInt();
     emit newDownloadEnabled(mDownloadEnabled);
 
     mQuickView->rootContext()->setContextProperty("artistView", mArtistViewSetting);
@@ -292,6 +297,7 @@ void MainController::writeSettings()
     settings.setValue("lastfmsession",mLastFMSessionKey);
     settings.setValue("resumeindex",mResumeIndex);
     settings.setValue("resumetime",mResumeTime);
+    settings.setValue("firstuse",mFirstUse);
     settings.endGroup();
     readSettings();
 }
@@ -357,6 +363,8 @@ void MainController::receiveSettingKey(QVariant setting)
         } else if ( settings.at(0) == "showCoverNowPlaying" ) {
             mCoverInNowPlaying = settings.at(1).toInt();
             mQuickView->rootContext()->setContextProperty("showCoverNowPlaying", mCoverInNowPlaying);
+        } else if ( settings.at(0) == "firstuse" ) {
+            mFirstUse = settings.at(1).toInt();
         }
     }
     writeSettings();
