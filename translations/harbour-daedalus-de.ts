@@ -313,7 +313,7 @@
     <message>
         <location filename="../qml/pages/CurrentSong.qml" line="46"/>
         <source>show all tracks from album</source>
-        <translation>Zeige alle Liede des Albums</translation>
+        <translation>Zeige alle Lieder des Albums</translation>
     </message>
     <message>
         <location filename="../qml/pages/CurrentSong.qml" line="57"/>
@@ -830,6 +830,29 @@
         <location filename="../qml/pages/SongDialog.qml" line="192"/>
         <source>play song</source>
         <translation>Lied abspielen</translation>
+    </message>
+</context>
+<context>
+    <name>harbour-daedalus</name>
+    <message>
+        <location filename="../qml/harbour-daedalus.qml" line="208"/>
+        <source>first use</source>
+        <translation>erster Start</translation>
+    </message>
+    <message>
+        <location filename="../qml/harbour-daedalus.qml" line="213"/>
+        <source>This application can download metadata from last.fm on demand. If you want to use this feature enable it below or enable it in the metadata settings.</source>
+        <translation>Diese Anwendung lädt bei Bedarf und optional Metadaten von Last.fm. Wenn sie diese Funktion verwenden möchten, aktivieren sie diese bitte mit der unten aufgeführten Option oder später in den Metadaten-Einstellungen.</translation>
+    </message>
+    <message>
+        <location filename="../qml/harbour-daedalus.qml" line="220"/>
+        <source>At the moment this also loads metadata for your played music on data connection. Try using bulk download on wireless network to reduce mobile data traffic.</source>
+        <translation>In der aktuellen Version lädt die Anwendung die Metadaten auch bei der Verwendung einer mobilen Datenverbindung. Durch die Verwendung der Massendownload-Funktion kann die Datenmenge unterwegs reduziert werden.</translation>
+    </message>
+    <message>
+        <location filename="../qml/harbour-daedalus.qml" line="228"/>
+        <source>enable Last.fm download</source>
+        <translation>Last.fm Download aktivieren</translation>
     </message>
 </context>
 </TS>

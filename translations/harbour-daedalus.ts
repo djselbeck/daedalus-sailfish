@@ -831,4 +831,27 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>harbour-daedalus</name>
+    <message>
+        <location filename="../qml/harbour-daedalus.qml" line="208"/>
+        <source>first use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/harbour-daedalus.qml" line="213"/>
+        <source>This application can download metadata from last.fm on demand. If you want to use this feature enable it below or enable it in the metadata settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/harbour-daedalus.qml" line="220"/>
+        <source>At the moment this also loads metadata for your played music on data connection. Try using bulk download on wireless network to reduce mobile data traffic.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/harbour-daedalus.qml" line="228"/>
+        <source>enable Last.fm download</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>
