@@ -415,13 +415,6 @@ Page {
                             addTrackAfterCurrentRemorse();
                         }
                     }
-                    MenuItem {
-                        text: qsTr("add to saved list")
-                        onClicked: {
-                            requestSavedPlaylists()
-                            pageStack.push(Qt.resolvedUrl("AddToPlaylistDialog.qml"),{url:path});
-                        }
-                    }
                 }
             }
         }

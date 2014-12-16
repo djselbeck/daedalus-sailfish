@@ -150,14 +150,6 @@ Page {
                             onClicked: pageStack.navigateForward(PageStackAction.Animated)
                         }
 
-                        MenuItem {
-                            text: qsTr("add to saved list")
-                            onClicked: {
-                                requestSavedPlaylists()
-                                pageStack.push(Qt.resolvedUrl("AddToPlaylistDialog.qml"),{url:path});
-                            }
-                        }
-
                     }
                 }
                 //                Component.onCompleted: {
@@ -285,6 +277,7 @@ Page {
             DialogHeader {
                 acceptText: qsTr("save playlist")
             }
+
             Label {
                 text: qsTr("playlist name:")
             }
@@ -292,6 +285,13 @@ Page {
                 id: playlistNameField
                 width: parent.width
                 placeholderText: qsTr("input playlist name")
+            }
+            Label {
+                width: parent.width
+                wrapMode: Text.WordWrap
+                text: qsTr("playlist will be saved under $XDG_MUSIC_DIR which probably is /home/nemo/Music")
+                height: implicitHeight
+                font.pixelSize: Theme.fontSizeSmall
             }
         }
         onDone: {
@@ -328,7 +328,7 @@ Page {
         }
         onDone: {
             if (result === DialogResult.Accepted) {
-                addSong(urlInputField.text)
+                addURL(urlInputField.text)
             }
             urlInputField.text = ""
             urlInputField.focus = false

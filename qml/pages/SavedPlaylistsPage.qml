@@ -47,10 +47,10 @@ Page
                     pageStack.push(Qt.resolvedUrl("PlaylistTracksPage.qml"),{playlistname:name === undefined ? playlisturl : name})
                 }
                 function playListRemorse() {
-                    remorseAction(qsTr("playing list"), function() { playPlaylist(modelData); },3000)
+                    remorseAction(qsTr("playing list"), function() { playPlaylist(playlisturl); },3000)
                 }
                 function addListRemorse() {
-                    remorseAction(qsTr("adding list"), function() { addPlaylist(modelData); },3000)
+                    remorseAction(qsTr("adding list"), function() { addPlaylist(playlisturl); },3000)
                 }
                 Component {
 
@@ -69,6 +69,13 @@ Page
                                         addListRemorse();
                                     }
                                 }
+                                MenuItem {
+                                    text: qsTr("delete list")
+                                    onClicked: {
+                                        pageStack.push(deleteSavedPlaylistQuestion,{playlisturl:playlisturl});
+                                        //deletePlaylist(playlisturl);
+                                    }
+                                }
                             }
                 }
             }
@@ -76,5 +83,35 @@ Page
     Component.onDestruction: {
         clearSavedPlaylists();
         console.debug("Clearing playlists");
+    }
+
+    Dialog
+    {
+        id: deleteSavedPlaylistQuestion
+        property string playlisturl;
+        property string playlistname;
+        anchors.fill: parent
+        Column {
+            width: parent.width
+            spacing: 10
+            anchors.margins: Theme.paddingMedium
+            DialogHeader {
+                acceptText: qsTr("delete playlist");
+            }
+            Label {
+                width: parent.width
+                wrapMode: Text.WordWrap
+                height: implicitHeight
+                font.pixelSize: Theme.fontSizeSmall
+                text: qsTr("Do you really want to delete this playlist? This step is irreversible!")
+             }
+        }
+        onDone: {
+            if ( result == DialogResult.Accepted)
+            {
+                deletePlaylistFile(playlisturl);
+                pageStack.pop(mPlaylistPage);
+            }
+        }
     }
 }

@@ -134,11 +134,6 @@
         <source>play after current</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="419"/>
-        <source>add to saved list</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>AlbumsList</name>
@@ -232,13 +227,13 @@
     </message>
     <message>
         <location filename="../qml/pages/CurrentPlaylistPage.qml" line="59"/>
-        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="265"/>
+        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="257"/>
         <source>delete playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/pages/CurrentPlaylistPage.qml" line="65"/>
-        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="286"/>
+        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="278"/>
         <source>save playlist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -278,28 +273,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="154"/>
-        <source>add to saved list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="235"/>
+        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="227"/>
         <source>Deleting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="268"/>
+        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="260"/>
         <source>really delete playlist?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="289"/>
+        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="282"/>
         <source>playlist name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="294"/>
+        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="287"/>
         <source>input playlist name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/CurrentPlaylistPage.qml" line="292"/>
+        <source>playlist will be saved under $XDG_MUSIC_DIR which probably is /home/nemo/Music</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -656,17 +651,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/PlaylistTracksPage.qml" line="190"/>
-        <source>really delete playlist?</source>
+        <location filename="../qml/pages/PlaylistTracksPage.qml" line="194"/>
+        <source>Do you really want to delete this playlist? This step is irreversible!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SavedPlaylistTracksModel</name>
     <message>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="63"/>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="64"/>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="65"/>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="71"/>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="72"/>
+        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="73"/>
         <source>Undefined</source>
         <translation type="unfinished"></translation>
     </message>
@@ -696,6 +691,21 @@
     <message>
         <location filename="../qml/pages/SavedPlaylistsPage.qml" line="67"/>
         <source>add list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SavedPlaylistsPage.qml" line="73"/>
+        <source>delete list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SavedPlaylistsPage.qml" line="99"/>
+        <source>delete playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SavedPlaylistsPage.qml" line="106"/>
+        <source>Do you really want to delete this playlist? This step is irreversible!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -733,12 +743,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="74"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="75"/>
         <source>not authenticated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="74"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="75"/>
         <source>authenticated with key:
 </source>
         <translation type="unfinished"></translation>

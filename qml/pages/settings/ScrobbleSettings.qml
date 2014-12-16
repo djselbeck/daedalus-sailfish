@@ -71,6 +71,7 @@ Dialog {
             }
 
             Label {
+                color: Theme.secondaryColor
                 text: lastfmsessionkey === "" ? qsTr("not authenticated") : qsTr("authenticated with key:\n") + lastfmsessionkey
                 anchors.right: parent.right
                 anchors.left: parent.left
@@ -78,6 +79,8 @@ Dialog {
         }
     }
     onAccepted: {
-        newLastfmUserData([usernameText.text,passwordText.text]);
+        if ( usernameText.text !=="" && passwordText.text !== "") {
+            newLastfmUserData([usernameText.text,passwordText.text]);
+        }
     }
 }

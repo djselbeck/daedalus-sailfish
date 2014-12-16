@@ -53,6 +53,7 @@ signals:
 
 public slots:
     void addFile(TrackObject *track);
+    void addUrl(QString url);
     void playSong(TrackObject *track);
     void insertAt(TrackObject *track, int pos);
     void removePosition(int position);

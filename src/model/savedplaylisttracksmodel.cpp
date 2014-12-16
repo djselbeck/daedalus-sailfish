@@ -25,6 +25,14 @@ SavedPlaylistTracksModel::SavedPlaylistTracksModel(QObject *parent, QList<QUrl> 
     }
 }
 
+SavedPlaylistTracksModel::~SavedPlaylistTracksModel()
+{
+    if ( mTracks != 0 ) {
+        qDeleteAll(*mTracks);
+        delete(mTracks);
+    }
+}
+
 
 void SavedPlaylistTracksModel::requestTrack(QUrl track)
 {
@@ -88,6 +96,7 @@ void SavedPlaylistTracksModel::trackReady()
         beginResetModel();
         endResetModel();
         emit sendBusy(false);
+        emit playlistReady();
     }
 }
 
@@ -167,6 +176,6 @@ QVariantMap SavedPlaylistTracksModel::get(int row){
 TrackObject* SavedPlaylistTracksModel::getTrack(int position)
 {
     if ( position < mTracks->size()) {
-        return mTracks->at(position);
+        return new TrackObject(*mTracks->at(position));
     }
 }

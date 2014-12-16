@@ -13,6 +13,7 @@ class SavedPlaylistTracksModel : public QAbstractListModel
     Q_OBJECT
 public:
     explicit SavedPlaylistTracksModel(QObject *parent = 0,QList<QUrl> *tracks = 0, QSparqlConnection *connection = 0, QThread *fetchthread = 0);
+    ~SavedPlaylistTracksModel();
 
     enum EntryRoles {
         TitleRole = Qt::UserRole + 1,
@@ -35,6 +36,7 @@ public:
 
 signals:
     void sendBusy(bool);
+    void playlistReady();
 
 public slots:
     void requestTrack(QUrl track);
