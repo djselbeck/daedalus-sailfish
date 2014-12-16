@@ -294,7 +294,7 @@
     </message>
     <message>
         <location filename="../qml/pages/CurrentPlaylistPage.qml" line="292"/>
-        <source>playlist will be saved under $XDG_MUSIC_DIR which probably is /home/nemo/Music</source>
+        <source>playlist will be saved under $XDG_MUSIC_DIR which probably is your home music folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

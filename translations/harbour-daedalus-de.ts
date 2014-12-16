@@ -294,8 +294,12 @@
     </message>
     <message>
         <location filename="../qml/pages/CurrentPlaylistPage.qml" line="292"/>
+        <source>playlist will be saved under $XDG_MUSIC_DIR which probably is your home music folder.</source>
+        <translation>Die Wiedergabeliste wird unter $XDG_MUSIC_DIR gespeichert, was vermutlich in ihr Musikverzeichnis zeigt.</translation>
+    </message>
+    <message>
         <source>playlist will be saved under $XDG_MUSIC_DIR which probably is /home/nemo/Music</source>
-        <translation>Die Wiedergabeliste wird unter $XDG_MUSIC_DIR abgespeichert, was vorraussichtlich auf /home/nemo/Music zeigt</translation>
+        <translation type="vanished">Die Wiedergabeliste wird unter $XDG_MUSIC_DIR abgespeichert, was vorraussichtlich auf /home/nemo/Music zeigt</translation>
     </message>
     <message>
         <location filename="../qml/pages/CurrentPlaylistPage.qml" line="321"/>

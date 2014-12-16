@@ -289,7 +289,7 @@ Page {
             Label {
                 width: parent.width
                 wrapMode: Text.WordWrap
-                text: qsTr("playlist will be saved under $XDG_MUSIC_DIR which probably is /home/nemo/Music")
+                text: qsTr("playlist will be saved under $XDG_MUSIC_DIR which probably is your home music folder.")
                 height: implicitHeight
                 font.pixelSize: Theme.fontSizeSmall
             }
