@@ -61,7 +61,7 @@ QVariant SavedPlaylistsModel::data(const QModelIndex &index, int role) const {
         QUrl sparQLURL = mSparqlModel->data(mSparqlModel->index(index.row(),1),0).toString();
         qDebug() << "name " << sparQLName << sparQLURL;
         if ( sparQLName == "" ) {
-            return sparQLURL.fileName();
+            return sparQLURL.fileName().replace(".pls","").replace(".m3u","");
         }
         return sparQLName;
     }
