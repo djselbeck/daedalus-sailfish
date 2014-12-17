@@ -2,7 +2,6 @@
 #define PLAYLIST_H
 
 #include <QObject>
-#include <QMediaPlaylist>
 #include <QMediaPlayer>
 #include <QAbstractListModel>
 #include <QTimer>
@@ -60,7 +59,6 @@ public slots:
     void moveTrack(int from, int to);
     void playNext(int position);
     void playPosition(int position);
-    void setPlaybackMode(QMediaPlaylist::PlaybackMode mode);
     void setRandom(bool random);
     void setRepeat(bool repeat);
 
@@ -96,7 +94,8 @@ private:
     unsigned int mResumeIndex;
 
     unsigned int mCurrentIndex;
-    int mNextIndex;
+    unsigned int mNextIndex;
+    bool mHaveNextTrack;
 
     bool mRandom;
     bool mRepeat;
