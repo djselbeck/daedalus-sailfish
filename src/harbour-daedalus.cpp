@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
 
     view->engine()->addImportPath("/usr/share/harbour-daedalus/qml/");
     view->setSource(SailfishApp::pathTo("qml/harbour-daedalus.qml"));
-    view->setDefaultAlphaBuffer(true);
 
     MainController controller(&(*view));
     view->show();

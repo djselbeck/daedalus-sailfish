@@ -218,11 +218,14 @@ void Playlist::updateState()
     qDebug() << "Player state changed";
     if ( (mPlayer->state() == QMediaPlayer::StoppedState) && mHaveNextTrack ) {
         playPosition(mNextIndex);
+    } else if( (mPlayer->state() == QMediaPlayer::StoppedState) && !mHaveNextTrack)  {
+        stop();
     }
 }
 
 void Playlist::updateStatus()
 {
+    qDebug() << "new status";
     int index = mCurrentIndex;
     int playing = mPlayer->state();
     QString title;
@@ -314,7 +317,10 @@ void Playlist::togglePlayPause()
 
 void Playlist::stop()
 {
+    qDebug() << "stopping playback";
     mPlayer->stop();
+    mPlayer->setPosition(0);
+    mPlayer->media();
     mCurrentIndex = 0;
     mNextIndex = -1;
     mHaveNextTrack = false;
