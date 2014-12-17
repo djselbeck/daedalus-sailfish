@@ -2,7 +2,6 @@
 #define PLAYLIST_H
 
 #include <QObject>
-#include <QMediaPlaylist>
 #include <QMediaPlayer>
 #include <QAbstractListModel>
 #include <QTimer>
@@ -60,7 +59,6 @@ public slots:
     void moveTrack(int from, int to);
     void playNext(int position);
     void playPosition(int position);
-    void setPlaybackMode(QMediaPlaylist::PlaybackMode mode);
     void setRandom(bool random);
     void setRepeat(bool repeat);
 
@@ -84,7 +82,7 @@ public slots:
 
 private:
     QMediaPlayer *mPlayer;
-    QMediaPlaylist *mQPlaylist;
+//    QMediaPlaylist *mQPlaylist;
     QList<TrackObject*> *mTrackList;
     int mOldIndex;
     PlaybackStatusObject *mStatusObject;
@@ -95,11 +93,20 @@ private:
     unsigned int mResumeTime;
     unsigned int mResumeIndex;
 
+    unsigned int mCurrentIndex;
+    unsigned int mNextIndex;
+    bool mHaveNextTrack;
 
+    bool mRandom;
+    bool mRepeat;
+
+    unsigned int getRandomIndex();
+    void setNextTrack();
 
 private slots:
     void indexChanged(int index);
     void updateStatus();
+    void updateState();
 
     void receiveSavedPlaybackStateList(QList<TrackObject*>*);
 

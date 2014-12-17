@@ -3,19 +3,17 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QTime>
 
 #include "../model/playbackstate.h"
 
 Playlist::Playlist(QObject *parent) :
     QAbstractListModel(parent)
 {
-    mQPlaylist = new QMediaPlaylist(this);
     mTrackList = new QList<TrackObject*>();
     mPlayer = new QMediaPlayer(this);
-    mPlayer->setPlaylist(mQPlaylist);
-    connect(mQPlaylist,SIGNAL(currentIndexChanged(int)),this,SLOT(indexChanged(int)));
 
-    connect(mPlayer,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(updateStatus()));
+    connect(mPlayer,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(updateState()));
     connect(mPlayer,SIGNAL(positionChanged(qint64)),this,SLOT(updateStatus()));
 
     mBackgroundThread = new QThread(this);
@@ -29,19 +27,23 @@ Playlist::Playlist(QObject *parent) :
     connect(mPlaybackState,SIGNAL(lastPlaylistReady(QList<TrackObject*>*)),this,SLOT(receiveSavedPlaybackStateList(QList<TrackObject*>*)));
     connect(mPlaybackState,SIGNAL(workDone()),mBackgroundThread,SLOT(terminate()));
 
+    mNextIndex = 0;
+    mCurrentIndex = 0;
+    mRandom = false;
+    mRepeat = false;
+
+    qsrand(QTime::currentTime().msec());
 
     emit sendBusy(false);
 }
 
 Playlist::~Playlist()
 {
+    stop();
     qDebug() << "Waiting for background thread";
     mBackgroundThread->wait(3 * 60 * 1000);
     qDebug() << "Waiting for background thread done";
-    mPlayer->stop();
-    mQPlaylist->clear();
     delete(mPlayer);
-    delete(mQPlaylist);
     qDeleteAll(*mTrackList);
     delete(mTrackList);
 }
@@ -49,11 +51,6 @@ Playlist::~Playlist()
 
 void Playlist::addFile(TrackObject *track)
 {
-    bool retVal = mQPlaylist->addMedia(track->getURL());
-    if ( !retVal ) {
-        qDebug() << "Couldn't add " << track->getURL();
-        return;
-    }
     int position = mTrackList->size();
     beginInsertRows(QModelIndex(),position,position);
     mTrackList->append(track);
@@ -67,58 +64,61 @@ void Playlist::insertAt(TrackObject *track, int pos)
     if ( pos >= mTrackList->size() ) {
         insPos = mTrackList->size();
     }
-    bool retVal = mQPlaylist->insertMedia(insPos,track->getURL());
-    if ( !retVal ) {
-        delete(track);
-        qDebug() << "Couldn't add " << track->getURL();
-        return;
-    }
     beginInsertRows(QModelIndex(),insPos,insPos);
     mTrackList->insert(insPos,track);
     endInsertRows();
     qDebug() << "File: " << track->getURL() << " added at " <<insPos;
+
+    if ( pos < mCurrentIndex ) {
+        mCurrentIndex++;
+        indexChanged(mCurrentIndex);
+    }
+    setNextTrack();
 }
 
 void Playlist::playSong(TrackObject *track)
 {
-    int pos = rowCount();
+    unsigned int pos = rowCount();
     insertAt(track,pos);
     playPosition(pos);
 }
 
 void Playlist::removePosition(int position)
 {
-    if (mQPlaylist->currentIndex() == position) {
+    if (mCurrentIndex == position) {
         // currently playing try to advance
         next();
-    }
-    bool retVal = mQPlaylist->removeMedia(position);
-    if ( !retVal ) {
-        qDebug() << "error removing song:" << position;
-        return;
     }
     beginRemoveRows(QModelIndex(),position,position);
     delete(mTrackList->at(position));
     mTrackList->removeAt(position);
     endRemoveRows();
 
+    if ( position < mCurrentIndex ) {
+        mCurrentIndex--;
+        indexChanged(mCurrentIndex);
+    }
+    setNextTrack();
 }
 
 void Playlist::playPosition(int position)
 {
-    int oldpos = mQPlaylist->currentIndex();
+    mNextIndex = -1;
+    mHaveNextTrack = false;
+    qDebug() << "player state: " << mPlayer->state();
     qDebug() << "jumping to position: " << position;
-    mQPlaylist->setCurrentIndex(position);
+    mPlayer->stop();
+    mCurrentIndex = position;
+    qDebug() << "Setting player media to: " << mTrackList->at(position)->getURL().toLocalFile();
+    mPlayer->setMedia(mTrackList->at(position)->getURL());
+    qDebug() << "player set";
     mPlayer->play();
-    indexChanged(mQPlaylist->currentIndex());
+    qDebug() << "play called";
+    indexChanged(mCurrentIndex);
     updateStatus();
+
+    setNextTrack();
 }
-
-void Playlist::setPlaybackMode(QMediaPlaylist::PlaybackMode mode)
-{
-
-}
-
 
 QHash<int, QByteArray> Playlist::roleNames() const {
     QHash<int,QByteArray> roles;
@@ -165,13 +165,10 @@ QVariant Playlist::data(const QModelIndex &index, int role) const
         return mTrackList->at(index.row())->getLengthFormatted();
     case PlayingRole:
         if ( (mPlayer->state() == QMediaPlayer::PlayingState || mPlayer->state() == QMediaPlayer::PlayingState) &&
-             mQPlaylist->currentIndex() == index.row() ) {
+             mCurrentIndex == index.row() ) {
             return true;
         }
         return false;
-//    case SectionRole:
-//        return mTrackList->at(index.row())->getArtist() + QString('|') + mTrackList->at(index.row())->getAlbum();
-//    }
        }
     if (role == SectionRole) {
         QString album = mTrackList->at(index.row())->getAlbum();
@@ -216,10 +213,18 @@ void Playlist::registerStatusObject(PlaybackStatusObject *obj)
     mStatusObject = obj;
 }
 
+void Playlist::updateState()
+{
+    qDebug() << "Player state changed";
+    if ( (mPlayer->state() == QMediaPlayer::StoppedState) && mHaveNextTrack ) {
+        playPosition(mNextIndex);
+    }
+}
+
 void Playlist::updateStatus()
 {
-    int index = mQPlaylist->currentIndex();
-    int playing = mPlayer->state() == QMediaPlayer::PlayingState ? 1 : 0;
+    int index = mCurrentIndex;
+    int playing = mPlayer->state();
     QString title;
     QString artist;
     QString album;
@@ -229,10 +234,10 @@ void Playlist::updateStatus()
     int elapsed = mPlayer->position()/1000;;
     int tracknr = 0;
     int discnr = 0;
-    int playlistposition = mQPlaylist->currentIndex();
+    int playlistposition = mCurrentIndex;
     int playlistlength = mTrackList->size();
-    int random = mQPlaylist->playbackMode() == QMediaPlaylist::Random ? 1 : 0;
-    int repeat = mQPlaylist->playbackMode() == QMediaPlaylist::Loop ? 1 : 0;
+    int random = mRandom;
+    int repeat = mRepeat;
 
     if (mTrackList->size() > 0 && index >= 0) {
         title = mTrackList->at(index)->getTitle();
@@ -251,8 +256,8 @@ void Playlist::updateStatus()
 
 void Playlist::next()
 {
-    if ( mQPlaylist->currentIndex() + 1 < mTrackList->size() ) {
-        mQPlaylist->next();
+    if ( mHaveNextTrack ) {
+        playPosition(mNextIndex);
     } else {
         stop();
     }
@@ -260,20 +265,25 @@ void Playlist::next()
 
 void Playlist::previous()
 {
-    mQPlaylist->previous();
+//    mQPlaylist->previous();
+    if ( mCurrentIndex > 0 ) {
+        playPosition(mCurrentIndex -1);
+    } else {
+        stop();
+    }
 }
 
 void Playlist::pause()
 {
     mPlayer->pause();
-    indexChanged(mQPlaylist->currentIndex());
+    indexChanged(mCurrentIndex);
     updateStatus();
 }
 
 void Playlist::play()
 {
     mPlayer->play();
-    indexChanged(mQPlaylist->currentIndex());
+    indexChanged(mCurrentIndex);
     updateStatus();
 }
 
@@ -281,11 +291,6 @@ void Playlist::clear()
 {
     stop();
     beginResetModel();
-    bool retVal = mQPlaylist->clear();
-    if ( !retVal ) {
-        qDebug() << "Couldn't delete playlist";
-        return;
-    }
     TrackObject *track;
     foreach (track, *mTrackList) {
         delete(track);
@@ -298,16 +303,22 @@ void Playlist::togglePlayPause()
 {
     if( mPlayer->state() == QMediaPlayer::PlayingState ) {
         pause();
-    } else if ( mPlayer->state() == QMediaPlayer::PausedState || mPlayer->state() == QMediaPlayer::StoppedState ) {
+    } else if ( mPlayer->state() == QMediaPlayer::PausedState) {
         play();
+    } else {
+        if ( mTrackList->size() > 0 ) {
+            playPosition(0);
+        }
     }
 }
 
 void Playlist::stop()
 {
     mPlayer->stop();
-    indexChanged(mQPlaylist->currentIndex());
-    mQPlaylist->setCurrentIndex(-1);
+    mCurrentIndex = 0;
+    mNextIndex = -1;
+    mHaveNextTrack = false;
+    indexChanged(mCurrentIndex);
     updateStatus();
 }
 
@@ -320,63 +331,61 @@ void Playlist::seek(int pos)
 
 void Playlist::setRandom(bool random)
 {
-    if ( random ) {
-        mQPlaylist->setPlaybackMode(QMediaPlaylist::Random);
-    } else {
-        mQPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
-    }
+    mRepeat = false;
+    mRandom = random;
+    setNextTrack();
     updateStatus();
 }
 
 void Playlist::setRepeat(bool repeat)
 {
-    if ( repeat ) {
-        mQPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
-    } else {
-        mQPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
-    }
+    mRepeat = repeat;
+    mRandom = 0;
+    setNextTrack();
     updateStatus();
 }
 
 void Playlist::moveTrack(int from, int to)
 {
-    if ( mQPlaylist->currentIndex() == from || from >= rowCount()) {
+    if ( mCurrentIndex == from || from >= rowCount()) {
         // Abort here
         return;
     }
-    bool retVal = mQPlaylist->removeMedia(from);
-    if ( !retVal ) {
-        qDebug() << "error moving track";
-        return;
+
+    if ( from < to ) {
+        to--;
     }
+
     beginRemoveRows(QModelIndex(),from,from);
     TrackObject *tempTrack = mTrackList->at(from);
     mTrackList->removeAt(from);
     endRemoveRows();
     beginInsertRows(QModelIndex(),to,to);
-    retVal = mQPlaylist->insertMedia(to,tempTrack->getURL());
-    if ( !retVal ) {
-        qDebug() << "error reinserting track";
-        return;
-    }
     mTrackList->insert(to,tempTrack);
     endInsertRows();
+
+    // Correct indices
+    if ( from < mCurrentIndex ) {
+        mCurrentIndex--;
+        setNextTrack();
+        indexChanged(mCurrentIndex);
+    }
 }
 
 void Playlist::playNext(int position)
 {
-//    moveTrack(position,currentIndex()+1);
+    moveTrack(position,mCurrentIndex+1);
     // create a copy of the track
-    if ( position >= mTrackList->size() || position < 0 ) {
-        return;
-    }
-    TrackObject *copy = new TrackObject(*(mTrackList->at(position)));
-    insertAt(copy,mQPlaylist->currentIndex() + 1);
+//    if ( position >= mTrackList->size() || position < 0 ) {
+//        return;
+//    }
+//    TrackObject *copy = new TrackObject(*(mTrackList->at(position)));
+//    insertAt(copy,mCurrentIndex + 1);
 }
 
 int Playlist::currentIndex()
 {
-    return mQPlaylist->currentIndex();
+    return mCurrentIndex;
 }
 
 void Playlist::savePlaylist(QString name)
@@ -429,9 +438,6 @@ void Playlist::receiveSavedPlaybackStateList(QList<TrackObject *> *list)
             qDeleteAll(*mTrackList);
             delete(mTrackList);
         }
-        foreach(TrackObject *track,*list) {
-            mQPlaylist->addMedia(track->getURL());
-        }
 
         beginResetModel();
         mTrackList = list;
@@ -477,4 +483,34 @@ void Playlist::addUrl(QString url)
 {
     TrackObject *dummyTrack = new TrackObject(url,"","",url,QUrl(url),0,0,0,0);
     addFile(dummyTrack);
+}
+
+unsigned int Playlist::getRandomIndex()
+{
+    return qrand() % (mTrackList->size() -1);
+}
+
+void Playlist::setNextTrack()
+{
+    // Determine next playing index
+    if ( !mRandom && !mRepeat ) {
+        if ( mCurrentIndex + 1 < mTrackList->size() ) {
+            mNextIndex = mCurrentIndex + 1;
+            mHaveNextTrack = true;
+        } else
+        {
+            mHaveNextTrack = false;
+        }
+    } else if ( mRandom ) {
+        mNextIndex = getRandomIndex();
+    } else if ( mRepeat ) {
+        if ( mCurrentIndex + 1 < mTrackList->size()) {
+            mNextIndex = mCurrentIndex + 1;
+            mHaveNextTrack = true;
+        } else {
+            mNextIndex = 0;
+            mHaveNextTrack = true;
+        }
+    }
+    qDebug() << "next index is: " << mNextIndex;
 }

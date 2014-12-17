@@ -26,6 +26,9 @@
 #include "metadata/imagedatabase.h"
 #include "metadata/qmlimageprovider.h"
 
+#include "dbus/daedalusdbusadaptor.h"
+#include "dbus/daedalusdbusmainmprisadaptor.h"
+
 class MainController : public QObject
 {
     Q_OBJECT
@@ -94,6 +97,10 @@ private:
 
     QThread *mModelThread;
     QThread *mDBThread;
+
+    // DBus remote mpris interface
+    DaedalusDBUSAdaptor *mDbusAdaptor;
+    DaedalusDbusMainMprisAdaptor *mDbusMainAdaptor;
 
     // Qml stuff
     QQuickView *mQuickView;

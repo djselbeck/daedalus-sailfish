@@ -49,6 +49,10 @@ signals:
     void artistChanged();
     void albumChanged();
     void titleChanged();
+    void playingChanged();
+    void positionChanged();
+    void repeatChanged();
+    void randomChanged();
 
 public slots:
 
