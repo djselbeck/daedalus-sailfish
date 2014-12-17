@@ -134,12 +134,24 @@ void PlaybackStatusObject::setInformation(QString title, QString artist, QString
     mLength = length;
     mTrackNr = tracknr;
     mDiscNr = discnr;
-    mElapsed = elapsed;
+    if ( mElapsed != elapsed) {
+        mElapsed = elapsed;
+        emit positionChanged();
+    }
     mPlaylistPosition = playlistposition;
     mPlaylistLength = playlistlength;
-    mPlaying = playing;
-    mRandom = random;
-    mRepeat = repeat;
+    if ( playing != mPlaying ) {
+        mPlaying = playing;
+        emit playingChanged();
+    }
+    if ( random != mRandom ) {
+        mRandom = random;
+        emit randomChanged();
+    }
+    if ( repeat != mRepeat ) {
+        mRepeat = repeat;
+        emit repeatChanged();
+    }
     // Notify listeners
     emit valuesChanged();
 

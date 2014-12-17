@@ -224,7 +224,7 @@ void Playlist::updateState()
 void Playlist::updateStatus()
 {
     int index = mCurrentIndex;
-    int playing = mPlayer->state() == QMediaPlayer::PlayingState ? 1 : 0;
+    int playing = mPlayer->state();
     QString title;
     QString artist;
     QString album;

@@ -14,7 +14,7 @@ TARGET = harbour-daedalus
 
 CONFIG += sailfishapp
 
-QT += multimedia sql
+QT += multimedia sql dbus
 
 INCLUDEPATH += src
 
@@ -42,7 +42,9 @@ SOURCES += \
     src/model/savedplaylisttracksmodel.cpp \
     src/model/m3uparser.cpp \
     src/model/plswriter.cpp \
-    src/model/playbackstate.cpp
+    src/model/playbackstate.cpp \
+    src/dbus/daedalusdbusadaptor.cpp \
+    src/dbus/daedalusdbusmainmprisadaptor.cpp
 
 OTHER_FILES += qml/harbour-daedalus.qml \
     rpm/harbour-daedalus.changes.in \
@@ -114,13 +116,15 @@ HEADERS += \
     src/model/savedplaylisttracksmodel.h \
     src/model/m3uparser.h \
     src/model/plswriter.h \
-    src/model/playbackstate.h
+    src/model/playbackstate.h \
+    src/dbus/daedalusdbusadaptor.h \
+    src/dbus/daedalusdbusmainmprisadaptor.h
 
 RESOURCES += \
     images.qrc
 
-DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS QT_NO_DEBUG_OUTPUT
-#DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS
+#DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS QT_NO_DEBUG_OUTPUT
+DEFINES += QT_USE_FAST_CONCATENATION QT_USE_FAST_OPERATOR_PLUS
 
 
 

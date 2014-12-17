@@ -1,8 +1,11 @@
 #include "maincontroller.h"
 
 #include <QSettings>
+#include <QDBusConnection>
 
 #include "global.h"
+
+#include "dbus/daedalusdbusmainmprisadaptor.h"
 
 MainController::MainController(QObject *parent) :
     QObject(parent)
@@ -27,6 +30,7 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mPlaylistsModel = new SavedPlaylistsModel(0,mSparQLConnection,mModelThread);
     mPlaylistTracksModel = 0;
 
+
     mResumeIndex = 0;
     mResumeTime = 0;
 
@@ -39,6 +43,11 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     qmlRegisterType<PlaybackStatusObject>();
     //qRegisterMetaType<PlaybackStatusObject>("PlaybackStatusObject");
     viewer->engine()->addImageProvider("imagedbprovider",mQMLImgProvider);
+
+    mDbusMainAdaptor = new DaedalusDbusMainMprisAdaptor(this);
+    mDbusAdaptor = new DaedalusDBUSAdaptor(mPlaylist,mPlaybackStatus,this);
+    QDBusConnection::sessionBus().registerObject(QString("/org/mpris/MediaPlayer2"), this, QDBusConnection::ExportAdaptors);
+    QDBusConnection::sessionBus().registerService("org.mpris.MediaPlayer2.daedalus");
 
     mQuickView = viewer;
 
