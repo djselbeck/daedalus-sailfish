@@ -29,12 +29,10 @@ void LastFMScrobbler::authenticate(QString username, QString password)
     requestVariables["api_key"] = LASTFMAPIKEY;
     requestVariables["username"] = username;
     requestVariables["password"] = password;
-    QString request = makeRequest(requestVariables);
-    qDebug() << "Auth request is: " << request;
+    QUrlQuery query = makeRequest(requestVariables);
     QNetworkRequest authRequest = QNetworkRequest(QUrl("https://ws.audioscrobbler.com/2.0/"));
     authRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
-    QUrlQuery query(request);
-    qDebug() << "query: " << query.toString(QUrl::FullyEncoded).toUtf8();
+    qDebug() << "authenticate query: " << query.toString(QUrl::FullyEncoded);
     mNetAccess->post(authRequest,query.toString(QUrl::FullyEncoded).toUtf8());
 }
 
@@ -65,13 +63,13 @@ void LastFMScrobbler::trackChanged()
         mLastTitle = title;
         mTrackNR = QString::number(mStatus->getTrackNr());
         mDuration = mStatus->getLength();
-        if ( mLastArtist != "" && mLastTitle != "") {
+        if ( mLastArtist != "" && mLastTitle != "" && (mStatus->getPlaying() == 1)) {
             qDebug() << "New track: " << mTimeTrackStarted << mStatus->getTitle() << mStatus->getArtist() << mStatus->getAlbum();
             sendNowPlaying();
         }
     }
     mElapsed = mStatus->getElapsed();
-    if ( !mStatus->getPlaying() ) {
+    if ( mStatus->getPlaying() == 0 ) {
         // reset values
         mLastAlbum = "";
         mLastArtist = "";
@@ -94,12 +92,10 @@ void LastFMScrobbler::sendNowPlaying()
         requestVariables["trackNumber"] = mTrackNR;
         requestVariables["duration"] = QString::number(mDuration);
         requestVariables["sk"] = mSessionKey;
-        QString request = makeRequest(requestVariables);
-        qDebug() << "Auth request is: " << request;
+        QUrlQuery query = makeRequest(requestVariables);
         QNetworkRequest authRequest = QNetworkRequest(QUrl("https://ws.audioscrobbler.com/2.0/"));
         authRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
-        QUrlQuery query(request);
-        qDebug() << "query: " << query.toString(QUrl::FullyEncoded).toUtf8();
+        qDebug() << "now playing query: " << query.toString(QUrl::FullyEncoded);
         mNetAccess->post(authRequest,query.toString(QUrl::FullyEncoded).toUtf8());
 }
 
@@ -116,45 +112,32 @@ void LastFMScrobbler::scrobbleTrack()
     requestVariables["trackNumber"] = mTrackNR;
     requestVariables["duration"] = QString::number(mDuration);
     requestVariables["sk"] = mSessionKey;
-    QString request = makeRequest(requestVariables);
-    qDebug() << "Auth request is: " << request;
+    QUrlQuery query = makeRequest(requestVariables);
     QNetworkRequest authRequest = QNetworkRequest(QUrl("https://ws.audioscrobbler.com/2.0/"));
     authRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
-    QUrlQuery query(request);
-    qDebug() << "query: " << query.toString(QUrl::FullyEncoded).toUtf8();
+    qDebug() << "scrobble track query: " << query.toString(QUrl::FullyEncoded).toUtf8();
     mNetAccess->post(authRequest,query.toString(QUrl::FullyEncoded).toUtf8());
 }
 
-QString LastFMScrobbler::makeRequest(QMap<QString, QString> variables)
+QUrlQuery LastFMScrobbler::makeRequest(QMap<QString, QString> variables)
 {
     QString request;
-    QString signatureInput;
+    QString signatureInput = "";
+    QUrlQuery query;
     QMap<QString, QString>::iterator i;
     for ( i = variables.begin(); i != variables.end(); ++i) {
         qDebug() << "key: " << i.key() << " value: " << i.value();
-        QString key = i.key();
-        key = key.replace('&'," ");
-        key = key.replace('?'," ");
-        key = key.replace(':'," ");
-//        key = key.replace(' ',"%20");
-        QString value = i.value();
-        value = value.replace('&'," ");
-        value = value.replace('?'," ");
-        value = value.replace(':'," ");
-//        value = value.replace(' '," ");
-        if( i == variables.begin() ) {
-            request += "" + key + "=" + value;
-        } else {
-            request += "&" + key + "=" + value;
-        }
-        signatureInput += key + value;
+        query.addQueryItem(i.key(),i.value());
+        signatureInput += i.key() + i.value();
     }
+    qDebug() << "query to string: " << query.toString(QUrl::FullyEncoded);
     QByteArray sigInputRaw;
     sigInputRaw.append(signatureInput + LASTFMSECRET);
+    qDebug() << "signing: " << sigInputRaw;
     QString signature = QCryptographicHash::hash(sigInputRaw,QCryptographicHash::Md5).toHex();
-    request += "&api_sig=" + signature;
-
-    return request;
+    query.addQueryItem("api_sig",signature);
+    qDebug() << "query(signed): " << query.toString(QUrl::FullyEncoded);
+    return query;
 }
 
 void LastFMScrobbler::parseReply(QNetworkReply* reply)

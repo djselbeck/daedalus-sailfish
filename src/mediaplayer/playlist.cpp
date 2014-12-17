@@ -115,7 +115,7 @@ void Playlist::playPosition(int position)
     mPlayer->play();
     qDebug() << "play called";
     indexChanged(mCurrentIndex);
-    updateStatus();
+//    updateStatus();
 
     setNextTrack();
 }

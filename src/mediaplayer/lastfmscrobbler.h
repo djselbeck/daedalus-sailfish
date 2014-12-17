@@ -33,7 +33,7 @@ private slots:
 private:
     void sendNowPlaying();
     void scrobbleTrack();
-    QString makeRequest(QMap<QString,QString> variables);
+    QUrlQuery makeRequest(QMap<QString,QString> variables);
 
     QNetworkAccessManager *mNetAccess;
     PlaybackStatusObject *mStatus;
