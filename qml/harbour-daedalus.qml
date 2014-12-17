@@ -122,8 +122,8 @@ ApplicationWindow
     property bool mPositionSliderActive: false
 
     // Global image sources for play/pause
-    property string playbuttoniconsource : playbackstatus.playing ?  "image://theme/icon-m-pause" :  "image://theme/icon-m-play";
-    property string playbuttoniconsourcecover :  playbackstatus.playing ? "image://theme/icon-cover-pause" : "image://theme/icon-cover-play";
+    property string playbuttoniconsource : playbackstatus.playing==1  ?  "image://theme/icon-m-pause" :  "image://theme/icon-m-play";
+    property string playbuttoniconsourcecover :  playbackstatus.playing==1 ? "image://theme/icon-cover-pause" : "image://theme/icon-cover-play";
 
     property string artistname
     property string albumname

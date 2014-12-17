@@ -503,6 +503,7 @@ void Playlist::setNextTrack()
         }
     } else if ( mRandom ) {
         mNextIndex = getRandomIndex();
+        mHaveNextTrack = true;
     } else if ( mRepeat ) {
         if ( mCurrentIndex + 1 < mTrackList->size()) {
             mNextIndex = mCurrentIndex + 1;

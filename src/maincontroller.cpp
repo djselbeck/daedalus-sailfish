@@ -456,8 +456,8 @@ void MainController::playActiveAlbumRandom()
     mPlaylist->clear();
     addActiveAlbum();
     mPlaylist->setRandom(true);
-    mPlaylist->next();
     mPlaylist->play();
+    mPlaylist->next();
     disconnect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
 
 }

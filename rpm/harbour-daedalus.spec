@@ -16,7 +16,7 @@ Name:       harbour-daedalus
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Sailfish music player on basis of smpc
 Version:    1.0.0
-Release:    1
+Release:    3
 Group:      Qt/Qt
 License:    LICENSE
 URL:        http://example.org/
