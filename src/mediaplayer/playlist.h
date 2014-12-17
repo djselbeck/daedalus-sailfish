@@ -84,7 +84,7 @@ public slots:
 
 private:
     QMediaPlayer *mPlayer;
-    QMediaPlaylist *mQPlaylist;
+//    QMediaPlaylist *mQPlaylist;
     QList<TrackObject*> *mTrackList;
     int mOldIndex;
     PlaybackStatusObject *mStatusObject;
@@ -95,11 +95,19 @@ private:
     unsigned int mResumeTime;
     unsigned int mResumeIndex;
 
+    unsigned int mCurrentIndex;
+    int mNextIndex;
 
+    bool mRandom;
+    bool mRepeat;
+
+    unsigned int getRandomIndex();
+    void setNextTrack();
 
 private slots:
     void indexChanged(int index);
     void updateStatus();
+    void updateState();
 
     void receiveSavedPlaybackStateList(QList<TrackObject*>*);
 
