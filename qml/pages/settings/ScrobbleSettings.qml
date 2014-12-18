@@ -7,6 +7,7 @@ Dialog {
         id: mainFlickable
         anchors.fill: parent
         clip: true
+        contentHeight: mainColumn.height
         Column {
             id: mainColumn
             spacing: Theme.paddingSmall

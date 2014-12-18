@@ -716,43 +716,43 @@
 <context>
     <name>ScrobbleSettings</name>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="21"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="22"/>
         <source>Scrobbling</source>
         <translation>Scrobbeln</translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="31"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="32"/>
         <source>Please enter your last.fm credentials if you want to scrobble your songs to last.fm. Only an authentication hash is saved on the device.</source>
         <translation>Bitte geben sie ihre Last.fm Zugangsdaten ein, damit ihre Lieder nach last.fm gescrobbelt werden können. Es wird lediglich ein Authentifizierungs-Hash auf dem Gerät gespeichert.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="39"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="40"/>
         <source>username:</source>
         <translation>Benutzername:</translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="47"/>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="59"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="48"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="60"/>
         <source>input username</source>
         <translation>Benutzername eingeben</translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="51"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="52"/>
         <source>password:</source>
         <translation>Passwort:</translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="67"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="68"/>
         <source>clear authentication</source>
         <translation>Authentifikation zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="75"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="76"/>
         <source>not authenticated</source>
         <translation>nicht authentifiziert</translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="75"/>
+        <location filename="../qml/pages/settings/ScrobbleSettings.qml" line="76"/>
         <source>authenticated with key:
 </source>
         <translation>authentifiziert mit Schlüssel:

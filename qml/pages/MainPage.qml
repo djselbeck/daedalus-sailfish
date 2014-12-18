@@ -113,7 +113,7 @@ Page {
             }
             else if ( status === PageStatus.Activating ) {
             }
+            console.debug("Main page status changed:" + status);
         }
-
 
 }

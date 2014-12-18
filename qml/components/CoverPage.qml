@@ -11,6 +11,7 @@ CoverBackground {
         } else {
             coverimg.active = false
         }
+
     }
 
     OpacityRampEffect {
@@ -28,6 +29,7 @@ CoverBackground {
             anchors.fill: parent
             sourceprimary: coverimageurl
             sourcesecondary: artistimageurl
+            //source: coverimageurl
             fillMode: Image.PreserveAspectCrop
         }
     }
@@ -64,6 +66,7 @@ CoverBackground {
 
     onStatusChanged: {
         recheckActive()
+        console.debug("cover status: " + status);
     }
 
 //        Image{

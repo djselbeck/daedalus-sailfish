@@ -18,16 +18,8 @@ Item {
                 opacity: 1.0
             }
             PropertyChanges {
-                target: primaryImg
-                visible: true
-            }
-            PropertyChanges {
                 target: secondaryImg
                 opacity: 0.0
-            }
-            PropertyChanges {
-                target: secondaryImg
-                visible: false
             }
         },
         State {
@@ -37,16 +29,8 @@ Item {
                 opacity: 0.0
             }
             PropertyChanges {
-                target: primaryImg
-                visible: false
-            }
-            PropertyChanges {
                 target: secondaryImg
                 opacity: 1.0
-            }
-            PropertyChanges {
-                target: secondaryImg
-                visible: true
             }
         }
     ]

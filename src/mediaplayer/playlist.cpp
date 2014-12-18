@@ -318,12 +318,12 @@ void Playlist::togglePlayPause()
 void Playlist::stop()
 {
     qDebug() << "stopping playback";
+    mHaveNextTrack = false;
     mPlayer->stop();
     mPlayer->setPosition(0);
     mPlayer->media();
     mCurrentIndex = 0;
     mNextIndex = -1;
-    mHaveNextTrack = false;
     indexChanged(mCurrentIndex);
     updateStatus();
 }
