@@ -18,8 +18,16 @@ Item {
                 opacity: 1.0
             }
             PropertyChanges {
+                target: primaryImg
+                visible: true
+            }
+            PropertyChanges {
                 target: secondaryImg
                 opacity: 0.0
+            }
+            PropertyChanges {
+                target: secondaryImg
+                visible: false
             }
         },
         State {
@@ -29,8 +37,16 @@ Item {
                 opacity: 0.0
             }
             PropertyChanges {
+                target: primaryImg
+                visible: false
+            }
+            PropertyChanges {
                 target: secondaryImg
                 opacity: 1.0
+            }
+            PropertyChanges {
+                target: secondaryImg
+                visible: true
             }
         }
     ]
@@ -46,6 +62,9 @@ Item {
 
     Image {
         id: primaryImg
+        sourceSize.height: height
+        sourceSize.width: width
+
         anchors.fill: parent
         onStatusChanged: {
             if (status == Image.Ready) {
@@ -57,12 +76,13 @@ Item {
                 }
             }
         }
-        cache: false
+        onSourceSizeChanged: {
+            console.debug("Source height: " + sourceSize.height + " width: " + sourceSize.width)
+        }
     }
     Image {
         id: secondaryImg
         fillMode: primaryImg.fillMode
-        cache: false
         anchors.fill: parent
         onStatusChanged: {
             if (status == Image.Ready) {
@@ -76,13 +96,18 @@ Item {
         }
     }
 
-    BusyIndicator {
+    /*BusyIndicator {
         id: busyIndicator
         anchors.centerIn: parent
         size: BusyIndicatorSize.Medium
         running: (primaryImg.status === Image.Loading
                   || secondaryImg.status === Image.Loading)
-    }
+        visible: running
+        enabled: running
+        onRunningChanged: {
+            console.debug("Indicator runnig:" + running)
+        }
+    }*/
 
     Timer {
         id: waitTimer
@@ -100,9 +125,10 @@ Item {
         else {
             waitTimer.stop()
         }
+        console.log("Toggle image active changed: " + active);
     }
 
-    function setActiveImage() {
+   function setActiveImage() {
 //        console.debug(
 //                    "active: " + active + " state: " + state + " visible: " + visible)
         waitTimer.stop()
