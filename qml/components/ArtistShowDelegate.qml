@@ -29,8 +29,8 @@ BackgroundItem {
             id: albumImage
             antialiasing: true
             anchors.fill: parent
-            sourceSize.width: width
-            sourceSize.height: height
+            /*sourceSize.width: width
+            sourceSize.height: height*/
             source: imageURL
             cache: true
             asynchronous: true

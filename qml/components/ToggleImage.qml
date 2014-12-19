@@ -46,9 +46,6 @@ Item {
 
     Image {
         id: primaryImg
-        sourceSize.height: height
-        sourceSize.width: width
-
         anchors.fill: parent
         onStatusChanged: {
             if (status == Image.Ready) {
@@ -59,9 +56,6 @@ Item {
                     ready = false;
                 }
             }
-        }
-        onSourceSizeChanged: {
-            console.debug("Source height: " + sourceSize.height + " width: " + sourceSize.width)
         }
     }
     Image {
@@ -109,7 +103,6 @@ Item {
         else {
             waitTimer.stop()
         }
-        console.log("Toggle image active changed: " + active);
     }
 
    function setActiveImage() {

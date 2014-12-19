@@ -215,12 +215,13 @@ void Playlist::registerStatusObject(PlaybackStatusObject *obj)
 
 void Playlist::updateState()
 {
-    qDebug() << "Player state changed";
+    qDebug() << "Player state changed:" << mPlayer->state();
     if ( (mPlayer->state() == QMediaPlayer::StoppedState) && mHaveNextTrack ) {
         playPosition(mNextIndex);
     } else if( (mPlayer->state() == QMediaPlayer::StoppedState) && !mHaveNextTrack)  {
         stop();
     }
+    updateStatus();
 }
 
 void Playlist::updateStatus()
@@ -228,6 +229,7 @@ void Playlist::updateStatus()
     qDebug() << "new status";
     int index = mCurrentIndex;
     int playing = mPlayer->state();
+    qDebug() << "playing: " << playing;
     QString title;
     QString artist;
     QString album;

@@ -66,7 +66,6 @@ CoverBackground {
 
     onStatusChanged: {
         recheckActive()
-        console.debug("cover status: " + status);
     }
 
 //        Image{

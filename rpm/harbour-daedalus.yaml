@@ -1,12 +1,12 @@
 Name: harbour-daedalus
 Summary: Sailfish music player on basis of smpc
-Version: 1.0.0
-Release: 3
+Version: 1.0.1
+Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # http://gitorious.org/meego-developer-tools/spectacle/blobs/master/data/GROUPS
 Group: Qt/Qt
-URL: http://example.org/
-License: LICENSE
+URL: http://www.daedalus-music.org
+License: GPLv3
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
