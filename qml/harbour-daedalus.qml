@@ -61,6 +61,7 @@ ApplicationWindow
     signal playActiveAlbum();
     signal playActiveAlbumRandom();
     signal deletePlaylist();
+    signal shuffleCurrentPlaylist();
     signal savePlaylist(string name);
     signal deletePlaylistTrack(int index);
     signal addSavedPlaylistTrack(int index);

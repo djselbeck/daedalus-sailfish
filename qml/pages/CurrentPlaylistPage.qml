@@ -56,6 +56,12 @@ Page {
                 }
             }
             MenuItem {
+                text: qsTr("shuffle playlist")
+                onClicked: {
+                    shuffleCurrentPlaylist();
+                }
+            }
+            MenuItem {
                 text: qsTr("delete playlist")
                 onClicked: {
                     pageStack.push(deleteQuestionDialog)

@@ -523,3 +523,19 @@ void Playlist::setNextTrack()
     }
     qDebug() << "next index is: " << mNextIndex;
 }
+
+void Playlist::shufflePlaylist()
+{
+    beginResetModel();
+    QList<TrackObject*> *newTracks = new QList<TrackObject*>();
+    while ( !mTrackList->empty() ) {
+        int trackPos = qrand() % mTrackList->size();
+        newTracks->append(mTrackList->at(trackPos));
+        mTrackList->removeAt(trackPos);
+        qDebug() << "Removed and appended track at: " << trackPos;
+    }
+    delete(mTrackList);
+    mTrackList = newTracks;
+    endResetModel();
+    qDebug() << "finished shuffling the playlist";
+}

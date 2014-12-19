@@ -79,6 +79,8 @@ public slots:
     void setResumeIndex(unsigned int pos);
     void setResumeTime(unsigned int pos);
 
+    void shufflePlaylist();
+
 
 private:
     QMediaPlayer *mPlayer;

@@ -179,6 +179,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(addURL(QString)),mPlaylist,SLOT(addUrl(QString)));
     connect(item,SIGNAL(playPlaylist(QString)),this,SLOT(playPlaylist(QString)));
     connect(item,SIGNAL(addPlaylist(QString)),this,SLOT(addPlaylist(QString)));
+    connect(item,SIGNAL(shuffleCurrentPlaylist()),mPlaylist,SLOT(shufflePlaylist()));
 
     // basic controls
     connect(item,SIGNAL(next()),mPlaylist,SLOT(next()));
