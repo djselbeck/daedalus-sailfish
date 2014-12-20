@@ -101,20 +101,19 @@
 <context>
     <name>AlbumTracks</name>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="123"/>
-        <location filename="../qml/pages/AlbumTracks.qml" line="226"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="133"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="236"/>
         <source>add album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="131"/>
-        <location filename="../qml/pages/AlbumTracks.qml" line="234"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="141"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="244"/>
         <source>play album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="117"/>
-        <location filename="../qml/pages/AlbumTracks.qml" line="242"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="252"/>
         <source>play random</source>
         <translation type="unfinished"></translation>
     </message>
@@ -124,28 +123,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="389"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="117"/>
+        <source>play shuffled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AlbumTracks.qml" line="125"/>
+        <source>play randomly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AlbumTracks.qml" line="399"/>
         <source>playing track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="394"/>
-        <location filename="../qml/pages/AlbumTracks.qml" line="399"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="404"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="409"/>
         <source>adding track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="411"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="421"/>
         <source>play track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="418"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="428"/>
         <source>add track to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AlbumTracks.qml" line="424"/>
+        <location filename="../qml/pages/AlbumTracks.qml" line="434"/>
         <source>play after current</source>
         <translation type="unfinished"></translation>
     </message>
@@ -864,22 +873,22 @@
 <context>
     <name>harbour-daedalus</name>
     <message>
-        <location filename="../qml/harbour-daedalus.qml" line="210"/>
+        <location filename="../qml/harbour-daedalus.qml" line="211"/>
         <source>first use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/harbour-daedalus.qml" line="215"/>
+        <location filename="../qml/harbour-daedalus.qml" line="216"/>
         <source>This application can download metadata from last.fm on demand. If you want to use this feature enable it below or enable it in the metadata settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/harbour-daedalus.qml" line="222"/>
+        <location filename="../qml/harbour-daedalus.qml" line="223"/>
         <source>At the moment this also loads metadata for your played music on data connection. Try using bulk download on wireless network to reduce mobile data traffic.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/harbour-daedalus.qml" line="230"/>
+        <location filename="../qml/harbour-daedalus.qml" line="231"/>
         <source>enable Last.fm download</source>
         <translation type="unfinished"></translation>
     </message>

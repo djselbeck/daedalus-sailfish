@@ -114,7 +114,17 @@ Page {
                         }
                     }
                     MenuItem {
-                        text: qsTr("play random")
+                        text: qsTr("play shuffled")
+                        enabled: allTracksPage
+                        visible: enabled
+                        onClicked: {
+                            playActiveAlbumShuffle()
+                        }
+                    }
+                    MenuItem {
+                        text: qsTr("play randomly")
+                        enabled: allTracksPage
+                        visible: enabled
                         onClicked: {
                             playActiveAlbumRandom()
                         }

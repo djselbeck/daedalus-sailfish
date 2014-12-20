@@ -146,6 +146,7 @@ private slots:
     void addActiveAlbum();
     void playActiveAlbum();
     void playActiveAlbumRandom();
+    void playActiveAlbumShuffle();
 
     void addSavedPlaylistTrack(int index);
     void addSavedPlaylistTrackAfterCurrent(int index);

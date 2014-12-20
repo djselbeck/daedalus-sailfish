@@ -167,6 +167,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(playPlaylistIndex(int)),mPlaylist,SLOT(playPosition(int)));
     connect(item,SIGNAL(playActiveAlbum()),this,SLOT(playActiveAlbum()));
     connect(item,SIGNAL(playActiveAlbumRandom()),this,SLOT(playActiveAlbumRandom()));
+    connect(item,SIGNAL(playActiveAlbumShuffle()),this,SLOT(playActiveAlbumShuffle()));
     connect(item,SIGNAL(addAlbum(QString)),this,SLOT(addAlbumTracksStart(QString)));
     connect(item,SIGNAL(playAlbum(QString)),this,SLOT(playAlbumTracksStart(QString)));
     connect(item,SIGNAL(addArtist(QString)),this,SLOT(addArtistTracksStart(QString)));
@@ -461,6 +462,14 @@ void MainController::playActiveAlbumRandom()
     mPlaylist->setRandom(true);
     mPlaylist->play();
     mPlaylist->next();
+    disconnect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
+}
+
+void MainController::playActiveAlbumShuffle()
+{
+    mPlaylist->clear();
+    addActiveAlbum();
+    mPlaylist->shufflePlaylist();
     disconnect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
 
 }
