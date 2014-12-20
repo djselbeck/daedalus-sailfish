@@ -56,6 +56,7 @@ void Playlist::addFile(TrackObject *track)
     mTrackList->append(track);
     endInsertRows();
     qDebug() << "File: " << track->getURL() << " added at " << mTrackList->size()-1;
+    setNextTrack();
 }
 
 void Playlist::insertAt(TrackObject *track, int pos)
