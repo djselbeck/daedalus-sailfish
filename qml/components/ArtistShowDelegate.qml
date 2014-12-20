@@ -221,10 +221,6 @@ BackgroundItem {
                     showView.interactive = false
                     console.debug("Album backpage created")
                 }
-                Component.onDestruction: {
-                    clearTrackList()
-                    console.debug("Album backpage destroyed")
-                }
             }
         }
         active: false

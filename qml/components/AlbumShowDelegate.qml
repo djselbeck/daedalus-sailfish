@@ -203,7 +203,7 @@ BackgroundItem {
                             id: moreButton
                             icon.source: "image://theme/icon-m-other"
                             onClicked: {
-                                ClickHandler.albumClicked(artist, title, albumurn);
+                                ClickHandler.albumClicked(artist, title, albumurn,artisturn);
                                 if ( flipped ) {
                                     rotateOut.running = true
                                     flipped = false
@@ -338,7 +338,7 @@ BackgroundItem {
     onClicked: {
         // Only flip front cover
         if ( coverRotation == 0 ) {
-            requestAlbum([artisturn,albumurn]);
+            requestArtistAlbum([artisturn,albumurn]);
             if (!flipped) {
                 backsideLoader.active = true
                 flipped = true
