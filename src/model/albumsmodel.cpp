@@ -156,7 +156,11 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const {
         break;
     case SectionRole:
         albumTitle = mSparqlModel->data(index,AlbumRole).toString();
-       return QString(albumTitle.at(0)).toUpper();
+        if ( albumTitle.length() > 0 ) {
+        return QString(albumTitle.at(0)).toUpper();
+        } else {
+            return "";
+        }
         break;
     case ArtistRole:
         return mSparqlModel->data(index,role);
