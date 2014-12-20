@@ -7,7 +7,7 @@ ArtistsModel::ArtistsModel(QObject *parent, QSparqlConnection *connection, QThre
 {
     if ( connection != NULL ) {
         mConnection = connection;
-        mArtistsQueryString = "SELECT ?artist  COUNT(?album) as ?albumcount ?artistobj WHERE { ?album nmm:albumArtist ?artistobj . ?artistobj nmm:artistName ?artist } GROUP BY ?artist ORDER BY ?artist";
+        mArtistsQueryString = "SELECT nmm:artistName(?artist) as ?artistname COUNT(DISTINCT ?album) as ?albumcount COUNT(?piece) as ?trackcount ?artist WHERE { ?piece a nmm:MusicPiece . OPTIONAL { ?piece nmm:performer ?artist } . OPTIONAL { ?piece nmm:musicAlbum ?album } } GROUP BY ?artist order by ?artistname";
     }
     mSparqlModel = new QSparqlQueryModel(0);
     if ( fetchthread != 0  ) {
@@ -44,6 +44,7 @@ QHash<int, QByteArray> ArtistsModel::roleNames() const {
     QHash<int,QByteArray> roles;
     roles[NameRole] = "artist";
     roles[AlbumCountRole] = "albumcount";
+    roles[TrackCountRole] = "trackcount";
     roles[ArtistURNRole] = "artisturn";
     roles[SectionRole] = "sectionprop";
     roles[ImageURLRole] = "imageURL";

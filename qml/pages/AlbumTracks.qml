@@ -10,6 +10,7 @@ Page {
     //    property alias listmodel: albumTracksModel
     property string albumname
     property string artistname
+    property string albumurn
     property int lastIndex: 0
     property bool allTracksPage
 
@@ -17,7 +18,7 @@ Page {
         id: portraitLoader
         active: false
         anchors.fill: parent
-//        anchors.bottomMargin: quickControlPanel.visibleSize
+        //        anchors.bottomMargin: quickControlPanel.visibleSize
         sourceComponent: Component {
 
             SilicaListView {
@@ -37,9 +38,8 @@ Page {
                     id: speedScroller
                     listview: albumTracksListView
                 }
-                onCountChanged:
-                {
-                    speedScroller.reReadSections();
+                onCountChanged: {
+                    speedScroller.reReadSections()
                 }
 
                 header: Item {
@@ -105,11 +105,26 @@ Page {
                 }
                 PullDownMenu {
                     MenuItem {
+                        enabled: (artistname !== "")
+                        visible: enabled
+                        text: qsTr("show all tracks")
+                        onClicked: {
+                            requestAlbum(albumurn)
+                            artistname = ""
+                        }
+                    }
+                    MenuItem {
+                        text: qsTr("play random")
+                        onClicked: {
+                            playActiveAlbumRandom()
+                        }
+                    }
+                    MenuItem {
                         text: qsTr("add album")
                         enabled: !allTracksPage
                         visible: enabled
                         onClicked: {
-                            addActiveAlbum();
+                            addActiveAlbum()
                         }
                     }
                     MenuItem {
@@ -117,13 +132,7 @@ Page {
                         enabled: !allTracksPage
                         visible: enabled
                         onClicked: {
-                            playActiveAlbum();
-                        }
-                    }
-                    MenuItem {
-                        text: qsTr("play random")
-                        onClicked: {
-                            playActiveAlbumRandom();
+                            playActiveAlbum()
                         }
                     }
                 }
@@ -136,7 +145,7 @@ Page {
         id: landscapeLoader
         anchors {
             fill: parent
-//            rightMargin: quickControlPanel.visibleSize
+            //            rightMargin: quickControlPanel.visibleSize
         }
         active: false
         sourceComponent: Component {
@@ -151,7 +160,7 @@ Page {
                         left: parent.left
                     }
 
-                    width: allTracksPage ? 0 :  parent.height / 2
+                    width: allTracksPage ? 0 : parent.height / 2
                     Image {
                         id: artistImageLC
                         width: height
@@ -201,7 +210,7 @@ Page {
                         right: parent.right
                         left: pictureColumn.right
                     }
-                    header: PageHeader{
+                    header: PageHeader {
                         title: albumname
                     }
                     quickScrollEnabled: jollaQuickscroll
@@ -209,9 +218,8 @@ Page {
                         id: speedScroller
                         listview: listViewLC
                     }
-                    onCountChanged:
-                    {
-                        speedScroller.reReadSections();
+                    onCountChanged: {
+                        speedScroller.reReadSections()
                     }
                     PullDownMenu {
                         MenuItem {
@@ -219,7 +227,7 @@ Page {
                             enabled: !allTracksPage
                             visible: enabled
                             onClicked: {
-                                addActiveAlbum();
+                                addActiveAlbum()
                             }
                         }
                         MenuItem {
@@ -227,16 +235,15 @@ Page {
                             enabled: !allTracksPage
                             visible: enabled
                             onClicked: {
-                                playActiveAlbum();
+                                playActiveAlbum()
                             }
                         }
                         MenuItem {
                             text: qsTr("play random")
                             onClicked: {
-                                playActiveAlbumRandom();
+                                playActiveAlbumRandom()
                             }
                         }
-
                     }
 
                     model: albumTracksModel
@@ -264,14 +271,16 @@ Page {
         } else if (status === PageStatus.Activating) {
             if (!orientationTransitionRunning) {
                 // Activate correct loader
-                if ((orientation === Orientation.Portrait) || (orientation === Orientation.PortraitInverted)) {
-                    if ( landscapeLoader.active ) {
-                        landscapeLoader.active = false;
+                if ((orientation === Orientation.Portrait)
+                        || (orientation === Orientation.PortraitInverted)) {
+                    if (landscapeLoader.active) {
+                        landscapeLoader.active = false
                     }
                     portraitLoader.active = true
-                } else if ((orientation === Orientation.Landscape) || (orientation === Orientation.LandscapeInverted)) {
-                    if ( portraitLoader.active ) {
-                        portraitLoader.active = false;
+                } else if ((orientation === Orientation.Landscape)
+                           || (orientation === Orientation.LandscapeInverted)) {
+                    if (portraitLoader.active) {
+                        portraitLoader.active = false
                     }
                     landscapeLoader.active = true
                 }
@@ -281,7 +290,7 @@ Page {
                 landscapeLoader.active = false
             }
         } else if (status === PageStatus.Active) {
-            if ( !allTracksPage ) {
+            if (!allTracksPage) {
                 requestAlbumInfo([albumname, artistname])
                 pageStack.pushAttached(Qt.resolvedUrl("AlbumInfoPage.qml"), {
                                            albumname: albumname
@@ -292,11 +301,12 @@ Page {
     onOrientationTransitionRunningChanged: {
         if (!orientationTransitionRunning) {
             // Activate correct loader
-            if ((orientation === Orientation.Portrait) || (orientation === Orientation.PortraitInverted)) {
-
+            if ((orientation === Orientation.Portrait)
+                    || (orientation === Orientation.PortraitInverted)) {
 
                 portraitLoader.active = true
-            } else if ((orientation === Orientation.Landscape) || (orientation === Orientation.LandscapeInverted)) {
+            } else if ((orientation === Orientation.Landscape)
+                       || (orientation === Orientation.LandscapeInverted)) {
                 landscapeLoader.active = true
             }
         } else {
@@ -310,7 +320,7 @@ Page {
         clearAlbumTrackList()
     }
     Component.onCompleted: {
-        console.debug("ALLTRACKS: "  + allTracksPage);
+        console.debug("ALLTRACKS: " + allTracksPage)
     }
 
     Component {
@@ -371,8 +381,9 @@ Page {
             }
             onClicked: {
                 //albumTracksListView.currentIndex = index
-                ClickHandler.albumTrackClicked(title, album, artist, lengthformatted, fileurl,
-                                  "year", tracknr, discnr, index)
+                ClickHandler.albumTrackClicked(title, album, artist,
+                                               lengthformatted, fileurl,
+                                               "year", tracknr, discnr, index)
             }
             function playTrackRemorse() {
                 remorseAction(qsTr("playing track"), function () {
@@ -381,7 +392,7 @@ Page {
             }
             function addTrackRemorse() {
                 remorseAction(qsTr("adding track"), function () {
-                    addAlbumTrack(index);
+                    addAlbumTrack(index)
                 }, 3000)
             }
             function addTrackAfterCurrentRemorse() {
@@ -392,9 +403,9 @@ Page {
             Component {
                 id: contextMenu
                 ContextMenu {
-                    anchors{
-                        right: (parent != null ) ? parent.right : undefined
-                        left: (parent != null ) ? parent.left : undefined
+                    anchors {
+                        right: (parent != null) ? parent.right : undefined
+                        left: (parent != null) ? parent.left : undefined
                     }
                     MenuItem {
                         text: qsTr("play track")
@@ -412,12 +423,11 @@ Page {
                     MenuItem {
                         text: qsTr("play after current")
                         onClicked: {
-                            addTrackAfterCurrentRemorse();
+                            addTrackAfterCurrentRemorse()
                         }
                     }
                 }
             }
         }
     }
-
 }

@@ -149,6 +149,7 @@ void MainController::connectQMLSignals()
     connect(item,SIGNAL(requestArtistAlbums(QString)),mAlbumsModel,SLOT(requestAlbums(QString)));
     connect(item,SIGNAL(requestAlbum(QString)),mAlbumTracksModel,SLOT(requestAlbumTracks(QString)));
     connect(item,SIGNAL(requestAllTracks()),mAlbumTracksModel,SLOT(requestAllTracks()));
+    connect(item,SIGNAL(requestArtistAlbum(QVariant)),mAlbumTracksModel,SLOT(requestArtistAlbumTracks(QVariant)));
 
     // Settings
     connect(item,SIGNAL(newDownloadSize(int)),this,SLOT(receiveDownloadSize(int)));

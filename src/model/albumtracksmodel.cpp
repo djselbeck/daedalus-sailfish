@@ -1,6 +1,7 @@
 #include "albumtracksmodel.h"
 
 #include <QTime>
+#include <QUrl>
 
 AlbumTracksModel::AlbumTracksModel(QObject *parent, QSparqlConnection *connection,QThread *fetchthread) :
     QAbstractListModel(parent)
@@ -19,11 +20,45 @@ AlbumTracksModel::AlbumTracksModel(QObject *parent, QSparqlConnection *connectio
 void AlbumTracksModel::requestAlbumTracks(QString albumurn)
 {
     emit sendBusy(true);
+    qDebug() << "Album tracks requested: " + albumurn;
+    if ( albumurn != "") {
+        albumurn = albumurn.replace('<',"%3C");
+        albumurn = albumurn.replace('>',"%3E");
+        mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { ?piece nmm:musicAlbum <" + albumurn + "> } ORDER BY ?discnr ?tracknr";
+        mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
+    } else {
+        // List all tracks without album tag
+        qDebug() << "Album tracks with no album tag requested: " + albumurn;
+        mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { ?piece a nmm:MusicPiece . OPTIONAL { ?piece nmm:musicAlbum ?album } FILTER (!bound(?album) ) } ORDER by ?album ";
+        mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
+    }
+}
+
+void AlbumTracksModel::requestArtistAlbumTracks(QVariant artistalbum)
+{
+    // Get artist urn
+    QStringList strings = artistalbum.toStringList();
+    if ( strings.size() != 2 ) {
+        return;
+    }
+    emit sendBusy(true);
+    QString artisturn = strings.at(0);
+    QString albumurn = strings.at(1);
+    if ( artisturn == "" ) {
+        requestAlbumTracks(albumurn);
+        return;
+    }
+    artisturn = artisturn.replace('<',"%3C");
+    artisturn = artisturn.replace('>',"%3E");
     albumurn = albumurn.replace('<',"%3C");
     albumurn = albumurn.replace('>',"%3E");
-    qDebug() << "Album tracks requested: " + albumurn;
-    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?piece nmm:musicAlbum <" + albumurn + "> ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?discnr ?tracknr";
-    mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
+    if ( albumurn != "" ) {
+        mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { ?piece nmm:musicAlbum <" + albumurn + "> . ?piece nmm:performer <" + artisturn +"> } ORDER BY ?discnr ?tracknr";
+        mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
+    } else {
+        mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { ?piece nmm:performer <" + artisturn +  "> . OPTIONAL { ?piece nmm:musicAlbum ?album } FILTER (!bound(?album) ) } ORDER by ?album ";
+        mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
+    }
 }
 
 void AlbumTracksModel::requestAlbumTracksReverseFromTrack(QString urn)
@@ -32,7 +67,7 @@ void AlbumTracksModel::requestAlbumTracksReverseFromTrack(QString urn)
     urn =  urn.replace('<',"%3C");
     urn =  urn.replace('>',"%3E");
     qDebug() << "Album tracks requested: " + urn;
-    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { <"+ urn +">  nmm:musicAlbum ?album . ?piece nmm:musicAlbum ?album ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?discnr ?tracknr";
+    mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { <"+ urn +">  nmm:musicAlbum ?album . ?piece nmm:musicAlbum ?album } ORDER BY ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 
@@ -42,7 +77,7 @@ void AlbumTracksModel::requestArtistTracks(QString artisturn)
     artisturn = artisturn.replace('<',"%3C");
     artisturn = artisturn.replace('>',"%3E");
     qDebug() << "Album tracks requested: " + artisturn;
-    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?album nmm:albumArtist <"+artisturn+"> . ?piece nmm:musicAlbum ?album ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?albumname ?discnr ?tracknr";
+    mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr  nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { ?piece nmm:performer <" + artisturn + ">  } ORDER BY ?albumname ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 
@@ -50,7 +85,7 @@ void AlbumTracksModel::requestAllTracks()
 {
     emit sendBusy(true);
     qDebug() << "All tracks requested: ";
-    mAlbumTracksQueryString = "SELECT ?title ?artistname ?albumname ?length ?tracknr ?discnr ?fileurl ?piece WHERE { ?piece a nmm:MusicPiece ; nie:url ?fileurl ; nie:title ?title ; nfo:duration ?length ; nmm:trackNumber ?tracknr ; nmm:musicAlbumDisc ?disc ; nmm:performer ?artist ; nmm:musicAlbum ?album . ?album nmm:albumTitle ?albumname . ?artist nmm:artistName ?artistname . ?disc nmm:setNumber ?discnr } ORDER BY ?artistname ?albumname ?discnr ?tracknr";
+    mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { ?piece a nmm:MusicPiece }  ?artistname ?albumname ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 
@@ -85,9 +120,6 @@ int AlbumTracksModel::rowCount(const QModelIndex &parent) const
 QVariant AlbumTracksModel::data(const QModelIndex &index, int role) const
 {
     switch ( role ) {
-    case TitleRole:
-        return mSparqlModel->data(index,role);
-        break;
     case ArtistRole:
         return mSparqlModel->data(index,role);
         break;
@@ -114,6 +146,12 @@ QVariant AlbumTracksModel::data(const QModelIndex &index, int role) const
     if ( role == DurationFormattedRole ) {
         int length = mSparqlModel->data(index,DurationRole).toInt();
         return getLengthFormatted(length);
+    } else if ( role == TitleRole ) {
+        QString title = mSparqlModel->data(index,role).toString();
+        if ( title == "" ) {
+            title = mSparqlModel->data(index,FileURLRole).toUrl().fileName();
+        }
+        return title;
     }
     return "";
 }

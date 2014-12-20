@@ -41,6 +41,7 @@ ApplicationWindow
     signal requestArtistAlbums(string artist);
     signal requestArtists();
     signal requestAlbum(string albumurn);
+    signal requestArtistAlbum(variant artistalbum);
     signal requestTrackAlbumTracks(string trackurn);
     signal requestTrackArtistAlbums(string trackurn);
     signal requestSavedPlaylists();

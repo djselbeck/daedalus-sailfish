@@ -21,8 +21,11 @@ AlbumsModel::AlbumsModel(QObject *parent, QSparqlConnection *connection, QThread
     mDownloadEnabled = downloadEnable;
     connect(mSparqlModel,SIGNAL(finished()),this,SLOT(sparqlModelfinished()));
     mDownloader = new ImageDownloader();
+}
 
-
+AlbumsModel::~AlbumsModel()
+{
+    delete(mDownloader);
 }
 
 
@@ -35,7 +38,7 @@ void AlbumsModel::requestAlbums()
     beginResetModel();
     qDebug() << "getting albums";
     // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
-    mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(distinct ?piece) as ?trackcount SUM( distinct ?tracklength) as ?totalduration nmm:artistName(?artistIns) as ?artistname ?album WHERE { ?piece a nmm:MusicPiece . OPTIONAL { ?piece nmm:musicAlbum ?album . ?album nmm:albumArtist ?artistIns  } . ?piece nfo:duration ?tracklength } GROUP BY ?album ORDER BY ?album";
+    mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(distinct ?piece) as ?trackcount SUM( distinct nfo:duration(?piece)) as ?totalduration nmm:artistName(?artistIns) as ?artistname ?album WHERE { ?piece a nmm:MusicPiece . ?piece nmm:musicAlbum ?album .  OPTIONAL { ?album nmm:albumArtist ?artistIns  } } GROUP BY ?album ORDER BY ?album";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
     endResetModel();
     disconnect(this,SIGNAL(requestAlbumInformation(Albumtype)),mDownloader,SLOT(requestAlbumArt(Albumtype)));
@@ -74,8 +77,11 @@ void AlbumsModel::requestAlbums(QString artist)
     qDebug() << "getting albums";
     artist = artist.replace('<',"%3C");
     artist = artist.replace('>',"%3E");
-    mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(?piece) as ?trackcount SUM(nfo:duration(?piece)) as ?totalduration nmm:artistName(?performer) as ?artistname ?album ?performer WHERE { ?piece nmm:performer <" + artist + ">  . OPTIONAL { ?piece nmm:musicAlbum ?album } . ?piece nmm:performer ?performer  } GROUP BY ?album ORDER BY ?album";
-    // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
+    if ( artist != "" ) {
+        mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(?piece) as ?trackcount SUM(nfo:duration(?piece)) as ?totalduration nmm:artistName(?performer) as ?artistname ?album ?performer WHERE { ?piece nmm:performer <" + artist + ">  . OPTIONAL { ?piece nmm:musicAlbum ?album } . ?piece nmm:performer ?performer  } GROUP BY ?album ORDER BY ?album";
+    } else {
+        mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(?piece) as ?trackcount SUM(nfo:duration(?piece)) as ?totalduration nmm:artistName(?performer) as ?artistname ?album ?performer WHERE { ?piece a nmm:MusicPiece  . OPTIONAL { ?piece nmm:musicAlbum ?album } . OPTIONAL { ?piece nmm:performer ?performer } FILTER(!bound(?performer))  } GROUP BY ?album ORDER BY ?album";
+    }
     mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
     connect(this,SIGNAL(requestAlbumInformation(Albumtype)),mDownloader,SLOT(requestAlbumArt(Albumtype)),Qt::QueuedConnection);
     connect(mDownloader,SIGNAL(albumInformationReady(AlbumInformation*)),this,SLOT(albumInformationReady(AlbumInformation*)));

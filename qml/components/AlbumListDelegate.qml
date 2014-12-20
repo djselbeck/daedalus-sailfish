@@ -38,7 +38,7 @@ Component {
             Label {
                 id: albumLabel
                 anchors.verticalCenter: parent.verticalCenter
-                text: (title === "" ? qsTr("no album tag") : title)
+                text: (title === "" ? qsTr("no album tag") : title) + artisturn
             }
         }
         OpacityRampEffect {
@@ -49,7 +49,8 @@ Component {
 
         onClicked: {
             listView.currentIndex = index;
-            ClickHandler.albumClicked(artist, title, albumurn);
+            console.debug("Album clicked: " + albumurn);
+            ClickHandler.albumClicked(artist, title, albumurn, artisturn);
         }
         function playAlbumRemorse() {
             remorseAction(qsTr("playing album"), function () {

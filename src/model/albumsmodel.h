@@ -28,6 +28,7 @@ class AlbumsModel : public QAbstractListModel
 
 public:
     explicit AlbumsModel(QObject *parent = 0, QSparqlConnection *connection = 0, QThread *fetchthread = 0, ImageDatabase *db = 0, bool downloadEnable = false);
+    ~AlbumsModel();
 
     Q_INVOKABLE QHash<int, QByteArray> roleNames() const;
     Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;

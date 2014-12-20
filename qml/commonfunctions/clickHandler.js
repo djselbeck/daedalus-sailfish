@@ -7,14 +7,20 @@ function artistClicked(artist, urn) {
                    })
 }
 
-function albumClicked(artist, albumstring, albumurn) {
-    requestAlbum(albumurn)
+function albumClicked(artist, albumstring, albumurn, artisturn) {
+    if ( artisturn === "") {
+        requestAlbum(albumurn)
+    } else {
+        requestArtistAlbum([artisturn,albumurn]);
+    }
+
     mainWindow.artistname = artist
     mainWindow.albumname = albumstring
     pageStack.push(Qt.resolvedUrl("../pages/AlbumTracks.qml"), {
                        artistname: artist,
                        albumname: albumstring,
-                       allTracksPage: false
+                       allTracksPage: false,
+                       albumurn: albumurn
                    })
 }
 

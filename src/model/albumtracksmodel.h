@@ -36,6 +36,7 @@ signals:
 
 public slots:
     void requestAlbumTracks(QString);
+    void requestArtistAlbumTracks(QVariant artistalbum);
     void requestAlbumTracksReverseFromTrack(QString urn);
     void requestArtistTracks(QString artisturn);
     void requestAllTracks();
