@@ -23,7 +23,8 @@ class AlbumsModel : public QAbstractListModel
         ArtistURNRole,
         SectionRole,
         AlbumCleandRole,
-        AlbumImageRole
+        AlbumImageRole,
+        LengthFormattedRole
     };
 
 public:
@@ -67,6 +68,8 @@ private:
     QString mDownloadSize;
     ImageDatabase *mDB;
     ImageDownloader *mDownloader;
+
+    QString formatLength(const int seconds) const;
 
 private slots:
     void albumInformationReady(AlbumInformation *info);

@@ -38,7 +38,7 @@ void AlbumsModel::requestAlbums()
     beginResetModel();
     qDebug() << "getting albums";
     // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
-    mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(distinct ?piece) as ?trackcount SUM( distinct nfo:duration(?piece)) as ?totalduration nmm:artistName(?artistIns) as ?artistname ?album WHERE { ?piece a nmm:MusicPiece . ?piece nmm:musicAlbum ?album .  OPTIONAL { ?album nmm:albumArtist ?artistIns  } } GROUP BY ?album ORDER BY ?album";
+    mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(distinct ?piece) as ?trackcount SUM( distinct nfo:duration(?piece)) as ?totalduration nmm:artistName(nmm:performer(?piece)) as ?artistname  WHERE { ?piece a nmm:MusicPiece . OPTIONAL { ?piece nmm:musicAlbum ?album} } GROUP BY ?album ORDER BY ?album";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
     endResetModel();
     disconnect(this,SIGNAL(requestAlbumInformation(Albumtype)),mDownloader,SLOT(requestAlbumArt(Albumtype)));
@@ -132,6 +132,7 @@ QHash<int, QByteArray> AlbumsModel::roleNames() const {
     roles[SectionRole] = "sectionprop";
     roles[AlbumCleandRole] = "titleClean";
     roles[AlbumImageRole] = "coverURL";
+    roles[LengthFormattedRole] = "lengthformatted";
     return roles;
 }
 
@@ -151,6 +152,10 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const {
         return urn.toEncoded();
         break;
     case ArtistURNRole:
+        urn = mSparqlModel->data(index,role).toUrl();
+        return urn.toEncoded();
+        break;
+    case TrackCountRole:
         urn = mSparqlModel->data(index,role).toUrl();
         return urn.toEncoded();
         break;
@@ -224,6 +229,10 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const {
                     }
                 }
     }
+    if ( role == LengthFormattedRole ) {
+        int length = mSparqlModel->data(index,DurationRole).toInt();
+        return formatLength(length);
+    }
     return "";
 }
 
@@ -288,8 +297,36 @@ void AlbumsModel::albumEntered(QString albumName)
 
 void AlbumsModel::clearData()
 {
+    mDownloader->clearDownloadQueue();
+    disconnect(this,SIGNAL(requestAlbumInformation(Albumtype)),mDownloader,SLOT(requestAlbumArt(Albumtype)));
+    disconnect(mDownloader,SIGNAL(albumInformationReady(AlbumInformation*)),this,SLOT(albumInformationReady(AlbumInformation*)));
+    disconnect(this,SIGNAL(requestDBEnter(AlbumInformation*)),mDB,SLOT(enterAlbumInformation(AlbumInformation*)));
+    disconnect(mDB,SIGNAL(albumEntered(QString)),this,SLOT(albumEntered(QString)));
     beginResetModel();
     mSparqlModel->clear();
     endResetModel();
 }
 
+QString AlbumsModel::formatLength(const int seconds) const
+{
+    QString temp;
+    int hours=0,min=0,sec=0;
+    hours = seconds/3600;
+    if(hours>0)
+    {
+        min=(seconds-(3600*hours))/60;
+    }
+    else{
+        min=seconds/60;
+    }
+    sec = seconds-hours*3600-min*60;
+    if(hours==0)
+    {
+        temp=(min<10?"0":"")+QString::number(min)+":"+(sec<10?"0":"")+QString::number(sec);
+    }
+    else
+    {
+        temp=(hours<10?"0":"")+QString::number(hours)+":"+(min<10?"0":"")+QString::number(min)+":"+(sec<10?"0":"")+QString::number(sec);
+    }
+    return temp;
+}

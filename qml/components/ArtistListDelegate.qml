@@ -32,9 +32,16 @@ Component {
                     source: ( listImageSize === 0 ) ? "" : imageURL
                 }
             }
-            Label {
+            Column {
                 anchors.verticalCenter: parent.verticalCenter
-                text: (artist === "" ? "No Artist Tag" : artist)
+                Label {
+                    text: (artist === "" ? "No Artist Tag" : artist)
+                }
+                Label {
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.secondaryColor
+                    text: (albumcount > 1 ? albumcount + " " +qsTr("albums") : albumcount == 1 ? albumcount + " " + qsTr("album") : "")
+                }
             }
         }
         OpacityRampEffect {

@@ -34,12 +34,21 @@ Component {
                 }
             }
 
-
-            Label {
-                id: albumLabel
+            Column
+            {
                 anchors.verticalCenter: parent.verticalCenter
-                text: (title === "" ? qsTr("no album tag") : title) + artisturn
+                Label {
+                    id: albumLabel
+                    text: (title === "" ? qsTr("no album tag") : title)
+                }
+                Label {
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.secondaryColor
+                    text: (trackcount > 1 ? trackcount + " " +qsTr("tracks") : trackcount == 1 ? trackcount + " " + qsTr("track") : "") + " (" + lengthformatted + ")"
+                }
             }
+
+
         }
         OpacityRampEffect {
             sourceItem: mainRow

@@ -74,7 +74,7 @@ QVariant ArtistsModel::data(const QModelIndex &index, int role) const {
         }
         break;
     case AlbumCountRole:
-
+        return mSparqlModel->data(index,role);
         break;
     }
     if ( role == ImageURLRole) {
