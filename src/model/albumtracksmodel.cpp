@@ -86,7 +86,7 @@ void AlbumTracksModel::requestAllTracks()
 {
     emit sendBusy(true);
     qDebug() << "All tracks requested: ";
-    mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { ?piece a nmm:MusicPiece }  ?artistname ?albumname ?discnr ?tracknr";
+    mAlbumTracksQueryString = "SELECT nie:title(?piece) as ?title nmm:artistName(nmm:performer(?piece)) as ?artistname nmm:albumTitle(nmm:musicAlbum(?piece)) as ?albumname nfo:duration(?piece) as ?length nmm:trackNumber(?piece) as ?tracknr nmm:setNumber(nmm:musicAlbumDisc(?piece)) as ?discnr nie:url(?piece) as ?fileurl ?piece WHERE { ?piece a nmm:MusicPiece } ORDER BY ?artistname ?albumname ?discnr ?tracknr";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumTracksQueryString),*mConnection);
 }
 
