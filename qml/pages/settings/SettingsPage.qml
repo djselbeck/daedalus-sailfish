@@ -35,7 +35,7 @@ Page
 
 
     Component.onCompleted: {
-        settingsMenuModel.append({"name":qsTr("database settings"), "ident":"database"})
+        settingsMenuModel.append({"name":qsTr("artwork settings"), "ident":"database"})
         settingsMenuModel.append({"name":qsTr("gui settings"), "ident":"guisettings"})
         settingsMenuModel.append({"name":qsTr("scrobbling"), "ident":"scrobbling"})
         settingsMenuModel.append({"name":qsTr("about"), "ident":"about"})
