@@ -77,11 +77,11 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mPlaylistAction = 0;
 
 
-    readSettings();
     mPlaylist->setResumeIndex(mResumeIndex);
     mPlaylist->setResumeTime(mResumeTime);
     connectQMLSignals();
     connectModelSignals();
+    readSettings();
     if ( mFirstUse ) {
         emit ( requestFirstUseDialog());
     }
