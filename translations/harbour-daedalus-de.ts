@@ -125,12 +125,12 @@
     <message>
         <location filename="../qml/pages/AlbumTracks.qml" line="117"/>
         <source>play shuffled</source>
-        <translation type="unfinished"></translation>
+        <translation>zerwürfelt abspielen</translation>
     </message>
     <message>
         <location filename="../qml/pages/AlbumTracks.qml" line="125"/>
         <source>play randomly</source>
-        <translation type="unfinished"></translation>
+        <translation>zufällig abspielen</translation>
     </message>
     <message>
         <location filename="../qml/pages/AlbumTracks.qml" line="399"/>

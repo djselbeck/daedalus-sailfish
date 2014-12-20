@@ -229,14 +229,14 @@ Page {
                     confirmationDialog.headerText = qsTr("download artists")
                     confirmationDialog.acceptText = confirmationDialog.headerText
                     confirmationDialog.questionText = qsTr(
-                                "This will download metadata information for all your artists in your MPD database. " +
+                                "This will download metadata information for all your artists in your music database. " +
                                 "This action will run in the background but take some time.");
                     break
                 case 5:
                     confirmationDialog.headerText = qsTr("download albums")
                     confirmationDialog.acceptText = confirmationDialog.headerText
                     confirmationDialog.questionText = qsTr(
-                                "This will download metadata information for all your albums in your MPD database. " +
+                                "This will download metadata information for all your albums in your music database. " +
                                 "This action will run in the background but take some time.");
                     break
                 }
