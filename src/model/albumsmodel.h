@@ -20,6 +20,7 @@ class AlbumsModel : public QAbstractListModel
         DurationRole,
         ArtistRole,
         AlbumURNRole,
+        ArtistURNRole,
         SectionRole,
         AlbumCleandRole,
         AlbumImageRole
