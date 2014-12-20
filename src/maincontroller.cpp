@@ -449,6 +449,7 @@ void MainController::playActiveAlbum()
     mPlaylist->clear();
     addActiveAlbum();
     mPlaylist->playPosition(0);
+    mPlaylist->setRandom(false);
     disconnect(mAlbumTracksModel,SIGNAL(modelReady()),this,SLOT(playActiveAlbum()));
 
 }
@@ -626,6 +627,7 @@ void MainController::playActivePlaylist()
         }
     }
     mPlaylist->playPosition(0);
+    mPlaylist->setRandom(false);
     clearSavedPlaylistTracks();
 }
 

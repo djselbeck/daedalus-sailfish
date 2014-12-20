@@ -104,21 +104,23 @@ void Playlist::removePosition(int position)
 
 void Playlist::playPosition(int position)
 {
-    mNextIndex = -1;
-    mHaveNextTrack = false;
-    qDebug() << "player state: " << mPlayer->state();
-    qDebug() << "jumping to position: " << position;
-    mPlayer->stop();
-    mCurrentIndex = position;
-    qDebug() << "Setting player media to: " << mTrackList->at(position)->getURL().toLocalFile();
-    mPlayer->setMedia(mTrackList->at(position)->getURL());
-    qDebug() << "player set";
-    mPlayer->play();
-    qDebug() << "play called";
-    indexChanged(mCurrentIndex);
-//    updateStatus();
+    if ( mTrackList->size() > position && position >= 0 ) {
+        mNextIndex = -1;
+        mHaveNextTrack = false;
+        qDebug() << "player state: " << mPlayer->state();
+        qDebug() << "jumping to position: " << position;
+        mPlayer->stop();
+        mCurrentIndex = position;
+        qDebug() << "Setting player media to: " << mTrackList->at(position)->getURL().toLocalFile();
+        mPlayer->setMedia(mTrackList->at(position)->getURL());
+        qDebug() << "player set";
+        mPlayer->play();
+        qDebug() << "play called";
+        indexChanged(mCurrentIndex);
+    //    updateStatus();
 
-    setNextTrack();
+        setNextTrack();
+    }
 }
 
 QHash<int, QByteArray> Playlist::roleNames() const {
@@ -527,6 +529,7 @@ void Playlist::setNextTrack()
 
 void Playlist::shufflePlaylist()
 {
+    stop();
     beginResetModel();
     QList<TrackObject*> *newTracks = new QList<TrackObject*>();
     while ( !mTrackList->empty() ) {
@@ -539,4 +542,7 @@ void Playlist::shufflePlaylist()
     mTrackList = newTracks;
     endResetModel();
     qDebug() << "finished shuffling the playlist";
+    setRandom(false);
+    playPosition(0);
+
 }
