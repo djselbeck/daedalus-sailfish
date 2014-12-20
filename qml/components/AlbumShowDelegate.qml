@@ -336,10 +336,9 @@ BackgroundItem {
     }
 
     onClicked: {
-        console.debug("index: " + index + " currentindex: " + showView.currentIndex)
         // Only flip front cover
         if ( coverRotation == 0 ) {
-            requestAlbum(albumurn);
+            requestAlbum([artisturn,albumurn]);
             if (!flipped) {
                 backsideLoader.active = true
                 flipped = true

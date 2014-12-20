@@ -44,6 +44,7 @@ void AlbumTracksModel::requestArtistAlbumTracks(QVariant artistalbum)
     emit sendBusy(true);
     QString artisturn = strings.at(0);
     QString albumurn = strings.at(1);
+    qDebug() << "Artist album tracks requested: " << artisturn << albumurn;
     if ( artisturn == "" ) {
         requestAlbumTracks(albumurn);
         return;

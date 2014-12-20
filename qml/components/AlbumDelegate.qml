@@ -65,7 +65,8 @@ ListItem {
 
         onClicked: {
             albumGridView.currentIndex = index
-            ClickHandler.albumClicked(artist, title, albumurn);
+            console.debug("Clicked album: " + albumurn + ":" + artisturn);
+            ClickHandler.albumClicked(artist, title, albumurn, artisturn);
         }
 //        Component.onCompleted: {
 //            console.debug("Album created: " + title)

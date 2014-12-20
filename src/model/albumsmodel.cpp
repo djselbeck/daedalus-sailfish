@@ -38,7 +38,7 @@ void AlbumsModel::requestAlbums()
     beginResetModel();
     qDebug() << "getting albums";
     // See qsparqlquerymodel.cpp and 4 from title, trackcount, totalduration, artistname
-    mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(distinct ?piece) as ?trackcount SUM( distinct nfo:duration(?piece)) as ?totalduration nmm:artistName(nmm:performer(?piece)) as ?artistname  WHERE { ?piece a nmm:MusicPiece . OPTIONAL { ?piece nmm:musicAlbum ?album} } GROUP BY ?album ORDER BY ?album";
+    mAlbumsQueryString = "SELECT nmm:albumTitle(?album) as ?albumname COUNT(distinct ?piece) as ?trackcount SUM( distinct nfo:duration(?piece)) as ?totalduration nmm:artistName(nmm:performer(?piece)) as ?artistname ?album WHERE { ?piece a nmm:MusicPiece . OPTIONAL { ?piece nmm:musicAlbum ?album} } GROUP BY ?album ORDER BY ?album";
     mSparqlModel->setQuery(QSparqlQuery(mAlbumsQueryString),*mConnection);
     endResetModel();
     disconnect(this,SIGNAL(requestAlbumInformation(Albumtype)),mDownloader,SLOT(requestAlbumArt(Albumtype)));
