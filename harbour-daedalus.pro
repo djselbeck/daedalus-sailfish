@@ -83,12 +83,14 @@ OTHER_FILES += qml/harbour-daedalus.qml \
     harbour-daedalus.png \
     qml/pages/settings/ScrobbleSettings.qml \
     qml/pages/SavedPlaylistsPage.qml \
-    qml/pages/PlaylistTracksPage.qml
+    qml/pages/PlaylistTracksPage.qml \
+    translations/harbour-daedalus-ru.ts
 
 # to disable building translations every time, comment out the
 # following CONFIG line
 CONFIG += sailfishapp_i18n
-TRANSLATIONS += translations/harbour-daedalus-de.ts
+TRANSLATIONS += translations/harbour-daedalus-de.ts \
+                translations/harbour-daedalus-ru.ts
 
 HEADERS += \
     src/maincontroller.h \
