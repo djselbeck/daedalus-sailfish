@@ -533,8 +533,13 @@
     </message>
     <message>
         <location filename="../qml/pages/settings/DatabaseSettings.qml" line="231"/>
-        <source>This will download metadata information for all your artists in your MPD database. This action will run in the background but take some time.</source>
-        <translation></translation>
+        <source>This will download metadata information for all your artists in your music database. This action will run in the background but take some time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/DatabaseSettings.qml" line="238"/>
+        <source>This will download metadata information for all your albums in your music database. This action will run in the background but take some time.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/pages/settings/DatabaseSettings.qml" line="236"/>
@@ -542,9 +547,8 @@
         <translation>Alben herunterladen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/settings/DatabaseSettings.qml" line="238"/>
         <source>This will download metadata information for all your albums in your MPD database. This action will run in the background but take some time.</source>
-        <translation>Dies lädt alle Album-Bilder herunter und benötigt einige Zeit. Dies geschieht im Hintergrund.</translation>
+        <translation type="vanished">Dies lädt alle Album-Bilder herunter und benötigt einige Zeit. Dies geschieht im Hintergrund.</translation>
     </message>
 </context>
 <context>
@@ -702,11 +706,8 @@
 <context>
     <name>SavedPlaylistTracksModel</name>
     <message>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="71"/>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="72"/>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="73"/>
         <source>Undefined</source>
-        <translation>nicht definiert</translation>
+        <translation type="vanished">nicht definiert</translation>
     </message>
 </context>
 <context>

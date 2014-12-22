@@ -68,9 +68,9 @@ void SavedPlaylistTracksModel::trackReady()
         trackurn = mSparqlModel->data(mSparqlModel->index(0,7),0).toString();
         qDebug() << "Found title: " << title << artist << album << length << tracknr << discnr << fileurl << trackurn;
     } else {
-        title = tr("Undefined");
-        artist = tr("Undefined");
-        album = tr("Undefined");
+        title = QUrl(mCurrentFile).fileName();
+        artist = "";
+        album = "";
         length = 0;
         tracknr = 0;
         discnr = 0;

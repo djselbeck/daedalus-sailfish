@@ -529,17 +529,17 @@
     </message>
     <message>
         <location filename="../qml/pages/settings/DatabaseSettings.qml" line="231"/>
-        <source>This will download metadata information for all your artists in your MPD database. This action will run in the background but take some time.</source>
+        <source>This will download metadata information for all your artists in your music database. This action will run in the background but take some time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/settings/DatabaseSettings.qml" line="238"/>
+        <source>This will download metadata information for all your albums in your music database. This action will run in the background but take some time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/pages/settings/DatabaseSettings.qml" line="236"/>
         <source>download albums</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/settings/DatabaseSettings.qml" line="238"/>
-        <source>This will download metadata information for all your albums in your MPD database. This action will run in the background but take some time.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -692,16 +692,6 @@
     <message>
         <location filename="../qml/pages/PlaylistTracksPage.qml" line="194"/>
         <source>Do you really want to delete this playlist? This step is irreversible!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SavedPlaylistTracksModel</name>
-    <message>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="71"/>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="72"/>
-        <location filename="../src/model/savedplaylisttracksmodel.cpp" line="73"/>
-        <source>Undefined</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

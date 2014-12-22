@@ -253,7 +253,7 @@ BackgroundItem {
                                         clip: true
                                         wrapMode: Text.WrapAnywhere
                                         elide: Text.ElideRight
-                                        text: (title === "" ? filename : title)
+                                        text: (title === "" ? fileurl : title)
                                         anchors {
                                             verticalCenter: parent.verticalCenter
                                         }

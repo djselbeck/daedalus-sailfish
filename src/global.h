@@ -1,7 +1,7 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#define VERSION "1.0.2_prerelease1"
+#define VERSION "1.0.2"
 
 #define IMAGEPROVIDERNAME "imagedbprovider"
 
