@@ -23,8 +23,6 @@ SOURCES += \
     src/model/albumsmodel.cpp \
     src/model/artistsmodel.cpp \
     src/model/albumtracksmodel.cpp \
-    src/mediaplayer/daedalusmediaplayer.cpp \
-    src/mediaplayer/playlist.cpp \
     src/model/trackobject.cpp \
     src/model/playbackstatusobject.cpp \
     src/metadata/albuminformation.cpp \
@@ -44,7 +42,8 @@ SOURCES += \
     src/model/plswriter.cpp \
     src/model/playbackstate.cpp \
     src/dbus/daedalusdbusadaptor.cpp \
-    src/dbus/daedalusdbusmainmprisadaptor.cpp
+    src/dbus/daedalusdbusmainmprisadaptor.cpp \
+    src/mediaplayer/daedalusmediaplayer.cpp
 
 OTHER_FILES += qml/harbour-daedalus.qml \
     rpm/harbour-daedalus.changes.in \
@@ -98,8 +97,6 @@ HEADERS += \
     src/global.h \
     src/model/artistsmodel.h \
     src/model/albumtracksmodel.h \
-    src/mediaplayer/daedalusmediaplayer.h \
-    src/mediaplayer/playlist.h \
     src/model/trackobject.h \
     src/model/playbackstatusobject.h \
     src/metadata/albuminformation.h \
@@ -120,7 +117,8 @@ HEADERS += \
     src/model/plswriter.h \
     src/model/playbackstate.h \
     src/dbus/daedalusdbusadaptor.h \
-    src/dbus/daedalusdbusmainmprisadaptor.h
+    src/dbus/daedalusdbusmainmprisadaptor.h \
+    src/mediaplayer/daedalusmediaplayer.h
 
 RESOURCES += \
     images.qrc

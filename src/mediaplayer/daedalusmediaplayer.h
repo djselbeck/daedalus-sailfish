@@ -11,12 +11,12 @@
 #include "../model/playbackstatusobject.h"
 #include "../model/playbackstate.h"
 
-class Playlist : public QAbstractListModel
+class DaedalusMediaPlayer : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit Playlist(QObject *parent = 0);
-    ~Playlist();
+    explicit DaedalusMediaPlayer(QObject *parent = 0);
+    ~DaedalusMediaPlayer();
 
     enum EntryRoles {
         TitleRole = Qt::UserRole + 1,

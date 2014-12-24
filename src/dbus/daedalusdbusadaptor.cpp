@@ -4,7 +4,7 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 
-DaedalusDBUSAdaptor::DaedalusDBUSAdaptor(Playlist *playlist, PlaybackStatusObject *playbackState, QObject *parent) : QDBusAbstractAdaptor(parent)
+DaedalusDBUSAdaptor::DaedalusDBUSAdaptor(DaedalusMediaPlayer *playlist, PlaybackStatusObject *playbackState, QObject *parent) : QDBusAbstractAdaptor(parent)
 {
     mPlaylist = playlist;
     mPlaybackStatus = playbackState;

@@ -37,7 +37,7 @@ MainController::MainController(QQuickView *viewer, QObject *parent) : QObject(pa
     mPlaylistManager = new PlaylistManager(0,mSparQLConnection);
 //    mPlaylistManager->moveToThread(mModelThread);
 
-    mPlaylist = new Playlist(0);
+    mPlaylist = new DaedalusMediaPlayer(0);
     mPlaybackStatus = new PlaybackStatusObject();
     // Register PlaybackStatusObject in metasystem
     qmlRegisterType<PlaybackStatusObject>();

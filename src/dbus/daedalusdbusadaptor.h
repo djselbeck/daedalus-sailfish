@@ -4,7 +4,7 @@
 #include <QDBusAbstractAdaptor>
 
 
-#include "../mediaplayer/playlist.h"
+#include "../mediaplayer/daedalusmediaplayer.h"
 #include "../model/playbackstatusobject.h"
 
 class DaedalusDBUSAdaptor : public QDBusAbstractAdaptor
@@ -27,7 +27,7 @@ class DaedalusDBUSAdaptor : public QDBusAbstractAdaptor
     Q_PROPERTY(bool CanGoNext READ canGoNext)
     Q_PROPERTY(bool CanGoPrevious READ canGoPrevious)
 public:
-    DaedalusDBUSAdaptor(Playlist *playlist, PlaybackStatusObject *playbackState, QObject *parent = 0);
+    DaedalusDBUSAdaptor(DaedalusMediaPlayer *playlist, PlaybackStatusObject *playbackState, QObject *parent = 0);
 
 public slots:
     // All directly callable from dbus
@@ -61,7 +61,7 @@ private:
     bool canGoNext();
     bool canGoPrevious();
 
-    Playlist *mPlaylist;
+    DaedalusMediaPlayer *mPlaylist;
     PlaybackStatusObject *mPlaybackStatus;
 
 private slots:

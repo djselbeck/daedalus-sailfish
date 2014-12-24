@@ -1,4 +1,4 @@
-#include "playlist.h"
+#include "daedalusmediaplayer.h"
 #include "../model/plswriter.h"
 
 #include <QFile>
@@ -7,7 +7,7 @@
 
 #include "../model/playbackstate.h"
 
-Playlist::Playlist(QObject *parent) :
+DaedalusMediaPlayer::DaedalusMediaPlayer(QObject *parent) :
     QAbstractListModel(parent)
 {
     mTrackList = new QList<TrackObject*>();
@@ -37,7 +37,7 @@ Playlist::Playlist(QObject *parent) :
     emit sendBusy(false);
 }
 
-Playlist::~Playlist()
+DaedalusMediaPlayer::~DaedalusMediaPlayer()
 {
     stop();
     qDebug() << "Waiting for background thread";
@@ -49,7 +49,7 @@ Playlist::~Playlist()
 }
 
 
-void Playlist::addFile(TrackObject *track)
+void DaedalusMediaPlayer::addFile(TrackObject *track)
 {
     int position = mTrackList->size();
     beginInsertRows(QModelIndex(),position,position);
@@ -59,7 +59,7 @@ void Playlist::addFile(TrackObject *track)
     setNextTrack();
 }
 
-void Playlist::insertAt(TrackObject *track, int pos)
+void DaedalusMediaPlayer::insertAt(TrackObject *track, int pos)
 {
     int insPos = pos;
     if ( pos >= mTrackList->size() ) {
@@ -77,14 +77,14 @@ void Playlist::insertAt(TrackObject *track, int pos)
     setNextTrack();
 }
 
-void Playlist::playSong(TrackObject *track)
+void DaedalusMediaPlayer::playSong(TrackObject *track)
 {
     unsigned int pos = rowCount();
     insertAt(track,pos);
     playPosition(pos);
 }
 
-void Playlist::removePosition(int position)
+void DaedalusMediaPlayer::removePosition(int position)
 {
     if (mCurrentIndex == position) {
         // currently playing try to advance
@@ -102,7 +102,7 @@ void Playlist::removePosition(int position)
     setNextTrack();
 }
 
-void Playlist::playPosition(int position)
+void DaedalusMediaPlayer::playPosition(int position)
 {
     if ( mTrackList->size() > position && position >= 0 ) {
         mNextIndex = -1;
@@ -123,7 +123,7 @@ void Playlist::playPosition(int position)
     }
 }
 
-QHash<int, QByteArray> Playlist::roleNames() const {
+QHash<int, QByteArray> DaedalusMediaPlayer::roleNames() const {
     QHash<int,QByteArray> roles;
     roles[TitleRole] = "title";
     roles[ArtistRole] = "artist";
@@ -140,12 +140,12 @@ QHash<int, QByteArray> Playlist::roleNames() const {
 }
 
 
-int Playlist::rowCount(const QModelIndex &parent) const
+int DaedalusMediaPlayer::rowCount(const QModelIndex &parent) const
 {
     return mTrackList->size();
 }
 
-QVariant Playlist::data(const QModelIndex &index, int role) const
+QVariant DaedalusMediaPlayer::data(const QModelIndex &index, int role) const
 {
     switch ( role ) {
     case TitleRole:
@@ -187,7 +187,7 @@ QVariant Playlist::data(const QModelIndex &index, int role) const
     return "";
 }
 
-QVariantMap Playlist::get(int row){
+QVariantMap DaedalusMediaPlayer::get(int row){
     QHash<int,QByteArray> roles = roleNames();
     QHashIterator<int, QByteArray> i(roles);
     QVariantMap res;
@@ -200,7 +200,7 @@ QVariantMap Playlist::get(int row){
     return res;
 }
 
-void Playlist::indexChanged(int position)
+void DaedalusMediaPlayer::indexChanged(int position)
 {
     qDebug() << "new playing index: " << position << " of "  << rowCount() << " tracks";
     emit dataChanged(index(mOldIndex),index(mOldIndex));
@@ -208,7 +208,7 @@ void Playlist::indexChanged(int position)
     mOldIndex = position;
 }
 
-void Playlist::registerStatusObject(PlaybackStatusObject *obj)
+void DaedalusMediaPlayer::registerStatusObject(PlaybackStatusObject *obj)
 {
     if ( obj == 0 ) {
         return;
@@ -216,7 +216,7 @@ void Playlist::registerStatusObject(PlaybackStatusObject *obj)
     mStatusObject = obj;
 }
 
-void Playlist::updateState()
+void DaedalusMediaPlayer::updateState()
 {
     qDebug() << "Player state changed:" << mPlayer->state();
     if ( (mPlayer->state() == QMediaPlayer::StoppedState) && mHaveNextTrack ) {
@@ -227,7 +227,7 @@ void Playlist::updateState()
     updateStatus();
 }
 
-void Playlist::updateStatus()
+void DaedalusMediaPlayer::updateStatus()
 {
     qDebug() << "new status";
     int index = mCurrentIndex;
@@ -262,7 +262,7 @@ void Playlist::updateStatus()
     }
 }
 
-void Playlist::next()
+void DaedalusMediaPlayer::next()
 {
     if ( mHaveNextTrack ) {
         playPosition(mNextIndex);
@@ -271,7 +271,7 @@ void Playlist::next()
     }
 }
 
-void Playlist::previous()
+void DaedalusMediaPlayer::previous()
 {
 //    mQPlaylist->previous();
     if ( mCurrentIndex > 0 ) {
@@ -281,21 +281,21 @@ void Playlist::previous()
     }
 }
 
-void Playlist::pause()
+void DaedalusMediaPlayer::pause()
 {
     mPlayer->pause();
     indexChanged(mCurrentIndex);
     updateStatus();
 }
 
-void Playlist::play()
+void DaedalusMediaPlayer::play()
 {
     mPlayer->play();
     indexChanged(mCurrentIndex);
     updateStatus();
 }
 
-void Playlist::clear()
+void DaedalusMediaPlayer::clear()
 {
     stop();
     beginResetModel();
@@ -307,7 +307,7 @@ void Playlist::clear()
     endResetModel();
 }
 
-void Playlist::togglePlayPause()
+void DaedalusMediaPlayer::togglePlayPause()
 {
     if( mPlayer->state() == QMediaPlayer::PlayingState ) {
         pause();
@@ -320,7 +320,7 @@ void Playlist::togglePlayPause()
     }
 }
 
-void Playlist::stop()
+void DaedalusMediaPlayer::stop()
 {
     qDebug() << "stopping playback";
     mHaveNextTrack = false;
@@ -333,14 +333,14 @@ void Playlist::stop()
     updateStatus();
 }
 
-void Playlist::seek(int pos)
+void DaedalusMediaPlayer::seek(int pos)
 {
     if ( mPlayer->isSeekable() ) {
         mPlayer->setPosition(pos * 1000);
     }
 }
 
-void Playlist::setRandom(bool random)
+void DaedalusMediaPlayer::setRandom(bool random)
 {
     mRepeat = false;
     mRandom = random;
@@ -348,7 +348,7 @@ void Playlist::setRandom(bool random)
     updateStatus();
 }
 
-void Playlist::setRepeat(bool repeat)
+void DaedalusMediaPlayer::setRepeat(bool repeat)
 {
     mRepeat = repeat;
     mRandom = 0;
@@ -356,7 +356,7 @@ void Playlist::setRepeat(bool repeat)
     updateStatus();
 }
 
-void Playlist::moveTrack(int from, int to)
+void DaedalusMediaPlayer::moveTrack(int from, int to)
 {
     if ( mCurrentIndex == from || from >= rowCount()) {
         // Abort here
@@ -383,7 +383,7 @@ void Playlist::moveTrack(int from, int to)
     }
 }
 
-void Playlist::playNext(int position)
+void DaedalusMediaPlayer::playNext(int position)
 {
     moveTrack(position,mCurrentIndex+1);
     // create a copy of the track
@@ -394,20 +394,20 @@ void Playlist::playNext(int position)
 //    insertAt(copy,mCurrentIndex + 1);
 }
 
-int Playlist::currentIndex()
+int DaedalusMediaPlayer::currentIndex()
 {
     return mCurrentIndex;
 }
 
-void Playlist::savePlaylist(QString name)
+void DaedalusMediaPlayer::savePlaylist(QString name)
 {
     name = name.replace(".pls","");
-    QString outputPath = Playlist::getXDGMusicDir() + '/' + name + ".pls";
+    QString outputPath = DaedalusMediaPlayer::getXDGMusicDir() + '/' + name + ".pls";
     QUrl destination = QUrl::fromLocalFile(outputPath);
     PLSWriter::writePlaylist(mTrackList,destination,name);
 }
 
-QString Playlist::getXDGMusicDir()
+QString DaedalusMediaPlayer::getXDGMusicDir()
 {
     QString xdgConfigHome = qgetenv("XDG_CONFIG_HOME");
     QString homePath = qgetenv("HOME");
@@ -437,12 +437,12 @@ QString Playlist::getXDGMusicDir()
     return "";
 }
 
-void Playlist::savePlaylistToSql()
+void DaedalusMediaPlayer::savePlaylistToSql()
 {
     emit requestPlaylistStateSave(mTrackList);
 }
 
-void Playlist::receiveSavedPlaybackStateList(QList<TrackObject *> *list)
+void DaedalusMediaPlayer::receiveSavedPlaybackStateList(QList<TrackObject *> *list)
 {
     if ( list != 0 ) {
         if ( mTrackList != 0 ) {
@@ -473,35 +473,35 @@ void Playlist::receiveSavedPlaybackStateList(QList<TrackObject *> *list)
     emit sendBusy(false);
 }
 
-void Playlist::resumePlaylist()
+void DaedalusMediaPlayer::resumePlaylist()
 {
     emit sendBusy(true);
     emit requestSavedPlaylistState();
 }
 
 
-void Playlist::setResumeIndex(unsigned int pos)
+void DaedalusMediaPlayer::setResumeIndex(unsigned int pos)
 {
     mResumeIndex = pos;
 }
 
-void Playlist::setResumeTime(unsigned int pos)
+void DaedalusMediaPlayer::setResumeTime(unsigned int pos)
 {
     mResumeTime = pos;
 }
 
-void Playlist::addUrl(QString url)
+void DaedalusMediaPlayer::addUrl(QString url)
 {
     TrackObject *dummyTrack = new TrackObject(url,"","",url,QUrl(url),0,0,0,0);
     addFile(dummyTrack);
 }
 
-unsigned int Playlist::getRandomIndex()
+unsigned int DaedalusMediaPlayer::getRandomIndex()
 {
     return qrand() % (mTrackList->size() -1);
 }
 
-void Playlist::setNextTrack()
+void DaedalusMediaPlayer::setNextTrack()
 {
     // Determine next playing index
     if ( !mRandom && !mRepeat ) {
@@ -527,7 +527,7 @@ void Playlist::setNextTrack()
     qDebug() << "next index is: " << mNextIndex;
 }
 
-void Playlist::shufflePlaylist()
+void DaedalusMediaPlayer::shufflePlaylist()
 {
     stop();
     beginResetModel();

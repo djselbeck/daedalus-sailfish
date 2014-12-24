@@ -20,7 +20,7 @@
 #include "model/savedplaylisttracksmodel.h"
 #include "model/playbackstate.h"
 
-#include "mediaplayer/playlist.h"
+#include "mediaplayer/daedalusmediaplayer.h"
 #include "mediaplayer/lastfmscrobbler.h"
 
 #include "metadata/imagedatabase.h"
@@ -120,7 +120,7 @@ private:
     int mFirstUse;
 
     // Playback objects
-    Playlist *mPlaylist;
+    DaedalusMediaPlayer *mPlaylist;
     PlaybackStatusObject *mPlaybackStatus;
 
     // Scrobbling
