@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Media 1.0
 
 Page {
     id: mainPage
@@ -114,5 +115,12 @@ Page {
             else if ( status === PageStatus.Activating ) {
             }
         }
+
+    MediaKey { enabled: true; key: Qt.Key_MediaTogglePlayPause; onPressed: togglePlayPause() }
+    MediaKey { enabled: true; key: Qt.Key_MediaPlay; onPressed: play() }
+    MediaKey { enabled: true; key: Qt.Key_MediaPause; onPressed: pause() }
+    MediaKey { enabled: true; key: Qt.Key_MediaStop; onPressed: stop() }
+    MediaKey { enabled: true; key: Qt.Key_MediaNext; onPressed: next() }
+    MediaKey { enabled: true; key: Qt.Key_MediaPrevious; onPressed: prev() }
 
 }
