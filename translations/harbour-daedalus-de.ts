@@ -624,27 +624,27 @@
 <context>
     <name>MainPage</name>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="61"/>
+        <location filename="../qml/pages/MainPage.qml" line="62"/>
         <source>playlist</source>
         <translation>Wiedergabeliste</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="65"/>
+        <location filename="../qml/pages/MainPage.qml" line="66"/>
         <source>artists</source>
         <translation>Interpreten</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="69"/>
+        <location filename="../qml/pages/MainPage.qml" line="70"/>
         <source>albums</source>
         <translation>Alben</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="73"/>
+        <location filename="../qml/pages/MainPage.qml" line="74"/>
         <source>all tracks</source>
         <translation>alle Lieder</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="85"/>
+        <location filename="../qml/pages/MainPage.qml" line="86"/>
         <source>settings</source>
         <translation>Einstellungen</translation>
     </message>
