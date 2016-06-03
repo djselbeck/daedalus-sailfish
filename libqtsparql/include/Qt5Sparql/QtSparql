@@ -1,0 +1,14 @@
+#ifndef QT_QTSPARQL_MODULE_H
+#define QT_QTSPARQL_MODULE_H
+#include <QtNetwork/QtNetwork>
+#include "qsparqlquerymodel.h"
+#include "qsparql.h"
+#include "qsparqlbinding.h"
+#include "qsparqlconnection.h"
+#include "qsparqlconnectionoptions.h"
+#include "qsparqlerror.h"
+#include "qsparqlquery.h"
+#include "qsparqlqueryoptions.h"
+#include "qsparqlresult.h"
+#include "qsparqlresultrow.h"
+#endif
